@@ -27,7 +27,7 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
-
+ public $helpers = ['Html'];
     /**
      * Initialization hook method.
      *
@@ -44,7 +44,10 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
-        $this->loadComponent('Flash');
+         $this->loadComponent('Flash');
+        $this->loadComponent('Auth', [ //'authorize' => ['Controller'],
+      'loginRedirect' => [ 'controller' =>'Admins', 'action' =>'dashboard'],
+      'logoutRedirect' => [ 'controller' =>'Students', 'action' =>'index' ]]);
 
         /*
          * Enable the following component for recommended CakePHP security settings.
