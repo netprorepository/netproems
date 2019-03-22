@@ -1,0 +1,12 @@
+.main-result{
+	margin-top: 5px;
+	padding: 5px;
+}
+
+.border-top-right-bottom-left{
+	border: 1px solid #ccc;
+}
+
+.initials span{
+	margin-right: 8px;
+}

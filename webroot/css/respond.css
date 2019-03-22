@@ -1,0 +1,148 @@
+@media screen and (max-width: 599px) and (min-width: 0px){
+	.jumbotron {
+		background-image: url("../images/unnamed.jpg");
+	}
+	.hidemobile {
+		display: none !important;
+	}
+	.section.appintro {
+		padding: 40px 0 0 0;
+	}
+	.showmobile {
+		display: block !important;
+	}
+	.appintro .rightcol {
+		display: block;
+		width: 100%;
+	}
+	.appintro h2 {
+		font-size: 2em;
+		padding: 0 5%;
+	}
+	.appintro ul li {
+		font-size: 1.3em;
+	}
+	.appintro .leftcol {
+		display: block;
+		width: 100%;
+		padding: 0;
+	}
+	.appintro .leftcol img {
+		max-width: 360px;
+		height: auto;
+	}
+	.section h3.title {
+		font-size: 2em;
+	}
+}
+
+@media screen and (min-width: 1200px){
+	.container {
+		width: 1050px;
+	}
+}
+
+@media screen and (min-width: 768px){
+	.container {
+		width: auto;
+	}
+	.search-form .find {
+		float: left;
+		display: block;
+		margin-right: 2.35765%;
+	}
+	.find{
+		margin: 20px 0 20px 0;
+    }
+	.findbtn{
+		margin-left: 315px;
+	}
+	.footer {
+		text-align: left;
+		/*margin-top: 25px;*/
+	}
+	#filterDrop.collapse {
+		display: block !important;
+	}
+	.listing-h3{
+		font-size: 24px;
+	}
+	ul.nav.navbar-nav.navbar-right li a {
+		margin-top: 20px;
+	}
+	.sub-footer p{
+		margin-top: 30px;
+	}
+}
+
+
+@media (max-width: 767px){
+	.sort.text-right {
+		text-align: left;
+		/* padding-top: 10px; */
+	}
+	
+	body {
+		font-size: 13px;
+	}
+	
+	.listing-title h3 {
+		font-weight: bold;
+	}
+	
+	.listing-h3 {
+		font-weight: bold;
+	}
+	
+	.h3, h3 {
+		font-size: 16px;
+	}
+	
+	.panel-body.panel-mobile h2 {
+		font-size: 24px;
+	}
+	
+	.panel-body.panel-mobile .unit.car-details {
+		border-bottom: 1px solid #ccc;
+		padding-bottom: 5px;
+	}
+	.panel-mobile .trans {
+		padding-bottom: 5px;
+		border-bottom: 1px solid #ccc;
+	}
+	.btn-lg {
+		font-size: 14px;
+	}
+	
+	.jumbotron h1, .banner h1 {
+		font-size: 24px;
+	}
+   .main-form .form-control, .main-form .form-control:focus {
+		margin-bottom: 10px;
+	}
+	.navbar .navbar-toggle {
+		margin-top: 33px;
+		border-color: #fff;
+	}
+}
+
+@media screen and (max-width: 480px) and (min-width: 0px){
+	ul.infogridwrap li {
+		width: 47%;
+		margin: 0 1%;
+	}
+	ul.infogridwrap li .title {
+		font-size: 1.4em;
+	}
+	ul.infogridwrap li .desc {
+		font-size: 1.1em;
+	}
+	ul.infogridwrap li:before {
+		width: 100%;
+		left: 0;
+	}
+}
+
+
+
+
