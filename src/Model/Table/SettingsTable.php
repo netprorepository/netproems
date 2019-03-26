@@ -100,11 +100,11 @@ class SettingsTable extends Table
             ->requirePresence('adminprefix', 'create')
             ->notEmpty('adminprefix');
 
-        $validator
-            ->scalar('logo')
-            ->maxLength('logo', 256)
-            ->requirePresence('logo', 'create')
-            ->notEmpty('logo');
+//        $validator
+//            ->scalar('logo')
+//            ->maxLength('logo', 256)
+//            ->requirePresence('logo', 'create')
+//            ->notEmpty('logo');
 
         $validator
             ->scalar('staffprefix')

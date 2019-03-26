@@ -1,26 +1,44 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="NetPro EMS">
+  <meta name="author" content="NetPro Int'l">
 
-    <title>Gentellela Alela! | </title>
+ <link rel="icon" href="/img/logo-icon.png" type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <?= $this->Html->meta('logo-icon.png') ?>
+        <title>NETPRO EMS  </title>
 
-    <!-- Bootstrap -->
-     <?= $this->Html->css(['bootstrap.min','font-awesome.min','nprogress','animate.min','custom.min']) ?>
-      <?= $this->fetch('meta') ?>
-    <?= $this->fetch('css') ?>
-   
-  </head>
+  <!-- Custom fonts for this template-->
+  <?=
+        $this->Html->css(['all.min', 'sb-admin-2.min'])
+        ?>
+        <?= $this->fetch('meta') ?>
+        <?= $this->fetch('css') ?>
 
-  <body class="login">
-  <?= $this->Flash->render() ?>
- 
-        <?= $this->fetch('content') ?>
-  </body>
+</head>
+
+<body class="bg-gradient-primary">
+
+  <div class="container">
+
+    <!-- Outer Row -->
+     <?= $this->Flash->render() ?>
+
+<?= $this->fetch('content') ?>
+
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+   <?=
+        $this->Html->script(['jquery.min', 'bootstrap.bundle.min', 'jquery.easing.min', 'sb-admin-2.min'])
+        ?>
+
+<?= $this->fetch('script') ?>
+
+</body>
+
 </html>
-

@@ -22,7 +22,7 @@ class SettingsController extends AppController {
         $settings = $this->paginate($this->Settings);
 
         $this->set(compact('settings'));
-        $this->viewBuilder()->setLayout('newadminback');
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -90,7 +90,7 @@ class SettingsController extends AppController {
             $this->Flash->error(__('The setting could not be saved. Please, try again.'));
         }
         $this->set(compact('setting'));
-        $this->viewBuilder()->setLayout('newadminback');
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**

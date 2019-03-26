@@ -50,7 +50,7 @@ class UsersController extends AppController {
         $admin = $this->Users->get($this->Auth->user('id'));
 
         $this->set('admin', $admin);
-        $this->viewBuilder()->setLayout('newadminback');
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     //admin method for managing admins
@@ -63,7 +63,7 @@ class UsersController extends AppController {
 
         $this->set('admins', $admins);
 
-        $this->viewBuilder()->setLayout('newadminback');
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
 //ensure admin is loggedin
@@ -132,7 +132,7 @@ class UsersController extends AppController {
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
-        $this->viewBuilder()->setLayout('newadminback');
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -158,8 +158,9 @@ class UsersController extends AppController {
     public function newadmin() {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
+           
             //upload passport
-            $imagearray = $this->request->getData('passport');
+            $imagearray = $this->request->getData('passports');
             if (!empty($imagearray['tmp_name'])) {
                 $image_name = $this->addimage($imagearray);
             } else {
@@ -168,12 +169,14 @@ class UsersController extends AppController {
 
             $user = $this->Users->patchEntity($user, $this->request->getData());
             $user->passport = $image_name;
+            $user->created_by = $this->Auth->user('id');
+           //  debug(json_encode( $user, JSON_PRETTY_PRINT)); exit;
             if ($this->Users->save($user)) {
                 //generate uniqu id
                 $this->createadminid($user->id);
                 $this->Flash->success(__('The admin has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'manageadmins']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
@@ -182,7 +185,7 @@ class UsersController extends AppController {
         $states = $this->Users->States->find('list', ['limit' => 200]);
         $departments = $this->Users->Departments->find('list', ['limit' => 200]);
         $this->set(compact('user', 'roles', 'countries', 'states', 'departments'));
-        $this->viewBuilder()->setLayout('newadminback');
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     //function that generates a unique ID for each
@@ -231,7 +234,7 @@ class UsersController extends AppController {
         $states = $this->Users->States->find('list', ['limit' => 200]);
         $departments = $this->Users->Departments->find('list', ['limit' => 200]);
         $this->set(compact('user', 'roles', 'countries', 'states', 'departments'));
-        $this->viewBuilder()->setLayout('newadminback');
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     //function for adding a staff image
@@ -317,7 +320,7 @@ class UsersController extends AppController {
 
     // allow unrestricted pages
     public function beforeFilter(Event $event) {
-        $this->Auth->allow(['add']);
+       // $this->Auth->allow(['add']);
     }
 
 }
