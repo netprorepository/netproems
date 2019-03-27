@@ -225,7 +225,7 @@ class UsersController extends AppController {
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The admin has been supdated successfuly.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'manageadmins']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }

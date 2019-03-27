@@ -61,7 +61,8 @@
                 
                  <div class="form-group row">
                       <div class="col-sm-6">
-                  <?= $this->Form->control('gender', ['label' => false, 'class' => 'form-control form-control-user','placeholder'=>'gender'])?>
+                          <?php $gender = ['Male'=>'Male', 'Female'=>'Female'];  ?>
+                  <?= $this->Form->control('gender', ['label'=>false,'options' => $gender, 'class' => 'form-control','placeholder'=>'gender'])?>
                
                   </div>
                   <div class="col-sm-6 mb-3 mb-sm-0">
@@ -108,7 +109,7 @@
                 
                 
                 <div class="form-group">
-        <?= $this->Form->control('profile', ['label' => false, 'rows' => 6, 'colunm' => 6, 'required', 'class' => 'form-control form-control-user','placeholder'=>'profile'])?>
+        <?= $this->Form->control('profile', ['label' => false, 'rows' => 6, 'colunm' => 6, 'required', 'class' => 'form-control','placeholder'=>'profile'])?>
                
                 </div>
                 
