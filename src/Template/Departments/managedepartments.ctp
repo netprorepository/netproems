@@ -8,12 +8,12 @@ $userrole = $this->request->getSession()->read('usersroles');
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Manage Admins</h1>
+          <h1 class="h3 mb-2 text-gray-800">Manage Departments</h1>
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Admin Manager</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Department Manager</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -53,9 +53,13 @@ $userrole = $this->request->getSession()->read('usersroles');
                 <td><?= $department->has('faculty') ? $this->Html->link($department->faculty->name, ['controller' => 'Faculties', 'action' => 'view', $department->faculty->id]) : '' ?></td>
                 <td><?= h($department->deptcode) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $department->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $department->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $department->id], ['confirm' => __('Are you sure you want to delete # {0}?', $department->id)]) ?>
+                    <?= $this->Html->link(__(' View'), ['action' => 'view', $department->id,$department->name],
+                            ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view department details']) ?>
+                    <?= $this->Html->link(__(' Edit'), ['action' => 'edit', $department->id,$department->name],
+                            ['class'=>'btn btn-round btn-primary fa fa-edit','title'=>'update department details']) ?>
+                    <?= $this->Form->postLink(__(' Delete'), ['action' => 'delete', $department->id], 
+                            ['confirm' => __('Are you sure you want to delete # {0}?', $department->id),
+                                'class'=>'btn btn-round btn-danger fa fa-times','title'=>'delete department']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
