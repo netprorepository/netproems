@@ -225,7 +225,7 @@ class UsersController extends AppController {
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The admin has been supdated successfuly.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'manageadmins']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
@@ -330,9 +330,11 @@ class UsersController extends AppController {
 		return $this->redirect(['controller' => 'Users', 'action' => 'manageadmins']);
 		}
                 
-                public function viewadmin()
+                public function viewadmin($user_id)
                         {
-                    $admin = $this->Users->get($this->Auth->user('id'));
+                    
+                    
+                    $admin = $this->Users->get($user_id);
 
         $this->set('admin', $admin);
         $this->viewBuilder()->setLayout('adminbackend');

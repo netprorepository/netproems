@@ -42,19 +42,19 @@ $userdata = $this->request->getSession()->read('usersinfo');
                                 ?>
                          </div>
                       </div>
-                      <h3><?= $userdata['fname'] . " " . $userdata['lname']?></h3>
+                      <h3><?= $admin->fname . " " . $admin->lname?></h3>
 
                       <ul class="list-unstyled user_data">
-                        <li><i class="fa fa-map-marker user-profile-icon"></i> <?= $userdata['address']?>
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> <?= $admin->address ?>
                         </li>
 
                         <li>
-                          <i class="fa fa-phone user-profile-icon"></i> <?= $userdata['phone']?>
+                          <i class="fa fa-phone user-profile-icon"></i> <?= $admin->phone ?>
                         </li>
 
                         <li class="m-top-xs">
                           <i class="fa fa-external-link user-profile-icon"></i>
-                          <a href="<?= $userdata['username']?>" target="_blank"><?= $userdata['username']?></a>
+                          <a href="<?= $admin->username ?>" target="_blank"><?= $admin->username ?></a>
                         </li>
                       </ul>
 

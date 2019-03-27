@@ -47,10 +47,12 @@ $userrole = $this->request->getSession()->read('usersroles');
                                                 <?= $this->Html->link(__('View'), ['action' => 'viewadmin', $admin->id, $this->GenerateUrl($admin->fname)], ['class'=>'btn btn-round btn-info fa fa-eye']) ?>
                                                 <?= $this->Html->link(__('Edit'), ['action' => 'updateadmin', $admin->id, $this->GenerateUrl($admin->fname)], ['class'=>'btn btn-round btn-primary fa fa-edit']) ?>
                                                 <?php if ($admin->userstatus == "Enabled"){
-													echo $this->Form->postLink(__('Disable'), ['action' => 'changeuserstatus', $admin->id,'Disabled'], ['confirm' => __('Are you sure you want to disable # {0}?', $admin->fname),'class'=>'btn btn-round btn-danger']); 
-													} else{
-														 echo $this->Form->postLink(__('Enable'), ['action' => 'changeuserstatus', $admin->id,'Enabled'], ['confirm' => __('Are you sure you want enable user # {0}?', $admin->fname),'class'=>'btn btn-round btn-success']);
-														 } ?>
+							echo $this->Form->postLink(__('Enable'), ['action' => 'changeuserstatus', $admin->id,'Disabled'], ['confirm' => __('Are you sure you want enable user # {0}?', $admin->fname),'class'=>'btn btn-round btn-success']);
+													
+                                                    } else{
+                                                        echo $this->Form->postLink(__('Disable'), ['action' => 'changeuserstatus', $admin->id,'Enabled'], ['confirm' => __('Are you sure you want to disable # {0}?', $admin->fname),'class'=>'btn btn-round btn-danger']); 
+                                                    
+							} ?>
 										
 												 
                                             </td>
