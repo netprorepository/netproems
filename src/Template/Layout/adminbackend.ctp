@@ -14,7 +14,7 @@
 
   <!-- Custom fonts for this template-->
   <?=
-        $this->Html->css(['all.min', 'sb-admin-2.min','dataTables.bootstrap4.min','daterangepicker', 'bootstrap-timepicker.min',])
+        $this->Html->css(['all.min', 'sb-admin-2.min','dataTables.bootstrap4.min','daterangepicker', 'bootstrap-timepicker.min','custom'])
         ?>
         <?= $this->fetch('meta') ?>
         <?= $this->fetch('css') ?>
@@ -62,6 +62,7 @@
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
+      <?php if($user['id']==1){ ?>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
@@ -70,16 +71,25 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Manage Admins:</h6>
-         <?= $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], 
-                 ['title' => 'manage admins','class'=>'collapse-item'])?>
-           <?= $this->Html->link('New Admin', ['controller' => 'Users', 'action' => 'newadmin'], 
-                   ['title' => 'add new admin','class'=>'collapse-item'])
-    ?><?= $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1],
-            ['title' => 'update system system','class'=>'collapse-item'])?>
+         <?php echo $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], 
+                 ['title' => 'manage admins','class'=>'collapse-item']);
+          echo $this->Html->link('Manage Faculties', ['controller' => 'Faculties', 'action' => 'managefaculties'], 
+                   ['title' => 'manage faculties','class'=>'collapse-item']);
+          echo $this->Html->link('Manage Departments', ['controller' => 'Departments', 'action' => 'managedepartments'], 
+                   ['title' => 'manage departments','class'=>'collapse-item']);
+          echo $this->Html->link('Manage Programes', ['controller' => 'Programes', 'action' => 'manageprogrames'], 
+                   ['title' => 'manage programes','class'=>'collapse-item']);
+          echo $this->Html->link('New Admin', ['controller' => 'Users', 'action' => 'newadmin'], 
+                   ['title' => 'add new admin','class'=>'collapse-item']);
+   echo $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1],
+            ['title' => 'update system system','class'=>'collapse-item']);
+   
+   ?>
            
           </div>
         </div>
       </li>
+      <?php } ?>
 
       <!-- Nav Item - Utilities Collapse Menu -->
       <li class="nav-item">
@@ -401,7 +411,7 @@
   
     <?=
         $this->Html->script(['jquery.min', 'bootstrap.bundle.min', 'jquery.easing.min', 'sb-admin-2.min',
-            'Chart.min','chart-pie-demo','chart-area-demo','dataTables.bootstrap4.min','jquery.dataTables.min',
+            'Chart.min','chart-pie-demo','chart-area-demo','jquery.dataTables.min','dataTables.bootstrap4.min',
             'datatables-demo','bootstrap-timepicker.min','bootstrap-datepicker.min',])
         ?>
 

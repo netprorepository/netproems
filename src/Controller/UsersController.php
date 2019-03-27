@@ -221,7 +221,7 @@ class UsersController extends AppController {
             }
            
             $user = $this->Users->patchEntity($user, $this->request->getData());
-             $user->passport = $image_name;
+            $user->passport = $image_name;
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The admin has been supdated successfuly.'));
 
@@ -334,8 +334,9 @@ class UsersController extends AppController {
                         {
                     
                     
-                    $admin = $this->Users->get($user_id);
-
+                    $admin = $this->Users->get($user_id, [
+                         'contain' => ['Roles', 'Departments', 'Countries', 'States']
+                    ]);
         $this->set('admin', $admin);
         $this->viewBuilder()->setLayout('adminbackend');
         
