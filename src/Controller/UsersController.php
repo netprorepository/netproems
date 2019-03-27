@@ -322,5 +322,21 @@ class UsersController extends AppController {
     public function beforeFilter(Event $event) {
        // $this->Auth->allow(['add']);
     }
+    
+    public function changeuserstatus($user_id, $status){
+		$user = $this->Users->get($user_id);
+		$user->userstatus = $status;
+		$this->Users->save($user);
+		return $this->redirect(['controller' => 'Users', 'action' => 'manageadmins']);
+		}
+                
+                public function viewadmin()
+                        {
+                    $admin = $this->Users->get($this->Auth->user('id'));
+
+        $this->set('admin', $admin);
+        $this->viewBuilder()->setLayout('adminbackend');
+        
+                    }
 
 }
