@@ -6,9 +6,11 @@ $userrole = $this->request->getSession()->read('usersroles');
 
 <!-- Begin Page Content -->
         <div class="container-fluid">
-
+ <?= $this->Html->link(__(' '), ['action' => 'newdepartment'],
+                            ['class'=>'btn-circle btn-sm fa fa-plus float-right','title'=>'add new department']) ?>
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Manage Departments</h1>
+         
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">

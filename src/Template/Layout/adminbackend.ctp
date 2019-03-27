@@ -62,7 +62,7 @@
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <?php if($user['id']==1){ ?>
+      <?php if($user['role_id']==1){ ?>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
