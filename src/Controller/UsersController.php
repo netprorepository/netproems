@@ -334,8 +334,9 @@ class UsersController extends AppController {
                         {
                     
                     
-                    $admin = $this->Users->get($user_id);
-
+                    $admin = $this->Users->get($user_id, [
+                         'contain' => ['Roles', 'Departments', 'Countries', 'States']
+                    ]);
         $this->set('admin', $admin);
         $this->viewBuilder()->setLayout('adminbackend');
         
