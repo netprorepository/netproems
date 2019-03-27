@@ -14,7 +14,7 @@
 
   <!-- Custom fonts for this template-->
   <?=
-        $this->Html->css(['all.min', 'sb-admin-2.min','dataTables.bootstrap4.min','daterangepicker', 'bootstrap-timepicker.min',])
+        $this->Html->css(['all.min', 'sb-admin-2.min','dataTables.bootstrap4.min','daterangepicker', 'bootstrap-timepicker.min','custom'])
         ?>
         <?= $this->fetch('meta') ?>
         <?= $this->fetch('css') ?>

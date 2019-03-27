@@ -44,13 +44,17 @@ $userrole = $this->request->getSession()->read('usersroles');
 
 
                                             <td class="actions">
-                                                <?= $this->Html->link(__(' View'), ['action' => 'viewadmin', $admin->id, $this->GenerateUrl($admin->fname)],
-                                                        ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view admin details']) ?>
-                                                <?= $this->Html->link(__(' Edit'), ['action' => 'updateadmin', $admin->id, $this->GenerateUrl($admin->fname)],
-                                                        ['class'=>'btn btn-round btn-primary fa fa-edit','title'=>'update admin']) ?>
-                                                <?= $this->Form->postLink(__(' Delete'), ['action' => 'delete', $admin->id], 
-                                                        ['confirm' => __('Are you sure you want to delete # {0}?', $admin->fname),
-                                                            'class'=>'btn btn-round btn-danger fa fa-times','title'=>'delete admin records']) ?>
+                                                <?= $this->Html->link(__('View'), ['action' => 'viewadmin', $admin->id, $this->GenerateUrl($admin->fname)], ['class'=>'btn btn-round btn-info fa fa-eye']) ?>
+                                                <?= $this->Html->link(__('Edit'), ['action' => 'updateadmin', $admin->id, $this->GenerateUrl($admin->fname)], ['class'=>'btn btn-round btn-primary fa fa-edit']) ?>
+                                                <?php if ($admin->userstatus == "Enabled"){
+							echo $this->Form->postLink(__('Enable'), ['action' => 'changeuserstatus', $admin->id,'Disabled'], ['confirm' => __('Are you sure you want enable user # {0}?', $admin->fname),'class'=>'btn btn-round btn-success']);
+													
+                                                    } else{
+                                                        echo $this->Form->postLink(__('Disable'), ['action' => 'changeuserstatus', $admin->id,'Enabled'], ['confirm' => __('Are you sure you want to disable # {0}?', $admin->fname),'class'=>'btn btn-round btn-danger']); 
+                                                    
+							} ?>
+										
+												 
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
