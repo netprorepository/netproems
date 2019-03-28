@@ -18,11 +18,12 @@ class FacultiesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function managefaculties()
     {
         $faculties = $this->paginate($this->Faculties);
 
         $this->set(compact('faculties'));
+          $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -32,13 +33,14 @@ class FacultiesController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function viewfaculty($id = null)
     {
         $faculty = $this->Faculties->get($id, [
-            'contain' => ['Departments']
+            'contain' => ['Departments','Departments.Programes']
         ]);
 
         $this->set('faculty', $faculty);
+          $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -46,19 +48,29 @@ class FacultiesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function newfaculty()
     {
         $faculty = $this->Faculties->newEntity();
         if ($this->request->is('post')) {
             $faculty = $this->Faculties->patchEntity($faculty, $this->request->getData());
             if ($this->Faculties->save($faculty)) {
+                 //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Added a new Faculty ".$faculty->name;
+                $user_id = $this->Auth->user('id');
+                $description = "Created a new Faculty " . $faculty->name;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                 $this->Flash->success(__('The faculty has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managefaculties']);
             }
             $this->Flash->error(__('The faculty could not be saved. Please, try again.'));
         }
         $this->set(compact('faculty'));
+          $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -68,7 +80,7 @@ class FacultiesController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function updatefaculty($id = null)
     {
         $faculty = $this->Faculties->get($id, [
             'contain' => []
@@ -76,13 +88,23 @@ class FacultiesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $faculty = $this->Faculties->patchEntity($faculty, $this->request->getData());
             if ($this->Faculties->save($faculty)) {
-                $this->Flash->success(__('The faculty has been saved.'));
+                 //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a department ".$faculty->name;
+                $user_id = $this->Auth->user('id');
+                $description = "Updated a Faculty " . $faculty->name;
+                $ip = $this->request->clientIp();
+                $type = "Edit";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                $this->Flash->success(__('The faculty has been updated.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managefaculties']);
             }
             $this->Flash->error(__('The faculty could not be saved. Please, try again.'));
         }
         $this->set(compact('faculty'));
+          $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -97,15 +119,20 @@ class FacultiesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $faculty = $this->Faculties->get($id);
         if ($this->Faculties->delete($faculty)) {
+            //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Deleted a faculty ".$id;
+                $user_id = $this->Auth->user('id');
+                $description = "Deleted a faculty " . $faculty->name;
+                $ip = $this->request->clientIp();
+                $type = "Delete";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type); 
             $this->Flash->success(__('The faculty has been deleted.'));
         } else {
             $this->Flash->error(__('The faculty could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'managefaculties']);
     }
-	
-	public function test(){
-		// test function
-	}
 }
