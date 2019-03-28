@@ -20,7 +20,7 @@ class UsersController extends AppController {
             //   debug(json_encode($this->request->getData(), JSON_PRETTY_PRINT)); exit;
             $user = $this->Auth->identify();
 
-            if ($user && $user['userstatus'] != 'disabled') {
+            if ($user && $user['userstatus'] != 'Disabled') {
                 $this->Auth->setUser($user);
                 $RolesTable = TableRegistry::get('Roles');
                 $roles = $RolesTable->get($user['role_id']);
@@ -39,7 +39,7 @@ class UsersController extends AppController {
                 $this->request->getSession()->write('usersroles', $roles);
                 return $this->redirect(['controller' => 'Users', 'action' => 'dashboard']);
             } else {
-                $this->Flash->error('Bad Credentials or account disabled');
+                $this->Flash->error('Bad Credentials or account disabled. Please check your credentials or contact admin for assistance');
             }
         }
         $this->viewBuilder()->setLayout('login');
@@ -158,7 +158,7 @@ class UsersController extends AppController {
     public function newadmin() {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
-           
+
             //upload passport
             $imagearray = $this->request->getData('passports');
             if (!empty($imagearray['tmp_name'])) {
@@ -170,7 +170,7 @@ class UsersController extends AppController {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             $user->passport = $image_name;
             $user->created_by = $this->Auth->user('id');
-           //  debug(json_encode( $user, JSON_PRETTY_PRINT)); exit;
+            //  debug(json_encode( $user, JSON_PRETTY_PRINT)); exit;
             if ($this->Users->save($user)) {
                 //generate uniqu id
                 $this->createadminid($user->id);
@@ -219,7 +219,7 @@ class UsersController extends AppController {
             } else {
                 $image_name = $user->passport;
             }
-           
+
             $user = $this->Users->patchEntity($user, $this->request->getData());
             $user->passport = $image_name;
             if ($this->Users->save($user)) {
@@ -299,6 +299,20 @@ class UsersController extends AppController {
         return;
     }
 
+    //method that keeps track of all user activities on the app
+
+    public function makeLog($title, $user_id, $description, $ip, $type) {
+        $LogsTable = TableRegistry::get('Logs');
+        $logs = $LogsTable->newEntity();
+        $logs->title = $title;
+        $logs->user_id = $user_id;
+        $logs->description = $description;
+        $logs->ip = $ip;
+        $logs->type = $type;
+        // debug(json_encode( $logs, JSON_PRETTY_PRINT)); exit;
+        $LogsTable->save($logs);
+    }
+
     /**
      * Delete method
      *
@@ -320,26 +334,28 @@ class UsersController extends AppController {
 
     // allow unrestricted pages
     public function beforeFilter(Event $event) {
-       // $this->Auth->allow(['add']);
+        // $this->Auth->allow(['add']);
     }
-    
-    public function changeuserstatus($user_id, $status){
-		$user = $this->Users->get($user_id);
-		$user->userstatus = $status;
-		$this->Users->save($user);
-		return $this->redirect(['controller' => 'Users', 'action' => 'manageadmins']);
-		}
-                
-                public function viewadmin($user_id)
-                        {
-                    
-                    
-                    $admin = $this->Users->get($user_id, [
-                         'contain' => ['Roles', 'Departments', 'Countries', 'States']
-                    ]);
+
+    public function changeuserstatus($user_id, $status) {
+        $user = $this->Users->get($user_id);
+        $user->userstatus = $status;
+        if ($this->Users->save($user)) {
+            $this->Flash->success(__('Admin status has been changed to ' . $status));
+        } else {
+            $this->Flash->error(__('Unable to change admin status. Please, try again.'));
+        }
+        return $this->redirect(['controller' => 'Users', 'action' => 'manageadmins']);
+    }
+
+    public function viewadmin($user_id) {
+
+
+        $admin = $this->Users->get($user_id, [
+            'contain' => ['Roles', 'Departments', 'Countries', 'States']
+        ]);
         $this->set('admin', $admin);
         $this->viewBuilder()->setLayout('adminbackend');
-        
-                    }
+    }
 
 }

@@ -6,10 +6,10 @@ $userrole = $this->request->getSession()->read('usersroles');
 
 <!-- Begin Page Content -->
         <div class="container-fluid">
- <?= $this->Html->link(__(' '), ['action' => 'newdepartment'],
-                            ['class'=>'btn-circle btn-sm fa fa-plus float-right','title'=>'add new department']) ?>
+            <div style="padding-bottom: 10px; margin-bottom: 20px;"><?= $this->Html->link(__(' '), ['action' => 'newdepartment'],
+                            ['class'=>'btn-circle btn-lg fa fa-plus float-right','title'=>'add new department']) ?>
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Manage Departments</h1>
+          <h1 class="h3 mb-2 text-gray-800">Manage Departments</h1></div>
          
 
           <!-- DataTales Example -->
@@ -30,6 +30,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                 <th scope="col"><?= $this->Paginator->sort('deptcode') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
+                  </thead>
             
             
               <tfoot>
@@ -57,10 +58,10 @@ $userrole = $this->request->getSession()->read('usersroles');
                 <td class="actions">
                     <?= $this->Html->link(__(' View'), ['action' => 'view', $department->id,$department->name],
                             ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view department details']) ?>
-                    <?= $this->Html->link(__(' Edit'), ['action' => 'edit', $department->id,$department->name],
+                    <?= $this->Html->link(__(' Update'), ['action' => 'updatedepartment', $department->id,$department->name],
                             ['class'=>'btn btn-round btn-primary fa fa-edit','title'=>'update department details']) ?>
                     <?= $this->Form->postLink(__(' Delete'), ['action' => 'delete', $department->id], 
-                            ['confirm' => __('Are you sure you want to delete # {0}?', $department->id),
+                            ['confirm' => __('Are you sure you want to delete # {0}?', $department->name),
                                 'class'=>'btn btn-round btn-danger fa fa-times','title'=>'delete department']) ?>
                 </td>
             </tr>

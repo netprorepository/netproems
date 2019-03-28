@@ -50,20 +50,30 @@ class DepartmentsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function newdepartment()
     {
         $department = $this->Departments->newEntity();
         if ($this->request->is('post')) {
             $department = $this->Departments->patchEntity($department, $this->request->getData());
             if ($this->Departments->save($department)) {
-                $this->Flash->success(__('The department has been saved.'));
+                 //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a department ".$department->id;
+                $user_id = $this->Auth->user('id');
+                $description = "Created new department " . $department->name;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                $this->Flash->success(__('The department has been added successfully.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managedepartments']);
             }
             $this->Flash->error(__('The department could not be saved. Please, try again.'));
         }
-        $faculties = $this->Departments->Faculties->find('list', ['limit' => 200]);
+        $faculties = $this->Departments->Faculties->find('list', ['limit' => 200])->order(['name'=>'ASC']);
         $this->set(compact('department', 'faculties'));
+         $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -73,22 +83,33 @@ class DepartmentsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function updatedepartment($id = null)
     {
         $department = $this->Departments->get($id, [
-            'contain' => []
+            'contain' => ['Faculties']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $department = $this->Departments->patchEntity($department, $this->request->getData());
             if ($this->Departments->save($department)) {
-                $this->Flash->success(__('The department has been saved.'));
+                //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a department ".$id;
+                $user_id = $this->Auth->user('id');
+                $description = "Updated a department " . $department->name;
+                $ip = $this->request->clientIp();
+                $type = "Edit";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+              
+                $this->Flash->success(__('The department has been updated.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managedepartments']);
             }
-            $this->Flash->error(__('The department could not be saved. Please, try again.'));
+            $this->Flash->error(__('The department could not be updated. Please, try again.'));
         }
-        $faculties = $this->Departments->Faculties->find('list', ['limit' => 200]);
+        $faculties = $this->Departments->Faculties->find('list', ['limit' => 200])->order(['name'=>'ASC']);
         $this->set(compact('department', 'faculties'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -103,11 +124,20 @@ class DepartmentsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $department = $this->Departments->get($id);
         if ($this->Departments->delete($department)) {
+           //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Deleted a department ".$id;
+                $user_id = $this->Auth->user('id');
+                $description = "Deleted a department " . $department->name;
+                $ip = $this->request->clientIp();
+                $type = "Delete";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type); 
             $this->Flash->success(__('The department has been deleted.'));
         } else {
             $this->Flash->error(__('The department could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'managedepartments']);
     }
 }
