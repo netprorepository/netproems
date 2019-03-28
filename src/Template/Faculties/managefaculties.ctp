@@ -1,0 +1,82 @@
+<?php
+$userdata = $this->request->getSession()->read('usersinfo');
+$userrole = $this->request->getSession()->read('usersroles');
+?>
+
+
+<!-- Begin Page Content -->
+        <div class="container-fluid">
+ <?= $this->Html->link(__(' '), ['action' => 'newdepartment'],
+                            ['class'=>'btn-circle btn-sm fa fa-plus float-right','title'=>'add new department']) ?>
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">Manage Faculties</h1>
+         
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Manage Faculties</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+            <tr>
+          
+                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
+              
+               
+                <th scope="col" class="actions"><?= __('Actions') ?></th>
+            </tr>
+            
+            
+              <tfoot>
+            <tr>
+          
+                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
+              
+                
+                <th scope="col" class="actions"><?= __('Actions') ?></th>
+            </tr>
+              </tfoot>
+            
+        </thead>
+        <tbody>
+             <?php foreach ($faculties as $faculty): ?>
+            <tr>
+               
+                <td><?= h($faculty->id) ?></td>
+                <td><?= h($faculty->name) ?></td>
+              
+                
+                <td class="actions">
+                    <?= $this->Html->link(__(' View'), ['action' => 'view', $faculty->id],
+                            ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view department details']) ?>
+                    <?= $this->Html->link(__(' Edit'), ['action' => 'edit', $faculty->id],
+                            ['class'=>'btn btn-round btn-primary fa fa-edit','title'=>'update department details']) ?>
+                    <?= $this->Form->postLink(__(' Delete'), ['action' => 'delete', $faculty->id], 
+                            ['confirm' => __('Are you sure you want to delete # {0}?', $faculty->id),
+                                'class'=>'btn btn-round btn-danger fa fa-times','title'=>'delete department']) ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+         </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+<!--    <div class="paginator">
+        <ul class="pagination">
+            <?= $this->Paginator->first('<< ' . __('first')) ?>
+            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->numbers() ?>
+            <?= $this->Paginator->next(__('next') . ' >') ?>
+            <?= $this->Paginator->last(__('last') . ' >>') ?>
+        </ul>
+        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+    </div>-->
+

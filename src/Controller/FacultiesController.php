@@ -18,11 +18,29 @@ class FacultiesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+   public function managefaculties()
+    {
+        /*$this->paginate = [
+            'contain' => ['Faculties']
+        ];
+        $departments = $this->paginate($this->Departments);
+
+        $this->set(compact('departments'));
+         $this->viewBuilder()->setLayout('adminbackend');*/
+       
+       $faculties = $this->paginate($this->Faculties);
+
+        $this->set(compact('faculties'));
+         $this->viewBuilder()->setLayout('adminbackend');
+    }
+    
+   
     public function index()
     {
         $faculties = $this->paginate($this->Faculties);
 
         $this->set(compact('faculties'));
+         $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
