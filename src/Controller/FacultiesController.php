@@ -104,4 +104,8 @@ class FacultiesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+	
+	public function test(){
+		// test function
+	}
 }
