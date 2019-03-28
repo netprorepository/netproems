@@ -75,10 +75,10 @@ class DepartmentsTable extends Table
             ->requirePresence('description', 'create')
             ->notEmpty('description');
 
-        $validator
-            ->dateTime('created_date')
-            ->requirePresence('created_date', 'create')
-            ->notEmpty('created_date');
+//        $validator
+//            ->dateTime('created_date')
+//            ->requirePresence('created_date', 'create')
+//            ->notEmpty('created_date');
 
         $validator
             ->scalar('deptcode')

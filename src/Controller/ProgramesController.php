@@ -18,7 +18,7 @@ class ProgramesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function manageprogrames()
     {
         $this->paginate = [
             'contain' => ['Departments']
@@ -26,6 +26,7 @@ class ProgramesController extends AppController
         $programes = $this->paginate($this->Programes);
 
         $this->set(compact('programes'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -49,20 +50,30 @@ class ProgramesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function newprograme()
     {
         $programe = $this->Programes->newEntity();
         if ($this->request->is('post')) {
             $programe = $this->Programes->patchEntity($programe, $this->request->getData());
             if ($this->Programes->save($programe)) {
+                 //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Added a new programe ".$programe->id;
+                $user_id = $this->Auth->user('id');
+                $description = "Created new programe " . $programe->name;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                 $this->Flash->success(__('The programe has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'manageprogrames']);
             }
             $this->Flash->error(__('The programe could not be saved. Please, try again.'));
         }
-        $departments = $this->Programes->Departments->find('list', ['limit' => 200]);
+        $departments = $this->Programes->Departments->find('list', ['limit' => 200])->order(['name'=>'ASC']);
         $this->set(compact('programe', 'departments'));
+          $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -72,22 +83,32 @@ class ProgramesController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function updateprograme($id = null)
     {
         $programe = $this->Programes->get($id, [
-            'contain' => []
+            'contain' => ['Departments']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $programe = $this->Programes->patchEntity($programe, $this->request->getData());
             if ($this->Programes->save($programe)) {
-                $this->Flash->success(__('The programe has been saved.'));
+                 //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a programe ".$programe->id;
+                $user_id = $this->Auth->user('id');
+                $description = "Updated a programme " . $programe->name;
+                $ip = $this->request->clientIp();
+                $type = "Edit";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                $this->Flash->success(__('The programe has been updated.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'manageprogrames']);
             }
             $this->Flash->error(__('The programe could not be saved. Please, try again.'));
         }
-        $departments = $this->Programes->Departments->find('list', ['limit' => 200]);
+        $departments = $this->Programes->Departments->find('list', ['limit' => 200])->order(['name'=>'ASC']);
         $this->set(compact('programe', 'departments'));
+         $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -102,11 +123,20 @@ class ProgramesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $programe = $this->Programes->get($id);
         if ($this->Programes->delete($programe)) {
+             //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Deleted a programe ".$programe->id;
+                $user_id = $this->Auth->user('id');
+                $description = "Deleted a programme " . $programe->name;
+                $ip = $this->request->clientIp();
+                $type = "Delete";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
             $this->Flash->success(__('The programe has been deleted.'));
         } else {
             $this->Flash->error(__('The programe could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'manageprogrames']);
     }
 }
