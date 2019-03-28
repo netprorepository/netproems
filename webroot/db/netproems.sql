@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2019 at 12:37 PM
+-- Generation Time: Mar 27, 2019 at 03:25 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -299,21 +299,24 @@ CREATE TABLE `departments` (
   `name` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `faculty_id` int(11) NOT NULL
+  `faculty_id` int(11) NOT NULL,
+  `deptcode` varchar(36) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `departments`
 --
 
-INSERT INTO `departments` (`id`, `name`, `description`, `created_date`, `faculty_id`) VALUES
-(1, 'Finance', 'Finance', '2018-10-26 13:47:31', 0),
-(2, 'Finance', 'Finances123', '2018-10-26 13:47:54', 1),
-(3, 'Pharmacy', 'Pharmacy', '2018-10-26 13:58:49', 1),
-(5, 'demo', 'demo', '2018-10-28 10:21:34', 0),
-(7, 'morning', 'this is a morning test.', '2018-10-29 07:21:29', 1),
-(16, 'Lab', 'Lab', '2018-11-01 08:20:55', 1),
-(17, 'Health', 'Health', '2018-11-01 08:22:28', 1);
+INSERT INTO `departments` (`id`, `name`, `description`, `created_date`, `faculty_id`, `deptcode`) VALUES
+(1, 'Finance', 'Finance', '2018-10-26 13:47:31', 1, ''),
+(2, 'Finance', 'Finances123', '2018-10-26 13:47:54', 1, ''),
+(3, 'Pharmacy', 'Pharmacy', '2018-10-26 13:58:49', 1, ''),
+(5, 'demo', 'demo', '2018-10-28 10:21:34', 1, ''),
+(7, 'morning', 'this is a morning test.', '2018-10-29 07:21:29', 1, ''),
+(16, 'Lab', 'Lab', '2018-11-01 08:20:55', 1, ''),
+(17, 'Health', 'Health', '2018-11-01 08:22:28', 1, ''),
+(21, 'Computer Science', 'Computer Science', '2019-03-27 12:21:32', 1, 'CSC'),
+(22, 'English', 'English', '2019-03-27 12:21:32', 2, 'ENG');
 
 -- --------------------------------------------------------
 
@@ -325,6 +328,14 @@ CREATE TABLE `faculties` (
   `id` int(11) NOT NULL,
   `name` varchar(156) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `faculties`
+--
+
+INSERT INTO `faculties` (`id`, `name`) VALUES
+(1, 'Physical Science'),
+(2, 'Arts');
 
 -- --------------------------------------------------------
 
@@ -341,6 +352,19 @@ CREATE TABLE `logs` (
   `ip` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(16) COLLATE latin1_general_ci NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `programes`
+--
+
+CREATE TABLE `programes` (
+  `id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `programecode` varchar(10) NOT NULL,
+  `name` varchar(22) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -4559,7 +4583,9 @@ INSERT INTO `userlogins` (`id`, `user_id`, `logintime`, `logouttime`) VALUES
 (11, 1, '2019-03-26 08:52:38', '2019-03-26 09:07:03'),
 (12, 1, '2019-03-26 09:07:13', '2019-03-26 10:01:51'),
 (13, 1, '2019-03-26 10:01:51', '2019-03-27 10:07:39'),
-(14, 1, '2019-03-27 10:07:39', '0000-00-00 00:00:00');
+(14, 1, '2019-03-27 10:07:39', '2019-03-27 12:04:12'),
+(15, 1, '2019-03-27 12:04:12', '2019-03-27 13:11:45'),
+(16, 1, '2019-03-27 13:11:45', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -4628,6 +4654,12 @@ ALTER TABLE `logs`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `programes`
+--
+ALTER TABLE `programes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
@@ -4665,18 +4697,24 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `faculties`
 --
 ALTER TABLE `faculties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `programes`
+--
+ALTER TABLE `programes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -4701,7 +4739,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `userlogins`
 --
 ALTER TABLE `userlogins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `users`
