@@ -73,6 +73,7 @@
             <h6 class="collapse-header">Manage Admins:</h6>
          <?php echo $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], 
                  ['title' => 'manage admins','class'=>'collapse-item']);
+				  echo'<h6 class="collapse-header">Manage Academics:</h6>';
           echo $this->Html->link('Manage Faculties', ['controller' => 'Faculties', 'action' => 'managefaculties'], 
                    ['title' => 'manage faculties','class'=>'collapse-item']);
           echo $this->Html->link('Manage Departments', ['controller' => 'Departments', 'action' => 'managedepartments'], 

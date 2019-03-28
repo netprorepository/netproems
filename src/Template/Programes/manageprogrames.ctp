@@ -49,9 +49,9 @@ $userrole = $this->request->getSession()->read('usersroles');
                 <td><?= h($programe->programecode) ?></td>
                 <td><?= h($programe->name) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__(' View'), ['action' => 'view', $programe->id],
+                    <?= $this->Html->link(__(' View'), ['action' => 'viewprogrames', $programe->id,$this->Generateurl($programe->department->name)],
                              ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view programe details']) ?>
-                    <?= $this->Html->link(__(' Update'), ['action' => 'updateprograme', $programe->id],
+                    <?= $this->Html->link(__(' Update'), ['action' => 'updateprograme', $programe->id,$this->Generateurl($programe->name)],
                              ['class'=>'btn btn-round btn-primary fa fa-edit','title'=>'update programe details']) ?>
                     <?= $this->Form->postLink(__(' Delete'), ['action' => 'delete', $programe->id], 
                             ['confirm' => __('Are you sure you want to delete # {0}?', $programe->id),
