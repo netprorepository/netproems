@@ -160,15 +160,15 @@ class UsersController extends AppController {
         if ($this->request->is('post')) {
 
             //upload passport
-            $imagearray = $this->request->getData('passports');
+           /* $imagearray = $this->request->getData('passports');
             if (!empty($imagearray['tmp_name'])) {
                 $image_name = $this->addimage($imagearray);
             } else {
                 $image_name = '';
-            }
+            }*/
 
             $user = $this->Users->patchEntity($user, $this->request->getData());
-            $user->passport = $image_name;
+           // $user->passport = $image_name;
             $user->created_by = $this->Auth->user('id');
             //  debug(json_encode( $user, JSON_PRETTY_PRINT)); exit;
             if ($this->Users->save($user)) {
@@ -181,10 +181,10 @@ class UsersController extends AppController {
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $roles = $this->Users->Roles->find('list', ['limit' => 200]);
-        $countries = $this->Users->Countries->find('list', ['limit' => 200]);
-        $states = $this->Users->States->find('list', ['limit' => 200]);
+        /*$countries = $this->Users->Countries->find('list', ['limit' => 200]);
+        $states = $this->Users->States->find('list', ['limit' => 200]);*/
         $departments = $this->Users->Departments->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'roles', 'countries', 'states', 'departments'));
+        $this->set(compact('user', 'roles', 'departments'));
         $this->viewBuilder()->setLayout('adminbackend');
     }
 

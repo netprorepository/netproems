@@ -90,6 +90,42 @@
           </div>
         </div>
       </li>
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Subject</span>
+        </a>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage Subject:</h6>
+            <?php
+              echo $this->Html->link('Manage Subjects', ['controller' => 'Subjects', 'action' => 'managesubjects'], 
+                    ['title' => 'Manage Subject','class'=>'collapse-item']);
+            ?>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Teacher</span>
+        </a>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage Teacher:</h6>
+            <?php
+              echo $this->Html->link('Manage Teacher', ['controller' => 'Teachers', 'action' => 'manageteachers'], 
+                    ['title' => 'Manage Teachers','class'=>'collapse-item']);
+              echo $this->Html->link('Assign Subject', ['controller' => 'Teachers', 'action' => 'assignsunjects'], 
+                    ['title' => 'Assign Subjects','class'=>'collapse-item']);
+            ?>
+          </div>
+        </div>
+      </li>
+
       <?php } ?>
 
       <!-- Nav Item - Utilities Collapse Menu -->

@@ -34,32 +34,37 @@
                 
                   <div class="form-group row">
                            
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                   <?=$this->Form->control('fname', ['label' => false, 'class' => 'form-control form-control-user2',
                     'id'=>  'exampleLastName','placeholder'=>'First Name'])?>
                     
                   </div>
                  
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                    <?=$this->Form->control('lname', ['label' => false, 'class' => 'form-control form-control-user2','id'=>'exampleFirstName',
                      'placeholder'=>'Last Name'  ])?>
                
                   </div>
+
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        <?= $this->Form->control('mname', ['label' => false, 'class' => 'form-control form-control-user2','placeholder'=>'middle name'])?>
+                    </div>
            
                 </div>
               
                 <div class="form-group row">
                       <div class="col-sm-6">
-                  <?= $this->Form->control('role_id', ['options' => $roles, 'label' => false, 'class' => 'form-control form-control-user2','placeholder'=>'role','required'])?>
+                  <?= $this->Form->control('role_id', ['options' => $roles, 'label' => false, 'class' => 'form-control form-control-user2','empty'=>'Select role','placeholder'=>'role','required'])?>
                
                   </div>
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-              <?= $this->Form->control('mname', ['label' => false, 'class' => 'form-control form-control-user2','placeholder'=>'middle name'])?>
-                    </div>
-                 
+ 
+                     <div class="col-sm-6">
+                  <?= $this->Form->control('department_id', ['options' => $departments, 'label' => false, 'class' => 'form-control form-control-user2','empty'=>'Select department','placeholder'=>'department'])?>
+               
+                  </div>
                 </div>
                 
-                 <div class="form-group row">
+                 <!--div class="form-group row">
                       <div class="col-sm-6">
 
                           <?php $gender = ['Male'=>'Male', 'Female'=>'Female'];  ?>
@@ -73,10 +78,10 @@
               <?= $this->Form->control('dob', ['label' => false, 'class' => 'form-control form-control-user2', 'type' => 'text', 'id' => 'datepicker','placeholder'=>'date of birth'])?>
                     </div>
                   
-                </div>
+                </div-->
                 
                 
-                  <div class="form-group row">
+                  <!--div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
               <?= $this->Form->control('country_id', ['label' => false, 'class' => 'form-control form-control-user2','placeholder'=>'country'])?>
                     </div>
@@ -84,10 +89,10 @@
                   <?= $this->Form->control('state_id', ['label' => false, 'class' => 'form-control form-control-user2','placeholder'=>'state']);?>
                
                   </div>
-                </div>
+                </div-->
                 
                 
-                 <div class="form-group row">
+                 <!--div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
               <?= $this->Form->control('phone', ['label' =>false, 'class' => 'form-control form-control-user2','placeholder'=>'phone'])?>
                     </div>
@@ -97,26 +102,23 @@
                
                   </div>
                   
-                </div>
+                </div-->
                 
                 
                   <div class="form-group row">
-                      <div class="col-sm-6">
-                  <?= $this->Form->control('department_id', ['options' => $departments, 'label' => false, 'class' => 'form-control form-control-user2','placeholder'=>'department'])?>
-               
-                  </div>
-                  <div class="col-sm-6 mb-3 mb-sm-0">
+                  
+                  <!--div class="col-sm-6 mb-3 mb-sm-0">
               <?= $this->Form->control('passports', ['label' => false, 'type' => 'file', 'class' => 'form-control form-control-user2','placeholder'=>'passport']);?>
-                    </div>
+                    </div-->
                   
                 </div>
                 
                 
-                <div class="form-group">
+                <!--div class="form-group">
 
         <?= $this->Form->control('profile', ['label' => false, 'rows' => 6, 'colunm' => 6, 'required', 'class' => 'form-control form-control-user2','placeholder'=>'profile'])?>
                
-                </div>
+                </div-->
                 
             
               <br /> <br />
