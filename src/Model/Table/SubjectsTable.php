@@ -81,15 +81,15 @@ class SubjectsTable extends Table
             ->requirePresence('creditload', 'create')
             ->notEmpty('creditload');
 
-        $validator
-            ->dateTime('created_date')
-            ->requirePresence('created_date', 'create')
-            ->notEmpty('created_date');
-
-        $validator
-            ->integer('status')
-            ->requirePresence('status', 'create')
-            ->notEmpty('status');
+//        $validator
+//            ->dateTime('created_date')
+//            ->requirePresence('created_date', 'create')
+//            ->notEmpty('created_date');
+//
+//        $validator
+//            ->integer('status')
+//            ->requirePresence('status', 'create')
+//            ->notEmpty('status');
 
         return $validator;
     }

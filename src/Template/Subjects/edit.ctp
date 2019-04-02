@@ -2,8 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Subject $subject
- */
-?>
+ 
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -22,20 +21,30 @@
         <li><?= $this->Html->link(__('New Subject Teacher'), ['controller' => 'SubjectTeachers', 'action' => 'add']) ?></li>
     </ul>
 </nav>
+ */
+?>
 <div class="subjects form large-9 medium-8 columns content">
     <?= $this->Form->create($subject) ?>
     <fieldset>
         <legend><?= __('Edit Subject') ?></legend>
         <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('subjectcode');
-            echo $this->Form->control('department_id', ['options' => $departments]);
-            echo $this->Form->control('creditload');
-            echo $this->Form->control('user_id', ['options' => $users]);
-            echo $this->Form->control('created_date');
-            echo $this->Form->control('status');
+            echo $this->Form->control('name', ['class' => 'form-control form-control-user2',
+                    'id'=>  'name']) . "<br\>";
+            echo $this->Form->control('subjectcode', ['class' => 'form-control form-control-user2',
+                    'id'=>  'subjectcode']) . "<br\>";
+            echo $this->Form->control('department_id', ['options' => $departments, 'class' => 'form-control form-control-user2',
+                    'id'=>  'department_id']) . "<br\>";
+            echo $this->Form->control('creditload', ['options' => $departments, 'class' => 'form-control form-control-user2',
+                    'id'=>  'creditload']) . "<br\>";
+            echo $this->Form->control('user_id', ['options' => $users, 'class' => 'form-control form-control-user2',
+                    'id'=>  'user_id']) . "<br\>";
+             $this->Form->control('created_date', [ 'class' => 'form-control form-control-user2',
+                    'id'=>  'created_date']) . "<br\>";
+             $this->Form->control('status', ['class' => 'form-control form-control-user2',
+                    'id'=>  'status','placeholder'=>'Subject Name']) . "<br\>";
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+     <br /> <br />
+     <?= $this->Form->button('Submit', ['class' => 'btn btn-primary btn-user btn-block']) ?>
+                        <?= $this->Form->end() ?>
 </div>
