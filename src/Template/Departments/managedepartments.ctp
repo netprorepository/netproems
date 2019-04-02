@@ -56,7 +56,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                 <td><?= $department->has('faculty') ? $this->Html->link($department->faculty->name, ['controller' => 'Faculties', 'action' => 'view', $department->faculty->id]) : '' ?></td>
                 <td><?= h($department->deptcode) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__(' View'), ['action' => 'view', $department->id,$department->name],
+                    <?= $this->Html->link(__(' View'), ['action' => 'viewdepartment', $department->id,$this->Generateurl($department->name)],
                             ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view department details']) ?>
                     <?= $this->Html->link(__(' Update'), ['action' => 'updatedepartment', $department->id,$department->name],
                             ['class'=>'btn btn-round btn-primary fa fa-edit','title'=>'update department details']) ?>

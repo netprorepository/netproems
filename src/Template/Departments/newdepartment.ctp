@@ -14,41 +14,33 @@
                         <fieldset>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <?= $this->Form->control('faculty_id', ['options' => $faculties, 'label' => false, 'empty'=>'Select faculty','placeholder' => 'Description', 'required',
+                                            'class' => 'form-control'])
+                                        ?>
+                                </div>
+                                <div class="col-sm-6 mb-3 mb-sm-0">
                                     <?= $this->Form->control('name', ['label' => false, 'placeholder' => 'Department Name', 'required',
                                         'class' => 'form-control form-control-user'])
                                     ?>
                                 </div>
+                            </div>
 
+                            <div class="form-group row">
                                 <div class="col-sm-6">
-
-
                                     <?= $this->Form->control('description', ['label' => false, 'placeholder' => 'Description', 'required',
                                         'class' => 'form-control form-control-user'])
                                     ?>
                                 </div>
-
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-
-<?= $this->Form->control('faculty_id', ['options' => $faculties, 'label' => false, 'placeholder' => 'Description', 'required',
-    'class' => 'form-control'])
-?>
-                                </div>
-
                                 <div class="col-sm-6">
-<?= $this->Form->control('deptcode', ['label' => false, 'placeholder' => 'Department Code', 'required',
-    'class' => 'form-control form-control-user'])
-?>
+                                    <?= $this->Form->control('deptcode', ['label' => false, 'placeholder' => 'Department Code', 'required',
+                                        'class' => 'form-control form-control-user'])
+                                    ?>
                                 </div>
-
                             </div>
                         </fieldset>
                         <br /> <br />
-<?= $this->Form->button('Submit', ['class' => 'btn btn-primary btn-user btn-block']) ?>
-<?= $this->Form->end() ?>
-
+                        <?= $this->Form->button('Submit', ['class' => 'btn btn-primary btn-user btn-block']) ?>
+                        <?= $this->Form->end() ?>
                     </div>
                 </div>
             </div>

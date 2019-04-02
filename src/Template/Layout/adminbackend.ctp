@@ -66,29 +66,66 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
-          <span>Admins</span>
+          <span>Admin</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Manage Admins:</h6>
-         <?php echo $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], 
-                 ['title' => 'manage admins','class'=>'collapse-item']);
-          echo $this->Html->link('Manage Faculties', ['controller' => 'Faculties', 'action' => 'managefaculties'], 
-                   ['title' => 'manage faculties','class'=>'collapse-item']);
-          echo $this->Html->link('Manage Departments', ['controller' => 'Departments', 'action' => 'managedepartments'], 
-                   ['title' => 'manage departments','class'=>'collapse-item']);
-          echo $this->Html->link('Manage Programes', ['controller' => 'Programes', 'action' => 'manageprogrames'], 
-                   ['title' => 'manage programes','class'=>'collapse-item']);
-          echo $this->Html->link('New Admin', ['controller' => 'Users', 'action' => 'newadmin'], 
-                   ['title' => 'add new admin','class'=>'collapse-item']);
-   echo $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1],
-            ['title' => 'update system system','class'=>'collapse-item']);
-   
-   ?>
-           
+            <?php
+              echo $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], 
+                    ['title' => 'manage admins','class'=>'collapse-item']);
+              echo $this->Html->link('New Admin', ['controller' => 'Users', 'action' => 'newadmin'], 
+                      ['title' => 'add new admin','class'=>'collapse-item']);
+              echo'<h6 class="collapse-header">Manage Academics:</h6>';
+              echo $this->Html->link('Manage Faculties', ['controller' => 'Faculties', 'action' => 'managefaculties'], 
+                      ['title' => 'manage faculties','class'=>'collapse-item']);
+              echo $this->Html->link('Manage Departments', ['controller' => 'Departments', 'action' => 'managedepartments'], 
+                      ['title' => 'manage departments','class'=>'collapse-item']);
+              echo $this->Html->link('Manage Programes', ['controller' => 'Programes', 'action' => 'manageprogrames'], 
+                      ['title' => 'manage programes','class'=>'collapse-item']);
+              echo'<h6 class="collapse-header">Settings:</h6>';
+              echo $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1],
+                        ['title' => 'update system system','class'=>'collapse-item']);
+            ?>
           </div>
         </div>
       </li>
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Subject</span>
+        </a>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage Subject:</h6>
+            <?php
+              echo $this->Html->link('Manage Subjects', ['controller' => 'Subjects', 'action' => 'managesubjects'], 
+                    ['title' => 'Manage Subject','class'=>'collapse-item']);
+            ?>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Teacher</span>
+        </a>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage Teacher:</h6>
+            <?php
+              echo $this->Html->link('Manage Teacher', ['controller' => 'Teachers', 'action' => 'manageteachers'], 
+                    ['title' => 'Manage Teachers','class'=>'collapse-item']);
+              echo $this->Html->link('Assign Subject', ['controller' => 'Teachers', 'action' => 'assignsunjects'], 
+                    ['title' => 'Assign Subjects','class'=>'collapse-item']);
+            ?>
+          </div>
+        </div>
+      </li>
+
       <?php } ?>
 
       <!-- Nav Item - Utilities Collapse Menu -->
@@ -320,12 +357,9 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $user['fname'] . " " . $user['lname'] ?></span>
-                
-                    <?=  $this->Html->image($user['passport'], 
-						   ['alt' => 'EMS', 'class' => 'img-profile rounded-circle'])
-                                ?>
-                    
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=$user['fname'].' '.$user['lname']  ?></span>
+                 <?php echo  $this->Html->image($user['passport'], ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle'])?>
+               
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

@@ -45,14 +45,14 @@ class UsersTable extends Table
             'foreignKey' => 'role_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Countries', [
+      /*  $this->belongsTo('Countries', [
             'foreignKey' => 'country_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('States', [
             'foreignKey' => 'state_id',
             'joinType' => 'INNER'
-        ]);
+        ]);*/
         $this->belongsTo('Departments', [
             'foreignKey' => 'department_id',
             'joinType' => 'INNER'
@@ -76,8 +76,8 @@ class UsersTable extends Table
         $validator
             ->requirePresence('username', 'create')
             ->notEmpty('username','Please provide a valid email address as your user name')
-          ->add('username', ['unique' => ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'username already exists']])   
-	    ->add('username', 'valid-email', ['rule' => 'email'])
+             ->add('username', ['unique' => ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'username already exists']])   
+	             ->add('username', 'valid-email', ['rule' => 'email'])
             ->requirePresence('password', 'create')
             ->add('password', [ 'length' => [ 'rule' => ['minLength', 6],
             'message' => 'Invalid password. password must not be less than six characters', ]])
@@ -122,7 +122,7 @@ class UsersTable extends Table
             ->maxLength('mname', 64)
             ->allowEmpty('mname');
 
-        $validator
+      /*  $validator
             ->scalar('gender')
             ->maxLength('gender', 15)
             ->requirePresence('gender', 'create')
@@ -147,7 +147,7 @@ class UsersTable extends Table
         $validator
             ->scalar('dob')
             ->maxLength('dob', 64)
-            ->allowEmpty('dob');
+            ->allowEmpty('dob');*/
 
 //        $validator
 //            ->dateTime('created_date')
@@ -159,10 +159,10 @@ class UsersTable extends Table
 //            ->requirePresence('created_by', 'create')
 //            ->notEmpty('created_by');
 
-        $validator
+       /* $validator
             ->scalar('passport')
             ->maxLength('passport', 128)
-            ->allowEmpty('passport');
+            ->allowEmpty('passport');*/
 
 //        $validator
 //            ->scalar('useruniquid')
@@ -190,8 +190,8 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['username']));
         $rules->add($rules->existsIn(['role_id'], 'Roles'));
-        $rules->add($rules->existsIn(['country_id'], 'Countries'));
-        $rules->add($rules->existsIn(['state_id'], 'States'));
+        /*$rules->add($rules->existsIn(['country_id'], 'Countries'));
+        $rules->add($rules->existsIn(['state_id'], 'States'));*/
         $rules->add($rules->existsIn(['department_id'], 'Departments'));
 
         return $rules;

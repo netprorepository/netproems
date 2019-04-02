@@ -36,13 +36,14 @@ class DepartmentsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function viewdepartment($id = null)
     {
         $department = $this->Departments->get($id, [
-            'contain' => ['Faculties', 'Programes', 'Users']
+            'contain' => ['Faculties', 'Programes']
         ]);
 
         $this->set('department', $department);
+         $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
