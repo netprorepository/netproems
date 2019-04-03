@@ -73,6 +73,7 @@
               header('Content-Disposition: attachment;filename="' . $teacher->cv . '"');
               header("Cache-control: private");
           }
+          
           readfile("cvs/" . $teacher->cv);
           return;
       }
