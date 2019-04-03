@@ -335,6 +335,9 @@ class UsersController extends AppController {
     // allow unrestricted pages
     public function beforeFilter(Event $event) {
         // $this->Auth->allow(['add']);
+        if (!$this->Auth->user()) {
+            $this->Auth->config('authError', false);
+        }
     }
 
     public function changeuserstatus($user_id, $status) {
@@ -357,5 +360,7 @@ class UsersController extends AppController {
         $this->set('admin', $admin);
         $this->viewBuilder()->setLayout('adminbackend');
     }
+    
+    
 
 }

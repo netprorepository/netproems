@@ -67,10 +67,10 @@
                                   <td><?= h($teacher->qualification) ?></td>
                               
                                   <td class="actions" width="20px;">
-                                      <a href="#" data-toggle="modal" data-target="#assignsubjects">
+<!--                                      <a href="#" data-toggle="modal" data-target="#assignsubjects">
 
                                           <button class="btn btn-success fa fa-check-circle" title="assign subjects">  </button>
-                                      </a>
+                                      </a>-->
                                       <?= $this->Html->link(__(' '), ['action' => 'viewteacher', $teacher->id, $this->generateurl($teacher->user->fname)], ['class' => 'fa fa-eye btn btn-info', 'title' => 'view teacher']) ?>
                                       <?= $this->Html->link(__(' '), ['action' => 'updateteacher', $teacher->id, $this->generateurl($teacher->user->fname)], ['class' => 'fa fa-edit btn btn-primary', 'title' => 'update teacher']) ?>
                                       <?= $this->Form->postLink(__(' '), ['action' => 'delete', $teacher->id], ['confirm' => __('Are you sure you want to delete # {0}?', $teacher->id), 'class' => 'fa fa-times-circle btn btn-danger', 'title' => 'delete teacher']) ?>
