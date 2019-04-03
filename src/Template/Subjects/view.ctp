@@ -53,4 +53,33 @@
             <td><?= h($subject->created_date) ?></td>
         </tr>
     </table>
+    <div class="related">
+        <h4><?= __('Related Subject Teachers') ?></h4>
+        <?php if (!empty($subject->subject_teachers)): ?>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th scope="col"><?= __('Id') ?></th>
+                <th scope="col"><?= __('Teacher Id') ?></th>
+                <th scope="col"><?= __('Subject Id') ?></th>
+                <th scope="col"><?= __('User Id') ?></th>
+                <th scope="col"><?= __('Created Date') ?></th>
+                <th scope="col" class="actions"><?= __('Actions') ?></th>
+            </tr>
+            <?php foreach ($subject->subject_teachers as $subjectTeachers): ?>
+            <tr>
+                <td><?= h($subjectTeachers->id) ?></td>
+                <td><?= h($subjectTeachers->teacher_id) ?></td>
+                <td><?= h($subjectTeachers->subject_id) ?></td>
+                <td><?= h($subjectTeachers->user_id) ?></td>
+                <td><?= h($subjectTeachers->created_date) ?></td>
+                <td class="actions">
+                    <?= $this->Html->link(__('View'), ['controller' => 'SubjectTeachers', 'action' => 'view', $subjectTeachers->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'SubjectTeachers', 'action' => 'edit', $subjectTeachers->id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'SubjectTeachers', 'action' => 'delete', $subjectTeachers->id], ['confirm' => __('Are you sure you want to delete # {0}?', $subjectTeachers->id)]) ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
+        <?php endif; ?>
+    </div>
 </div>

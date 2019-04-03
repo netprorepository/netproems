@@ -42,6 +42,7 @@ class SubjectsController extends AppController
         ]);
 
         $this->set('subject', $subject);
+        $this->viewBuilder()->setLayout('adminbackend');   
     }
 
     /**
@@ -57,14 +58,19 @@ class SubjectsController extends AppController
             if ($this->Subjects->save($subject)) {
                 $this->Flash->success(__('The subject has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managesubjects']);
             }
             $this->Flash->error(__('The subject could not be saved. Please, try again.'));
         }
         $departments = $this->Subjects->Departments->find('list', ['limit' => 200]);
         $users = $this->Subjects->Users->find('list', ['limit' => 200]);
         $this->set(compact('subject', 'departments', 'users'));
+         $this->viewBuilder()->setLayout('adminbackend');
     }
+        
+        
+    
+    
 
     /**
      * Edit method
@@ -83,13 +89,15 @@ class SubjectsController extends AppController
             if ($this->Subjects->save($subject)) {
                 $this->Flash->success(__('The subject has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managesubjects']);
             }
             $this->Flash->error(__('The subject could not be saved. Please, try again.'));
         }
         $departments = $this->Subjects->Departments->find('list', ['limit' => 200]);
         $users = $this->Subjects->Users->find('list', ['limit' => 200]);
         $this->set(compact('subject', 'departments', 'users'));
+
+        $this->viewBuilder()->setLayout('adminbackend');   
     }
 
     /**
@@ -110,5 +118,32 @@ class SubjectsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    
+    public function managesubjects()
+    {
+        $this->paginate = [
+            'contain' => ['Departments', 'Users']
+        ];
+        $subjects = $this->paginate($this->Subjects);
+
+        $this->set(compact('subjects'));
+
+        $this->viewBuilder()->setLayout('adminbackend');    
+        
+    }
+    
+     public function changesubjectstatus($id, $status) {
+        $subjects = $this->Subjects->get($id);
+        $subjects->status = $status;
+        if ($status==1){$mystatus="Enabled";}
+        else if ($status==0){$mystatus="Disabled";}
+        
+        if ($this->Subjects->save($subjects)) {
+            $this->Flash->success(__('Subject status ' . $mystatus));
+        } else {
+            $this->Flash->error(__('Unable to change Subjects status. Please, try again.'));
+        }
+        return $this->redirect(['controller' => 'Subjects', 'action' => 'managesubjects']);
     }
 }

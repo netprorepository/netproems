@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\CountriesTable|\Cake\ORM\Association\BelongsTo $Countries
  * @property \App\Model\Table\StatesTable|\Cake\ORM\Association\BelongsTo $States
  * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\BelongsToMany $Subjects
+ * @property \App\Model\Table\SubjectTeachersTable|\Cake\ORM\Association\HasMany $SubjectTeachers
  *
  * @method \App\Model\Entity\Teacher get($primaryKey, $options = [])
  * @method \App\Model\Entity\Teacher newEntity($data = null, array $options = [])

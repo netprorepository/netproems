@@ -12,6 +12,9 @@
         <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
+
+        <li><?= $this->Html->link(__('List Subject Teachers'), ['controller' => 'SubjectTeachers', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Subject Teacher'), ['controller' => 'SubjectTeachers', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="subjects index large-9 medium-8 columns content">
@@ -38,7 +41,8 @@
                 <td><?= h($subject->subjectcode) ?></td>
                 <td><?= $subject->has('department') ? $this->Html->link($subject->department->name, ['controller' => 'Departments', 'action' => 'view', $subject->department->id]) : '' ?></td>
                 <td><?= $this->Number->format($subject->creditload) ?></td>
-                <td><?= $subject->has('user') ? $this->Html->link($subject->user->username, ['controller' => 'Users', 'action' => 'view', $subject->user->id]) : '' ?></td>
+
+                <td><?= $subject->has('user') ? $this->Html->link($subject->user->id, ['controller' => 'Users', 'action' => 'view', $subject->user->id]) : '' ?></td>
                 <td><?= h($subject->created_date) ?></td>
                 <td><?= $this->Number->format($subject->status) ?></td>
                 <td class="actions">

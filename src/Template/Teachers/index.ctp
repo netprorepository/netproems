@@ -14,8 +14,9 @@
         <li><?= $this->Html->link(__('New Country'), ['controller' => 'Countries', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List States'), ['controller' => 'States', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New State'), ['controller' => 'States', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Subjects'), ['controller' => 'Subjects', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Subject'), ['controller' => 'Subjects', 'action' => 'add']) ?></li>
+
+        <li><?= $this->Html->link(__('List Subject Teachers'), ['controller' => 'SubjectTeachers', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Subject Teacher'), ['controller' => 'SubjectTeachers', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="teachers index large-9 medium-8 columns content">
@@ -34,7 +35,6 @@
                 <th scope="col"><?= $this->Paginator->sort('cv') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('qualification') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('date_created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('passport') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -42,7 +42,7 @@
             <?php foreach ($teachers as $teacher): ?>
             <tr>
                 <td><?= $this->Number->format($teacher->id) ?></td>
-                <td><?= $teacher->has('user') ? $this->Html->link($teacher->user->username, ['controller' => 'Users', 'action' => 'view', $teacher->user->id]) : '' ?></td>
+                <td><?= $teacher->has('user') ? $this->Html->link($teacher->user->id, ['controller' => 'Users', 'action' => 'view', $teacher->user->id]) : '' ?></td>
                 <td><?= h($teacher->gender) ?></td>
                 <td><?= h($teacher->address) ?></td>
                 <td><?= $teacher->has('country') ? $this->Html->link($teacher->country->name, ['controller' => 'Countries', 'action' => 'view', $teacher->country->id]) : '' ?></td>

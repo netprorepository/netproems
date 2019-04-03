@@ -12,6 +12,8 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\DepartmentsTable|\Cake\ORM\Association\BelongsTo $Departments
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  * @property |\Cake\ORM\Association\BelongsToMany $Teachers
+=======
+ * @property \App\Model\Table\SubjectTeachersTable|\Cake\ORM\Association\HasMany $SubjectTeachers
  *
  * @method \App\Model\Entity\Subject get($primaryKey, $options = [])
  * @method \App\Model\Entity\Subject newEntity($data = null, array $options = [])
@@ -83,15 +85,6 @@ class SubjectsTable extends Table
             ->requirePresence('creditload', 'create')
             ->notEmpty('creditload');
 
-        $validator
-            ->dateTime('created_date')
-            ->requirePresence('created_date', 'create')
-            ->notEmpty('created_date');
-
-        $validator
-            ->integer('status')
-            ->requirePresence('status', 'create')
-            ->notEmpty('status');
 
         return $validator;
     }
