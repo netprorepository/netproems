@@ -45,14 +45,14 @@ class UsersTable extends Table
             'foreignKey' => 'role_id',
             'joinType' => 'INNER'
         ]);
-      /*  $this->belongsTo('Countries', [
+        $this->belongsTo('Countries', [
             'foreignKey' => 'country_id',
-            'joinType' => 'INNER'
+            //'joinType' => 'INNER'
         ]);
         $this->belongsTo('States', [
             'foreignKey' => 'state_id',
-            'joinType' => 'INNER'
-        ]);*/
+           // 'joinType' => 'INNER'
+        ]);
         $this->belongsTo('Departments', [
             'foreignKey' => 'department_id',
             'joinType' => 'INNER'
