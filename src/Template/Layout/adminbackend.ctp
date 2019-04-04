@@ -77,6 +77,13 @@
                                   echo $this->Html->link('Manage Faculties', ['controller' => 'Faculties', 'action' => 'managefaculties'], ['title' => 'manage faculties', 'class' => 'collapse-item']);
                                   echo $this->Html->link('Manage Departments', ['controller' => 'Departments', 'action' => 'managedepartments'], ['title' => 'manage departments', 'class' => 'collapse-item']);
                                   echo $this->Html->link('Manage Programes', ['controller' => 'Programes', 'action' => 'manageprogrames'], ['title' => 'manage programes', 'class' => 'collapse-item']);
+                                  echo'<h6 class="collapse-header">Manage Fees:</h6>';
+                                  echo $this->Html->link('Manage Fees', ['controller' => 'Fees', 'action' => 'managefees'], ['title' => 'manage fees', 'class' => 'collapse-item']);
+                                  echo'<h6 class="collapse-header">Fee Allocations:</h6>';
+                                  echo $this->Html->link('Allocate Fees', ['controller' => 'Feeallocations', 'action' => 'managefeeallocations'], ['title' => 'manage fee allocations', 'class' => 'collapse-item']);
+                                  echo'<h6 class="collapse-header">Roles:</h6>';
+                                  echo $this->Html->link('Manage Roles', ['controller' => 'Roles', 'action' => 'manageroles'], ['title' => 'manage roles', 'class' => 'collapse-item']);
+
                                   echo'<h6 class="collapse-header">Settings:</h6>';
                                   echo $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1], ['title' => 'update system system', 'class' => 'collapse-item']);
                                   ?>
@@ -455,6 +462,10 @@
         <script>
             //Date picker
             $('#datepicker').datepicker({
+                autoclose: true
+            });
+            //Date picker
+            $('#datepicker2').datepicker({
                 autoclose: true
             });
         </script>
