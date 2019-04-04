@@ -39,7 +39,7 @@ class FeesController extends AppController
     public function viewfee($id = null)
     {
         $fee = $this->Fees->get($id, [
-            'contain' => ['Users', 'Feeallocations']
+            'contain' => ['Users', 'Feeallocations.Departments','Feeallocations.Users']
         ]);
 
         $this->set('fee', $fee);
