@@ -18,11 +18,12 @@ class RolesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function manageroles()
     {
         $roles = $this->paginate($this->Roles);
 
         $this->set(compact('roles'));
+         $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -39,6 +40,7 @@ class RolesController extends AppController
         ]);
 
         $this->set('role', $role);
+         $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -46,7 +48,7 @@ class RolesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function newrole()
     {
         $role = $this->Roles->newEntity();
         if ($this->request->is('post')) {
@@ -54,11 +56,12 @@ class RolesController extends AppController
             if ($this->Roles->save($role)) {
                 $this->Flash->success(__('The role has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'manageroles']);
             }
             $this->Flash->error(__('The role could not be saved. Please, try again.'));
         }
         $this->set(compact('role'));
+         $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -78,11 +81,12 @@ class RolesController extends AppController
             if ($this->Roles->save($role)) {
                 $this->Flash->success(__('The role has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'manageroles']);
             }
             $this->Flash->error(__('The role could not be saved. Please, try again.'));
         }
         $this->set(compact('role'));
+         $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -102,6 +106,6 @@ class RolesController extends AppController
             $this->Flash->error(__('The role could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'manageroles']);
     }
 }
