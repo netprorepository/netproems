@@ -18,7 +18,7 @@ class FeeallocationsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function managefeeallocations()
     {
         $this->paginate = [
             'contain' => ['Fees', 'Departments', 'Users']
@@ -26,6 +26,7 @@ class FeeallocationsController extends AppController
         $feeallocations = $this->paginate($this->Feeallocations);
 
         $this->set(compact('feeallocations'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -35,13 +36,14 @@ class FeeallocationsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function viewfeeallocation($id = null)
     {
         $feeallocation = $this->Feeallocations->get($id, [
             'contain' => ['Fees', 'Departments', 'Users']
         ]);
 
         $this->set('feeallocation', $feeallocation);
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -49,15 +51,25 @@ class FeeallocationsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function newfeeallocation()
     {
         $feeallocation = $this->Feeallocations->newEntity();
         if ($this->request->is('post')) {
             $feeallocation = $this->Feeallocations->patchEntity($feeallocation, $this->request->getData());
+            $feeallocation->user_id = $this->Auth->user('id');
             if ($this->Feeallocations->save($feeallocation)) {
+                  //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Added a new Fee allocation ".$feeallocation->id;
+                $user_id = $this->Auth->user('id');
+                $description = "Created a new Fee allocation " . $feeallocation->id;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                 $this->Flash->success(__('The feeallocation has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managefeeallocations']);
             }
             $this->Flash->error(__('The feeallocation could not be saved. Please, try again.'));
         }
@@ -65,6 +77,7 @@ class FeeallocationsController extends AppController
         $departments = $this->Feeallocations->Departments->find('list', ['limit' => 200]);
         $users = $this->Feeallocations->Users->find('list', ['limit' => 200]);
         $this->set(compact('feeallocation', 'fees', 'departments', 'users'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -74,7 +87,7 @@ class FeeallocationsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function editfeeallocation($id = null)
     {
         $feeallocation = $this->Feeallocations->get($id, [
             'contain' => []
@@ -84,7 +97,7 @@ class FeeallocationsController extends AppController
             if ($this->Feeallocations->save($feeallocation)) {
                 $this->Flash->success(__('The feeallocation has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managefeeallocations']);
             }
             $this->Flash->error(__('The feeallocation could not be saved. Please, try again.'));
         }
@@ -92,6 +105,7 @@ class FeeallocationsController extends AppController
         $departments = $this->Feeallocations->Departments->find('list', ['limit' => 200]);
         $users = $this->Feeallocations->Users->find('list', ['limit' => 200]);
         $this->set(compact('feeallocation', 'fees', 'departments', 'users'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -111,6 +125,6 @@ class FeeallocationsController extends AppController
             $this->Flash->error(__('The feeallocation could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'managefeeallocations']);
     }
 }
