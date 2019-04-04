@@ -14,6 +14,7 @@
         <li><?= $this->Html->link(__('New Country'), ['controller' => 'Countries', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List States'), ['controller' => 'States', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New State'), ['controller' => 'States', 'action' => 'add']) ?></li>
+
         <li><?= $this->Html->link(__('List Subject Teachers'), ['controller' => 'SubjectTeachers', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Subject Teacher'), ['controller' => 'SubjectTeachers', 'action' => 'add']) ?></li>
     </ul>
@@ -51,6 +52,7 @@
                 <td><?= h($teacher->cv) ?></td>
                 <td><?= h($teacher->qualification) ?></td>
                 <td><?= h($teacher->date_created) ?></td>
+                <td><?= h($teacher->passport) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $teacher->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $teacher->id]) ?>

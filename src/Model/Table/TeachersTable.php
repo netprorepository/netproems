@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\CountriesTable|\Cake\ORM\Association\BelongsTo $Countries
  * @property \App\Model\Table\StatesTable|\Cake\ORM\Association\BelongsTo $States
+ * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\BelongsToMany $Subjects
  * @property \App\Model\Table\SubjectTeachersTable|\Cake\ORM\Association\HasMany $SubjectTeachers
  *
  * @method \App\Model\Entity\Teacher get($primaryKey, $options = [])
@@ -52,8 +53,10 @@ class TeachersTable extends Table
             'foreignKey' => 'state_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('SubjectTeachers', [
-            'foreignKey' => 'teacher_id'
+        $this->belongsToMany('Subjects', [
+            'foreignKey' => 'teacher_id',
+            'targetForeignKey' => 'subject_id',
+            'joinTable' => 'subjects_teachers'
         ]);
     }
 
@@ -104,10 +107,15 @@ class TeachersTable extends Table
             ->requirePresence('qualification', 'create')
             ->notEmpty('qualification');
 
+//        $validator
+//            ->dateTime('date_created')
+//            ->requirePresence('date_created', 'create')
+//            ->notEmpty('date_created');
+
         $validator
-            ->dateTime('date_created')
-            ->requirePresence('date_created', 'create')
-            ->notEmpty('date_created');
+            ->scalar('passport')
+            ->maxLength('passport', 156)
+            ->allowEmpty('passport');
 
         return $validator;
     }

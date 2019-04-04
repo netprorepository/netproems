@@ -20,6 +20,8 @@
         <li><?= $this->Html->link(__('New Country'), ['controller' => 'Countries', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List States'), ['controller' => 'States', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New State'), ['controller' => 'States', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Subjects'), ['controller' => 'Subjects', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Subject'), ['controller' => 'Subjects', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Subject Teachers'), ['controller' => 'SubjectTeachers', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Subject Teacher'), ['controller' => 'SubjectTeachers', 'action' => 'add']) ?></li>
     </ul>
@@ -39,6 +41,8 @@
             echo $this->Form->control('cv');
             echo $this->Form->control('qualification');
             echo $this->Form->control('date_created');
+            echo $this->Form->control('passport');
+            echo $this->Form->control('subjects._ids', ['options' => $subjects]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

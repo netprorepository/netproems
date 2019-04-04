@@ -71,7 +71,6 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Manage Admins:</h6>
-<<<<<<< HEAD
             <?php
               echo $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], 
                     ['title' => 'manage admins','class'=>'collapse-item']);
@@ -88,24 +87,6 @@
               echo $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1],
                         ['title' => 'update system system','class'=>'collapse-item']);
             ?>
-=======
-         <?php echo $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], 
-                 ['title' => 'manage admins','class'=>'collapse-item']);
-				  echo'<h6 class="collapse-header">Manage Academics:</h6>';
-          echo $this->Html->link('Manage Faculties', ['controller' => 'Faculties', 'action' => 'managefaculties'], 
-                   ['title' => 'manage faculties','class'=>'collapse-item']);
-          echo $this->Html->link('Manage Departments', ['controller' => 'Departments', 'action' => 'managedepartments'], 
-                   ['title' => 'manage departments','class'=>'collapse-item']);
-          echo $this->Html->link('Manage Programes', ['controller' => 'Programes', 'action' => 'manageprogrames'], 
-                   ['title' => 'manage programes','class'=>'collapse-item']);
-          echo $this->Html->link('New Admin', ['controller' => 'Users', 'action' => 'newadmin'], 
-                   ['title' => 'add new admin','class'=>'collapse-item']);
-   echo $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1],
-            ['title' => 'update system system','class'=>'collapse-item']);
-   
-   ?>
-           
->>>>>>> dev1
           </div>
         </div>
       </li>
@@ -138,7 +119,7 @@
             <?php
               echo $this->Html->link('Manage Teacher', ['controller' => 'Teachers', 'action' => 'manageteachers'], 
                     ['title' => 'Manage Teachers','class'=>'collapse-item']);
-              echo $this->Html->link('Assign Subject', ['controller' => 'Teachers', 'action' => 'assignsunjects'], 
+              echo $this->Html->link('Assign Subject', ['controller' => 'Teachers', 'action' => 'assignsubjectstoteacher'], 
                     ['title' => 'Assign Subjects','class'=>'collapse-item']);
             ?>
           </div>
