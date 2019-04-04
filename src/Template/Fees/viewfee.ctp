@@ -53,85 +53,24 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                
-                <th scope="col"><?= __('Fee') ?></th>
-                <th scope="col"><?= __('Department') ?></th>
-                <th scope="col"><?= __('Startdate') ?></th>
-                <th scope="col"><?= __('Enddate') ?></th>
-                <th scope="col"><?= __('Allocated By') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($fee->feeallocations as $feeallocations): ?>
-            <tr>
-               
-                <td><?= h($feeallocations->fee) ?></td>
-                <td><?= h($feeallocations->department->name) ?></td>
-                <td><?= h($feeallocations->startdate) ?></td>
-                <td><?= h($feeallocations->enddate) ?></td>
-                <td><?= h($feeallocations->user->username) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Feeallocations', 'action' => 'view', $feeallocations->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Feeallocations', 'action' => 'edit', $feeallocations->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Feeallocations', 'action' => 'delete', $feeallocations->id], ['confirm' => __('Are you sure you want to delete # {0}?', $feeallocations->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-<div class="fees view large-9 medium-8 columns content">
-    <h3><?= h($fee->name) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Name') ?></th>
-            <td><?= h($fee->name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created By') ?></th>
-            <td><?= $fee->has('user') ? $this->Html->link($fee->user->username, ['controller' => 'Users', 'action' => 'view', $fee->user->id]) : '' ?></td>
-        </tr>
-       
-        <tr>
-            <th scope="row"><?= __('Amount') ?></th>
-            <td><?= $this->Number->format($fee->amount) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Status') ?></th>
-            <td><?= $this->Number->format($fee->status) ?></td>
-        </tr>
-    </table>
-    <div class="related">
-        <h4><?= __('Fee Allocations') ?></h4>
-        <?php if (!empty($fee->feeallocations)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-               
                 <th style="padding: 10px;"><?= __('Fee') ?></th>
                 <th style="padding: 10px;"><?= __('Department') ?></th>
                 <th style="padding: 10px;"><?= __('Startdate') ?></th>
                 <th style="padding: 10px;"><?= __('Enddate') ?></th>
-                <th sstyle="padding: 10px;"><?= __('Allocated By') ?></th>
+                <th style="padding: 10px;"><?= __('Allocated By') ?></th>
                 <th style="padding: 10px;" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($fee->feeallocations as $feeallocations): ?>
             <tr>
                
-                <td style="padding: 10px;"><?= h($fee->name) ?></td>
+                <td style="padding: 10px;"><?= h($feeallocations->fee) ?></td>
                 <td style="padding: 10px;"><?= h($feeallocations->department->name) ?></td>
                 <td style="padding: 10px;"><?= h($feeallocations->startdate) ?></td>
                 <td style="padding: 10px;"><?= h($feeallocations->enddate) ?></td>
                 <td style="padding: 10px;"><?= h($feeallocations->user->username) ?></td>
                 <td style="padding: 10px;" class="actions">
-                    <?= $this->Html->link(__(' View'), ['controller' => 'Feeallocations', 'action' => 'viewfeeallocation', $feeallocations->id]) ?>
-                    <?= $this->Html->link(__(' Edit'), ['controller' => 'Feeallocations', 'action' => 'editfeeallocation', $feeallocations->id]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Feeallocations', 'action' => 'view', $feeallocations->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Feeallocations', 'action' => 'edit', $feeallocations->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['controller' => 'Feeallocations', 'action' => 'delete', $feeallocations->id], ['confirm' => __('Are you sure you want to delete # {0}?', $feeallocations->id)]) ?>
                 </td>
             </tr>
