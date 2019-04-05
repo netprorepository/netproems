@@ -35,6 +35,8 @@ class Fee extends Entity
         'status' => true,
         'user' => true,
         'feeallocations' => true,
+        'startdate'=> true,
+        'enddate' => true,
         'departments' => true
     ];
 }
