@@ -84,7 +84,7 @@
        */
       public function editfee($id = null) {
           $fee = $this->Fees->get($id, [
-              'contain' => []
+              'contain' => ['Departments']
           ]);
           if ($this->request->is(['patch', 'post', 'put'])) {
               $fee = $this->Fees->patchEntity($fee, $this->request->getData());
