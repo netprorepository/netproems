@@ -24,9 +24,17 @@
                                     ?>
                                 </div>
                                 <div class="col-sm-4 mb-3 mb-sm-0">
-                                <?= $this->Form->control('departments._ids', ['options' => $departments,'label'=>false,'empty'=>'Select Departments','class'=>'form-control form-control-user'])?>
+                                <?= $this->Form->control('departments._ids', ['options' => $departments,'label'=>false,'empty'=>'Select Departments','class'=>'select2_multiple form-control form-control-user'])?>
                                     </div>
                             </div>
+                             <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+              <?= $this->Form->control('startdate', ['label' => false, 'class' => 'form-control form-control-user2', 'type' => 'text', 'id' => 'datepicker','placeholder'=>'start date'])?>
+                    </div>
+                                       <div class="col-sm-6 mb-3 mb-sm-0">
+              <?= $this->Form->control('enddate', ['label' => false, 'class' => 'form-control form-control-user2', 'type' => 'text', 'id' => 'datepicker2','placeholder'=>'end date'])?>
+                    </div>
+</div>
 
                             
                         </fieldset>
