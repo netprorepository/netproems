@@ -7,7 +7,7 @@
   <meta name="description" content="NetPro EMS">
   <meta name="author" content="NetPro Int'l">
 
- <link rel="icon" href="/img/alogo.png" type="image/x-icon">
+ <link rel="icon" href="../img/alogo.png" type="image/x-icon">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= $this->Html->meta('alogo.png') ?>
         <title>NETPRO EMS  </title>
