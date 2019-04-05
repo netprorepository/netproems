@@ -23,6 +23,15 @@
                   echo h($programes->name.' / '.$programes->programecode).'<br />';
                   
                    }} ?>
+                  <hr />
+                   <p>Fees Applicable to this department  </p>
+                  <?php if (!empty($department->fees)){
+                      
+                  foreach ($department->fees as $fee){
+          
+                  echo h($fee->name.'  -  N'.number_format($fee->amount,2)).'<br />';
+                  
+                   }} ?>
                  
                 </div>
               </div>
