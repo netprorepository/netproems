@@ -10,8 +10,11 @@ use Cake\Validation\Validator;
  * Departments Model
  *
  * @property \App\Model\Table\FacultiesTable|\Cake\ORM\Association\BelongsTo $Faculties
+ * @property |\Cake\ORM\Association\HasMany $Feeallocations
  * @property \App\Model\Table\ProgramesTable|\Cake\ORM\Association\HasMany $Programes
+ * @property |\Cake\ORM\Association\HasMany $Subjects
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\HasMany $Users
+ * @property |\Cake\ORM\Association\BelongsToMany $Fees
  *
  * @method \App\Model\Entity\Department get($primaryKey, $options = [])
  * @method \App\Model\Entity\Department newEntity($data = null, array $options = [])
@@ -43,11 +46,22 @@ class DepartmentsTable extends Table
             'foreignKey' => 'faculty_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasMany('Feeallocations', [
+            'foreignKey' => 'department_id'
+        ]);
         $this->hasMany('Programes', [
+            'foreignKey' => 'department_id'
+        ]);
+        $this->hasMany('Subjects', [
             'foreignKey' => 'department_id'
         ]);
         $this->hasMany('Users', [
             'foreignKey' => 'department_id'
+        ]);
+        $this->belongsToMany('Fees', [
+            'foreignKey' => 'department_id',
+            'targetForeignKey' => 'fee_id',
+            'joinTable' => 'departments_fees'
         ]);
     }
 
