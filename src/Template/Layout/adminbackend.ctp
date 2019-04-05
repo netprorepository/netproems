@@ -14,7 +14,7 @@
 
         <!-- Custom fonts for this template-->
         <?=
-          $this->Html->css(['all.min', 'sb-admin-2.min', 'dataTables.bootstrap4.min', 'daterangepicker', 'bootstrap-timepicker.min', 'custom'])
+          $this->Html->css(['all.min', 'sb-admin-2.min', 'dataTables.bootstrap4.min', 'daterangepicker', 'bootstrap-timepicker.min', 'custom','select2.min'])
         ?>
         <?= $this->fetch('meta') ?>
         <?= $this->fetch('css') ?>
@@ -453,7 +453,7 @@
         <?=
           $this->Html->script(['jquery.min', 'bootstrap.bundle.min', 'jquery.easing.min', 'sb-admin-2.min',
               'Chart.min', 'chart-pie-demo', 'chart-area-demo', 'jquery.dataTables.min', 'dataTables.bootstrap4.min',
-              'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min',])
+              'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min','select2.full.min'])
         ?>
 
         <?= $this->fetch('script') ?>
@@ -468,6 +468,18 @@
             $('#datepicker2').datepicker({
                 autoclose: true
             });
+               $(document).ready(function() {
+        $(".select2_single").select2({
+          placeholder: "Select a from The List",
+          allowClear: true
+        });
+        $(".select2_group").select2({});
+        $(".select2_multiple").select2({
+          maximumSelectionLength: 14,
+          placeholder: "With Max Selection limit 14",
+          allowClear: true
+        });
+      });
         </script>
     </body>
 
