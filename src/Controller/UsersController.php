@@ -16,6 +16,9 @@ use App\Controller\AppController;
 class UsersController extends AppController {
 
     public function login() {
+        //get the logo on the login page
+         $settings_Table = TableRegistry::get('Settings');
+        $logo = $settings_Table->get(1);
         if ($this->request->is('post')) {
             //   debug(json_encode($this->request->getData(), JSON_PRETTY_PRINT)); exit;
             $user = $this->Auth->identify();
@@ -26,10 +29,6 @@ class UsersController extends AppController {
                 $roles = $RolesTable->get($user['role_id']);
                 $this->updateLogout($user['id']);
                 $this->createLogin($user['id']);
-
-                $settings_Table = TableRegistry::get('Settings');
-
-
                 //get the system settings and put it in session
                 $settings = $settings_Table->get(1);
                 $this->request->getSession()->write('settings', $settings);
@@ -42,6 +41,7 @@ class UsersController extends AppController {
                 $this->Flash->error('Bad Credentials or account disabled. Please check your credentials or contact admin for assistance');
             }
         }
+        $this->set('logo', $logo);
         $this->viewBuilder()->setLayout('login');
     }
 
