@@ -139,6 +139,38 @@
               return $this->redirect(['action' => 'managefees']);
           }
       }
+      
+      
+      
+      //admin method for allocating fees
+      public function allocatefees($id){
+         $fee = $this->Fees->get($id); 
+          if ($this->request->is(['patch', 'post', 'put'])) {
+         $fee = $this->Fees->patchEntity($fee, $this->request->getData());
+              if ($this->Fees->save($fee)) {
+                  //log activity
+                  $usercontroller = new UsersController();
+
+                  $title = "Allocated a fee to Department " . $fee->name;
+                  $user_id = $this->Auth->user('id');
+                  $description = "Fee Allocation " . $fee->name;
+                  $ip = $this->request->clientIp();
+                  $type = "Edit";
+                  $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  $this->Flash->success(__('Fee was allocated successfully.'));
+
+                  return $this->redirect(['action' => 'managefees']);
+              }
+              $this->Flash->error(__('The fee could not be allocated. Please, try again.'));
+          }
+          $fees = $this->Fees->find('list',['limit'=>2000]);
+          $departments = $this->Fees->Departments->find('list', ['limit' => 200]);
+          $this->set(compact('fees', 'users', 'departments'));
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      
+
 
       /**
        * Delete method
