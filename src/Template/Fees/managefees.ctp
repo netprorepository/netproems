@@ -68,12 +68,13 @@
                                               'class' => 'btn btn-round btn-success fa fa-check-circle', 'title' => 'deactivate fee']);
                                       } else {
                                        echo $this->Form->postLink(__(' '), ['action' => 'deactivatefee', $fee->id], ['confirm' => __('Are you sure you want to deactivate this fee # {0}?', $fee->name),
-                                              'class' => 'btn btn-round btn-danger fa fa-times-circle', 'title' => 'activate fee']);  
+                                              'class' => 'btn btn-round btn-danger fa fa-times-circle', 'title' => 'activate fee']).'&nbsp;';  
+                                     echo  $this->Html->link(__(' Allocate'), ['action' => 'allocatefees', $fee->id, $this->Generateurl($fee->name)], ['class' => 'btn btn-round btn-info fa fa-notes', 'title' => 'allocate this fee to departments']);
                                       }
                                       ?>
                                   </td>
                               </tr>
-
+                              
                               </tr>
   <?php endforeach; ?>
                     </tbody>
