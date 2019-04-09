@@ -167,8 +167,17 @@
                                echo $this->Form->control('regno');
                              
                             -->
-
-
+                            <div class="form-group row">        
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+ <?=  $this->Html->image($student->olevelresulturl, ['alt' => 'O level cert', 'class' => 'img-responsive avatar-view', "width"=>"100%", "height"=>"300px",'title'=>'O level Cert'])?>
+                                </div>
+                                 <div class="col-sm-4 mb-3 mb-sm-0">
+ <?=  $this->Html->image($student->birthcerturl, ['alt' => 'Birth Cert', 'class' => 'img-responsive avatar-view', "width"=>"100%", "height"=>"300px",'title'=>'Birth Cert'])?>
+                                </div>
+                                 <div class="col-sm-4 mb-3 mb-sm-0">
+ <?=  $this->Html->image($student->othercerts, ['alt' => 'Other Certs', 'class' => 'img-responsive avatar-view', "width"=>"100%", "height"=>"300px",'title'=>'Other Cert'])?>
+                                </div>
+                                 </div>
                         </fieldset>
                         <br /> <br />
 <?= $this->Form->button('Submit', ['class' => 'btn btn-primary btn-user btn-block']) ?>
