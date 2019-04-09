@@ -36,7 +36,12 @@ class UsersController extends AppController {
 
                 $this->request->getSession()->write('usersinfo', $user);
                 $this->request->getSession()->write('usersroles', $roles);
+                if($user['role_id']==2){
+                   return $this->redirect(['controller' => 'Students', 'action' => 'dashboard']); 
+                }
+                else{
                 return $this->redirect(['controller' => 'Users', 'action' => 'dashboard']);
+                }
             } else {
                 $this->Flash->error('Bad Credentials or account disabled. Please check your credentials or contact admin for assistance');
             }
