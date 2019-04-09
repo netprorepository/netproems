@@ -422,7 +422,7 @@
       
       //method that creates invoices for students
       private function creatnewinvoice($student_id, $fee_id){
-          
+          echo 'yest i got here'; exit;
       }
 
       
