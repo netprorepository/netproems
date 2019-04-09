@@ -12,7 +12,7 @@
         </tr>
         <tr>
             <th scope="row" style="padding: 10px;"><?= __('Department') ?></th>
-            <td><?= $subject->has('department') ? $this->Html->link($subject->department->name, ['controller' => 'Departments', 'action' => 'view', $subject->department->id]) : '' ?></td>
+            <td><?= $subject->has('department') ? $this->Html->link($subject->department->name, ['controller' => 'Departments', 'action' => 'viewdepartment', $subject->department->id,$subject->department->name]) : '' ?></td>
         </tr>
 <!--        <tr>
             <th scope="row"><?= __('User') ?></th>
