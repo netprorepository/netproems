@@ -104,6 +104,8 @@
                                   ?>
                                    <?php
                                   echo $this->Html->link('Manage Applicants', ['controller' => 'Students', 'action' => 'manageapplicants'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                 echo $this->Html->link('Application Form', ['controller' => 'Students', 'action' => 'newapplicant'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                 
                                   ?>
                               </div>
                           </div>
