@@ -278,7 +278,9 @@ class UsersController extends AppController {
                 // echo $file_name; exit;
                 move_uploaded_file($imagearray["tmp_name"], $folder_upload . $newFileName);
                 chmod($folder_upload . $newFileName, 0644);
-                return $message = $file_name;
+                //delete old file
+                unlink($folder_upload . $file_name);
+                return $message = $newFileName;
             }
         } else {
             return $message = 'Unable to upload image, please ensure you are uploading a jpg,png,gif or Jpeg file. ';
