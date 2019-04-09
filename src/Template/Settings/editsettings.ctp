@@ -61,7 +61,11 @@
                             <div class="form-group row">
                                 <div class="col-sm-6">
                                     <?= $this->Form->control('regnoformat', ['label' => 'STUDENT REGNO FORMAT', 'class' => 'form-control form-control-user']) ?>
-                                </div>      
+                                </div>   
+                                
+                                <div class="col-sm-6">
+                                    <?= $this->Form->control('session_id', ['options'=>$sessions,'label' => 'Select Session', 'class' => 'form-control form-control-user']) ?>
+                                </div>
                             </div> 
                             <br /> <br />
                             <?= $this->Form->button('Submit', ['class' => 'btn btn-primary btn-user btn-block']) ?>
