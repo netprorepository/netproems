@@ -10,7 +10,8 @@ use Cake\Validation\Validator;
  * Transactions Model
  *
  * @property \App\Model\Table\StudentsTable|\Cake\ORM\Association\BelongsTo $Students
- * @property |\Cake\ORM\Association\BelongsTo $Sessions
+ * @property \App\Model\Table\SessionsTable|\Cake\ORM\Association\BelongsTo $Sessions
+ * @property |\Cake\ORM\Association\BelongsTo $Fees
  *
  * @method \App\Model\Entity\Transaction get($primaryKey, $options = [])
  * @method \App\Model\Entity\Transaction newEntity($data = null, array $options = [])
@@ -46,6 +47,10 @@ class TransactionsTable extends Table
             'foreignKey' => 'session_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Fees', [
+            'foreignKey' => 'fee_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -60,10 +65,10 @@ class TransactionsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
-            ->dateTime('transdate')
-            ->requirePresence('transdate', 'create')
-            ->notEmpty('transdate');
+//        $validator
+//            ->dateTime('transdate')
+//            ->requirePresence('transdate', 'create')
+//            ->notEmpty('transdate');
 
         $validator
             ->scalar('amount')
@@ -103,6 +108,7 @@ class TransactionsTable extends Table
     {
         $rules->add($rules->existsIn(['student_id'], 'Students'));
         $rules->add($rules->existsIn(['session_id'], 'Sessions'));
+        $rules->add($rules->existsIn(['fee_id'], 'Fees'));
 
         return $rules;
     }
