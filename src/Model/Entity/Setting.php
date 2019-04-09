@@ -42,6 +42,7 @@ class Setting extends Entity
         'invoiceprefix' => true,
         'adminprefix' => true,
         'logo' => true,
+        'regnoformat' => true,
         'staffprefix' => true
     ];
 }
