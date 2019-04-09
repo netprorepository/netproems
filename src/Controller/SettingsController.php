@@ -89,7 +89,8 @@ class SettingsController extends AppController {
             }
             $this->Flash->error(__('The setting could not be saved. Please, try again.'));
         }
-        $this->set(compact('setting'));
+        $sessions = $this->Settings->Sessions->find('list',['limit' => 200])->order(['name'=>'ASC']);
+        $this->set(compact('setting','sessions'));
         $this->viewBuilder()->setLayout('adminbackend');
     }
 
