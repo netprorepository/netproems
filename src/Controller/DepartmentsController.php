@@ -39,7 +39,7 @@ class DepartmentsController extends AppController
     public function viewdepartment($id = null)
     {
         $department = $this->Departments->get($id, [
-            'contain' => ['Faculties', 'Programes']
+            'contain' => ['Faculties', 'Programes','Fees']
         ]);
 
         $this->set('department', $department);
