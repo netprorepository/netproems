@@ -76,7 +76,7 @@ use Cake\Mailer\Email;
               $student = $this->Students->patchEntity($student, $this->request->getData());
               if ($this->Students->save($student)) {
                   //sends a mail to the student informing him that he has been offered a provissional admission 
-                  $this->studentselectionmail($student->email);
+                 $this->studentselectionmail($student->email,$student->fname,$student->lname);
                   $this->Flash->success(__('The student data has been updated successfully.'));
 
                   return $this->redirect(['action' => 'manageapplicants']);
