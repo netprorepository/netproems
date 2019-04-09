@@ -91,6 +91,23 @@
                           </div>
                       </li>
 
+                       <li class="nav-item">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
+                              <i class="fas fa-fw fa-cog"></i>
+                              <span>Students</span>
+                          </a>
+                          <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                              <div class="bg-white py-2 collapse-inner rounded">
+                                  <h6 class="collapse-header">Manage Students:</h6>
+                                  <?php
+                                  echo $this->Html->link('Manage Students', ['controller' => 'Students', 'action' => 'managestudents'], ['title' => 'Manage Students', 'class' => 'collapse-item']);
+                                  ?>
+                                   <?php
+                                  echo $this->Html->link('Manage Applicants', ['controller' => 'Students', 'action' => 'manageapplicants'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                  ?>
+                              </div>
+                          </div>
+                      </li>
 
                       <li class="nav-item">
                           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
