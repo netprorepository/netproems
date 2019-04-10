@@ -50,7 +50,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                <td><?= h($topic->title) ?></td>
                 <td><?= $topic->user->fname?></td>
                 <td><?= h(date('D d M Y H:i a', strtotime($topic->uploaddate))) ?></td>
-                <td><?php if(!empty($topic->updatedon)){echo h(date('D d M Y H:i a', strtotime($topic->updatedon)));} ?></td>
+                <td><?php if(!empty($topic->updatedon)){echo h($topic->updatedon);} ?></td>
                 
                 <td class="actions">
                     <?= $this->Html->link(__(' '), ['action' => 'viewcontents', $topic->id,$this->GenerateUrl($topic->title)],['class'=>'btn btn-info fa fa-eye','title'=>'view topics']) ?>
