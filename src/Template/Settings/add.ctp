@@ -26,6 +26,8 @@
             echo $this->Form->control('adminprefix');
             echo $this->Form->control('logo');
             echo $this->Form->control('staffprefix');
+            echo $this->Form->control('regnoformat');
+            echo $this->Form->control('session_id');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
