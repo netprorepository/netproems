@@ -35,7 +35,7 @@
                   $settings = $this->request->getSession()->read('settings');
                 ?>
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
@@ -112,15 +112,18 @@
                       </li>
 
                       <li class="nav-item">
-                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree1" aria-expanded="true" aria-controls="collapseTwo">
                               <i class="fas fa-fw fa-cog"></i>
                               <span>Subject</span>
                           </a>
-                          <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                          <div id="collapseThree1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                               <div class="bg-white py-2 collapse-inner rounded">
                                   <h6 class="collapse-header">Manage Subject:</h6>
                                   <?php
                                   echo $this->Html->link('Manage Subjects', ['controller' => 'Subjects', 'action' => 'managesubjects'], ['title' => 'Manage Subject', 'class' => 'collapse-item']);
+                                 echo $this->Html->link('Manage Topics', ['controller' => 'Topics', 'action' => 'managetopics'], ['title' => 'Manage Topics', 'class' => 'collapse-item']);
+                                 
+                                  
                                   ?>
                               </div>
                           </div>
@@ -191,6 +194,9 @@
                             <a class="collapse-item" href="blank.html">Blank Page</a>
                             <?php
                               if ($user['role_id'] == 3) {
+                                   echo $this->Html->link(__(' My Courses'), ['controller' => 'Teachers', 'action' => 'assignedcourses'], ['class' => 'collapse-item','title'=>'view assigned courese']);
+                                 echo $this->Html->link(__(' Manage Topics'), ['controller' => 'Teachers', 'action' => 'mytopics'], ['class' => 'collapse-item','title'=>'view and update topics']);
+                                 
                                   echo $this->Html->link(__(' Update Profile'), ['controller' => 'Teachers', 'action' => 'updateprofile'], ['class' => 'collapse-item']);
                                   echo $this->Html->link(__(' View Profile'), ['controller' => 'Teachers', 'action' => 'viewprofile'], ['class' => 'collapse-item']);
                                   // echo '<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>';
@@ -476,7 +482,7 @@
         <?=
           $this->Html->script(['jquery.min', 'bootstrap.bundle.min', 'jquery.easing.min', 'sb-admin-2.min',
               'Chart.min', 'chart-pie-demo', 'chart-area-demo', 'jquery.dataTables.min', 'dataTables.bootstrap4.min',
-              'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min','select2.full.min','summernote.min','summernote.init'])
+              'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min','select2.full.min','summernote.init','summernote.min'])
         ?>
 
         <?= $this->fetch('script') ?>
