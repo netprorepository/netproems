@@ -1,50 +1,55 @@
-<div class="right_col" role="main" style="margin-bottom: 55px;">
-    <div class="">
-        <div class="page-title">
-            <div class="title_left">
-                <h3><small></small></h3>
-            </div>
-        </div>
-        <div class="clearfix"></div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Subjects Contents</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <div class="col-md-3">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Please Click on Any Topic To Read</div>
-<div class="panel-body">
-
-                            <?php foreach ($sub_contents as $topic) { ?>
-                                  <button class="btn btn-info" onclick="getTopics(<?= $topic->id ?>)"><?= $topic->title ?> </button>
+<?php
+$userdata = $this->request->getSession()->read('usersinfo');
+$userrole = $this->request->getSession()->read('usersroles');
+?>
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Subject Topics</h1>
+  </div><!--/end d-sm-flex-->
+  <div class="row">
+  <!-- Pie Chart -->
+  <div class="col-xl-4 col-lg-5 col-sm-12 col-md-12 col-xs-12">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Topics</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+         <?php foreach ($sub_contents as $topic) { ?>
+          <button class="btn btn-info" style="margin: 6px;" onclick="getTopics(<?= $topic->id ?>)"><?= $topic->title ?> </button>
                               <?php } ?>
-</div>
+      </div>
+      <!--/end card body-->
+    </div>
+    <!--/end card-->
+  </div>
+  <!--/end col-xl-4-->
 
-                        </div>
-                        </div>
-                        <div class="col-md-7" id="contents">
+  <!-- Area Chart -->
+  <div class="col-xl-8 col-lg-7">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Topic Details</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body" id="contents">
+          
 
                            
 
                             Click on any topic to view the contents here
 
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>        
+        <hr/>
+       
+      </div>
     </div>
+    <!--/end card-->
+  </div>
+  <!--/end col-xl-8-->
 </div>
+        
 <script>
     function getTopics(id) {
         // alert(id);
@@ -53,7 +58,7 @@
             method: 'GET',
             dataType: 'text',
             success: function (response) {
-                  console.log(response); return;
+                //  console.log(response); return;
                 document.getElementById('contents').innerHTML = "";
                 document.getElementById('contents').innerHTML = response;
                 //location.href = redirect;
