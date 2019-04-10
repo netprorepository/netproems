@@ -18,6 +18,8 @@ use Cake\ORM\Entity;
  * @property string $adminprefix
  * @property string $logo
  * @property string $staffprefix
+ * @property string $regnoformat
+ * @property int $session_id
  */
 class Setting extends Entity
 {
@@ -42,7 +44,8 @@ class Setting extends Entity
         'invoiceprefix' => true,
         'adminprefix' => true,
         'logo' => true,
+        'staffprefix' => true,
         'regnoformat' => true,
-        'staffprefix' => true
+        'session_id' => true
     ];
 }
