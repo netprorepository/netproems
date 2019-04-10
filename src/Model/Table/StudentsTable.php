@@ -13,6 +13,8 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\StatesTable|\Cake\ORM\Association\BelongsTo $States
  * @property \App\Model\Table\CountriesTable|\Cake\ORM\Association\BelongsTo $Countries
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
+ * @property |\Cake\ORM\Association\HasMany $Invoices
+ * @property |\Cake\ORM\Association\HasMany $Transactions
  * @property \App\Model\Table\FeesTable|\Cake\ORM\Association\BelongsToMany $Fees
  * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\BelongsToMany $Subjects
  *
@@ -57,6 +59,12 @@ class StudentsTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Invoices', [
+            'foreignKey' => 'student_id'
+        ]);
+        $this->hasMany('Transactions', [
+            'foreignKey' => 'student_id'
         ]);
         $this->belongsToMany('Fees', [
             'foreignKey' => 'student_id',
@@ -192,6 +200,17 @@ class StudentsTable extends Table
             ->scalar('regno')
             ->maxLength('regno', 50)
             ->allowEmpty('regno');
+
+//        $validator
+//            ->scalar('status')
+//            ->maxLength('status', 30)
+//            ->requirePresence('status', 'create')
+//            ->notEmpty('status');
+//
+//        $validator
+//            ->scalar('admissiondate')
+//            ->maxLength('admissiondate', 54)
+//            ->allowEmpty('admissiondate');
 
         return $validator;
     }
