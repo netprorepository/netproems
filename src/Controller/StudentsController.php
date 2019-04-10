@@ -369,22 +369,29 @@
           $student = $this->Students->find()
                           ->where(['user_id' => $this->Auth->user('id')])
                           ->contain(['Fees', 'Subjects', 'Departments'])->first();
+          $counter = 0;
           foreach ($student->fees as $fee) {
               //check if this fee has been paid
               if($this->checkpayment($student->id, $fee->id)==0){
                   //fee has not been paid, check if there is an invoice for it already
                   if($this->checkinvoice($student->id, $fee->id)==1){
                       //there is an unpaid invoice, take him to his invoices
-                       return $this->redirect(['action' => 'invoices']);
+                     return $this->redirect(['action' => 'invoices',$student->id]);
                       
                   }else{
+                      $counter++;
                       //no invoices, create new one
-                      $this->creatnewinvoice($student->id, $fee->id);
+                      $this->creatnewinvoice($student->id, $fee->id,$fee->amount);
                   }
                   
               }
+               
+          }
+          if($counter>0){ //if new invoice was created, take the student to the invoice
+            return $this->redirect(['action' => 'invoices',$student->id]);  
           }
 
+          
           $this->set('student', $student);
           $this->viewBuilder()->setLayout('adminbackend');
       }
@@ -406,11 +413,11 @@
       //check if there is an exisiting invoice for a particular fee
       //method that checks if a given payment has been made
       private function checkinvoice($student_id, $fee_id) {
-          $transaction_sTable = TableRegistry::get('Transactions');
+          $invoices_sTable = TableRegistry::get('Invoices');
           $current_session = $this->request->getSession()->read('settings');
-          $payment = $transaction_sTable->find()
+          $payment = $invoices_sTable->find()
                           ->where(['student_id' => $student_id, 'fee_id' => $fee_id, 'session_id' => $current_session['session_id'],
-                              'paystatus !=' => 'completed'])->first();
+                              'paystatus' => 'Unpaid'])->first();
 
           if (!empty($payment)) {
               return 1;
@@ -420,16 +427,65 @@
 
       
       
+      //method that shows a student all her courses
+      public function mycourses(){
+         $mycourses =  $this->Students->find()
+                 ->where(['user_id'=>$this->Auth->user('id')])
+                 ->contain(['Subjects','Departments.Subjects'])->first();
+        //  debug(json_encode( $mycourses, JSON_PRETTY_PRINT));exit;
+          $this->set('mycourses',$mycourses);
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+
+
+//method that shows the student his invoices
+      public function myinvoices(){
+          $student =  $this->Students->find()
+                 ->where(['user_id'=>$this->Auth->user('id')])
+                 ->contain(['Invoices.Fees','Invoices.Sessions','Fees'])->first();
+         //   debug(json_encode(  $student, JSON_PRETTY_PRINT));exit;
+          $this->set('student',  $student);
+           $this->viewBuilder()->setLayout('adminbackend');
+          
+      }
+
+
+
+
+
+
+
+
       //method that creates invoices for students
-      private function creatnewinvoice($student_id, $fee_id){
-          echo 'yest i got here'; exit;
+      private function creatnewinvoice($student_id, $fee_id,$amount){
+        //  echo 'yest i got here'; exit;
+          //get the invoice table
+           $invoices_Table = TableRegistry::get('Invoices');
+           $invoice = $invoices_Table->newEntity();
+           $invoice->student_id = $student_id;
+           $invoice->fee_id = $fee_id;
+           $invoice->amount = $amount;
+           $invoice->session_id = 1;
+           $invoice->invoiceid = "NETEMS/".$fee_id.'/'.$student_id;
+          $invoices_Table->save( $invoice);
+          return;
       }
 
       
+//method that shows a student all his invoices
+      public function invoices($student_id){
+         //get the invoice table
+           $invoices_Table = TableRegistry::get('Invoices');
+            $myinvoices =  $invoices_Table->find()
+                    ->contain(['Fees','Sessions'])
+                    ->where(['student_id'=>$student_id,'paystatus'=>'Unpaid']);
+            //debug(json_encode( $myinvoices, JSON_PRETTY_PRINT));exit;
+          $this->set('myinvoices',  $myinvoices);
+           $this->viewBuilder()->setLayout('adminbackend');
+      }
 
-
-
-
+      
 
       /**
        * Delete method
