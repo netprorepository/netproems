@@ -154,9 +154,10 @@
                     <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header"> Utilities:</h6>
-                         <?= $this->Html->link('My Courses', ['controller' => 'Departments', 'action' => 'mycourses'], ['title' => 'My Courses', 'class' => 'collapse-item'])?>
+                         <?= $this->Html->link('My Courses', ['controller' => 'Students', 'action' => 'mycourses'], ['title' => 'My Courses', 'class' => 'collapse-item'])?>
                                  
-                            <a class="collapse-item" href="utilities-border.html">Borders</a>
+                        <?= $this->Html->link('My Invoices', ['controller' => 'Students', 'action' => 'myinvoices'], ['title' => 'My Courses', 'class' => 'collapse-item'])?>
+                        
                             <a class="collapse-item" href="utilities-animation.html">Animations</a>
                             <a class="collapse-item" href="utilities-other.html">Other</a>
                         </div>
