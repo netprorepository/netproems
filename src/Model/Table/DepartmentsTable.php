@@ -58,6 +58,9 @@ class DepartmentsTable extends Table
         $this->hasMany('Users', [
             'foreignKey' => 'department_id'
         ]);
+         $this->hasMany('Students', [
+            'foreignKey' => 'department_id'
+        ]);
         $this->belongsToMany('Fees', [
             'foreignKey' => 'department_id',
             'targetForeignKey' => 'fee_id',
