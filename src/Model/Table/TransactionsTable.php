@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\StudentsTable|\Cake\ORM\Association\BelongsTo $Students
  * @property \App\Model\Table\SessionsTable|\Cake\ORM\Association\BelongsTo $Sessions
- * @property |\Cake\ORM\Association\BelongsTo $Fees
+ * @property \App\Model\Table\FeesTable|\Cake\ORM\Association\BelongsTo $Fees
  *
  * @method \App\Model\Entity\Transaction get($primaryKey, $options = [])
  * @method \App\Model\Entity\Transaction newEntity($data = null, array $options = [])
