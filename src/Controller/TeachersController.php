@@ -201,10 +201,11 @@
               $cvfile = $this->request->getData('ccv');
               if (!empty($cvfile['tmp_name'])) {
                   $cv = $userscontroller->uploadcv($cvfile, "cvs/");
+                    $teacher->cv = $cv;
               }
 
               $teacher = $this->Teachers->patchEntity($teacher, $this->request->getData());
-              $teacher->cv = $cv;
+            
               if ($this->Teachers->save($teacher)) {
                   //log activity
                   $usercontroller = new UsersController();
@@ -306,6 +307,70 @@
           $this->set(compact('users', 'subjects'));
           $this->viewBuilder()->setLayout('adminbackend');
       }
+
+      
+      
+      //method that shows the teacher only her assigned courses
+      public function assignedcourses(){
+           $teacher = $this->Teachers->find()
+                   ->where(['user_id' => $this->Auth->user('id')])
+                          ->contain([ 'Subjects'])->first();
+
+          $this->set('teacher', $teacher);
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      
+      
+      //teachers method for addint a topic to a course
+      public function addtopic($subject_id){
+            $topics_Table = TableRegistry::get('Topics');
+            $subjects_Table = TableRegistry::get('Subjects');
+            $subject = $subjects_Table->get($subject_id);
+          $topic = $topics_Table->newEntity();
+          if ($this->request->is('post')) {
+              $topic = $topics_Table->patchEntity($topic, $this->request->getData());
+              $topic->user_id = $this->Auth->user('id');
+              $topic->subject_id = $subject_id;
+
+              if ($topics_Table->save($topic)) {
+                   //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Added a Topic ".$topic->title;
+                $user_id = $this->Auth->user('id');
+                $description = "Added a Topic " . $topic->title;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  $this->Flash->success(__('The topic has been saved.'));
+
+                  return $this->redirect(['action' => 'assignedcourses']);
+              }
+              $this->Flash->error(__('The topic could not be saved. Please, try again.'));
+          }
+          $subjects = $this->Teachers->Subjects->find('list', ['limit' => 200]);
+          // $admins = $this->Topics->Admins->find('list', ['limit' => 200]);
+          $this->set(compact('topic', 'subjects','subject'));
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      
+      
+      
+      //shows the teacher all her topics
+      public function mytopics(){
+           $teacher = $this->Teachers->find()
+                   ->where(['user_id'=>$this->Auth->user('id')])
+                   ->contain(['Subjects.Topics']);
+           debug(json_encode($teacher, JSON_PRETTY_PRINT)); exit;
+          $this->set('teacher', $teacher);
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      
+
+
 
       /**
        * Delete method
