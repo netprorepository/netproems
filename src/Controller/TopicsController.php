@@ -71,6 +71,15 @@
               $topic->user_id = $this->Auth->user('id');
 
               if ($this->Topics->save($topic)) {
+                   //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Added a Topic ".$topic->title;
+                $user_id = $this->Auth->user('id');
+                $description = "Added a Topic " . $topic->title;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                   $this->Flash->success(__('The topic has been saved.'));
 
                   return $this->redirect(['action' => 'managetopics']);
@@ -92,12 +101,22 @@
        */
       public function edittopic($id = null) {
           $topic = $this->Topics->get($id, [
-              'contain' => []
+              'contain' => ['Subjects']
           ]);
           if ($this->request->is(['patch', 'post', 'put'])) {
               $topic = $this->Topics->patchEntity($topic, $this->request->getData());
+              $topic->updatedon = date('d M Y');
               if ($this->Topics->save($topic)) {
-                  $this->Flash->success(__('The topic has been saved.'));
+                   //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a Topic ".$topic->title;
+                $user_id = $this->Auth->user('id');
+                $description = "Updated a Topic " . $topic->title;
+                $ip = $this->request->clientIp();
+                $type = "Edit";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  $this->Flash->success(__('The topic has been updated.'));
 
                   return $this->redirect(['action' => 'managetopics']);
               }
