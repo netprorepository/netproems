@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Settings Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Sessions
+ *
  * @method \App\Model\Entity\Setting get($primaryKey, $options = [])
  * @method \App\Model\Entity\Setting newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Setting[] newEntities(array $data, array $options = [])
@@ -34,6 +36,11 @@ class SettingsTable extends Table
         $this->setTable('settings');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        $this->belongsTo('Sessions', [
+            'foreignKey' => 'session_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -100,17 +107,23 @@ class SettingsTable extends Table
             ->requirePresence('adminprefix', 'create')
             ->notEmpty('adminprefix');
 
-//        $validator
-//            ->scalar('logo')
-//            ->maxLength('logo', 256)
-//            ->requirePresence('logo', 'create')
-//            ->notEmpty('logo');
+        $validator
+            ->scalar('logo')
+            ->maxLength('logo', 256)
+            ->requirePresence('logo', 'create')
+            ->notEmpty('logo');
 
         $validator
             ->scalar('staffprefix')
             ->maxLength('staffprefix', 28)
             ->requirePresence('staffprefix', 'create')
             ->notEmpty('staffprefix');
+
+        $validator
+            ->scalar('regnoformat')
+            ->maxLength('regnoformat', 30)
+            ->requirePresence('regnoformat', 'create')
+            ->notEmpty('regnoformat');
 
         return $validator;
     }
@@ -125,6 +138,7 @@ class SettingsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->existsIn(['session_id'], 'Sessions'));
 
         return $rules;
     }
