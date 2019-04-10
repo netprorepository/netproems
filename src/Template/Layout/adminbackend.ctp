@@ -14,7 +14,7 @@
 
         <!-- Custom fonts for this template-->
         <?=
-          $this->Html->css(['all.min', 'sb-admin-2.min', 'dataTables.bootstrap4.min', 'daterangepicker', 'bootstrap-timepicker.min', 'custom','select2.min'])
+          $this->Html->css(['all.min', 'sb-admin-2.min', 'dataTables.bootstrap4.min', 'daterangepicker', 'bootstrap-timepicker.min', 'custom','select2.min','summernote/summernote'])
         ?>
         <?= $this->fetch('meta') ?>
         <?= $this->fetch('css') ?>
@@ -476,7 +476,7 @@
         <?=
           $this->Html->script(['jquery.min', 'bootstrap.bundle.min', 'jquery.easing.min', 'sb-admin-2.min',
               'Chart.min', 'chart-pie-demo', 'chart-area-demo', 'jquery.dataTables.min', 'dataTables.bootstrap4.min',
-              'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min','select2.full.min'])
+              'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min','select2.full.min','summernote.min','summernote.init'])
         ?>
 
         <?= $this->fetch('script') ?>
