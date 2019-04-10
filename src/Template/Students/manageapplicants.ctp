@@ -83,7 +83,7 @@ $userrole = $this->request->getSession()->read('usersroles');
             </tr>
               </tfoot>
             
-        </thead>
+     
          <tbody>
             <?php foreach ($students as $student): ?>
             <tr>
