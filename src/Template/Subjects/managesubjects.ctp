@@ -2,8 +2,6 @@
 $userdata = $this->request->getSession()->read('usersinfo');
 $userrole = $this->request->getSession()->read('usersroles');
 ?>
-
-
 <!-- Begin Page Content -->
         <div class="container-fluid">
 
@@ -51,7 +49,9 @@ $userrole = $this->request->getSession()->read('usersroles');
                                             <td class="actions">
                                                 <?= $this->Html->link(__('View'), ['action' => 'view', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-info fa fa-eye']) ?>
                                                 <?= $this->Html->link(__('Edit'), ['action' => 'edit', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-primary fa fa-edit']) ?>
-                                                <?php if ($subjects->status == 1){
+                                              <?= $this->Html->link(__('Add Contaent'), ['controller'=>'Topics','action' => 'addtopic', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-success fa fa-eye','title'=>'add contents']) ?> 
+                                                 <?= $this->Html->link(__('View Contaents'), ['action' => 'viewcontents', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view contents']) ?> 
+ <?php if ($subjects->status == 1){
 							echo $this->Form->postLink(__('Disable'), ['action' => 'changesubjectstatus', $subjects->id, 0], ['confirm' => __('Are you sure you want disable {0}?', $subjects->name),'class'=>'btn btn-round btn-danger']);
 													
                                                     } else{
