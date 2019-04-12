@@ -18,6 +18,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Student $student
  * @property \App\Model\Entity\Session $session
+ * @property \App\Model\Entity\Fee $fee
  */
 class Transaction extends Entity
 {
@@ -41,6 +42,7 @@ class Transaction extends Entity
         'session_id' => true,
         'fee_id' => true,
         'student' => true,
-        'session' => true
+        'session' => true,
+        'fee' => true
     ];
 }

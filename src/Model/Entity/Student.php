@@ -31,6 +31,8 @@ use Cake\ORM\Entity;
  * @property string $passporturl
  * @property int $user_id
  * @property string $regno
+ * @property string $status
+ * @property string $admissiondate
  *
  * @property \App\Model\Entity\Department $department
  * @property \App\Model\Entity\State $state
@@ -58,10 +60,10 @@ class Student extends Entity
         'dob' => true,
         'joindate' => true,
         'department_id' => true,
-        //'olevelresulturl' => true,
+        'olevelresulturl' => true,
         'jamb' => true,
-       // 'birthcerturl' => true,
-       // 'othercerts' => true,
+        'birthcerturl' => true,
+        'othercerts' => true,
         'email' => true,
         'state_id' => true,
         'country_id' => true,
@@ -73,15 +75,15 @@ class Student extends Entity
         'motherphone' => true,
         'fathersjob' => true,
         'mothersjob' => true,
-       // 'passporturl' => true,
+        'passporturl' => true,
         'user_id' => true,
         'regno' => true,
+        'status' => true,
+        'admissiondate' => true,
         'department' => true,
         'state' => true,
         'country' => true,
         'user' => true,
-        'status' =>true,
-        'admissiondate' => true,
         'fees' => true,
         'subjects' => true
     ];

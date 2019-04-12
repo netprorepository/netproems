@@ -54,6 +54,10 @@ class SubjectsTable extends Table
             'targetForeignKey' => 'teacher_id',
             'joinTable' => 'subjects_teachers'
         ]);
+        $this->hasMany('Topics', [
+            'foreignKey' => 'subject_id',
+            
+        ]);
     }
 
     /**
