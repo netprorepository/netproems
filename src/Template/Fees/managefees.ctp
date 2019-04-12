@@ -64,11 +64,11 @@
                                       ?>
                                       <?php
                                       if ($fee->status ==0) { 
-                                         echo $this->Form->postLink(__(' '), ['action' => 'activatefee', $fee->id], ['confirm' => __('Are you sure you want to deactivate this fee # {0}?', $fee->name),
-                                              'class' => 'btn btn-round btn-success fa fa-check-circle', 'title' => 'deactivate fee']);
+                                         echo $this->Form->postLink(__(' '), ['action' => 'activatefee', $fee->id], ['confirm' => __('Are you sure you want to activate this fee # {0}?', $fee->name),
+                                              'class' => 'btn btn-round btn-success fa fa-check-circle', 'title' => 'activate fee']);
                                       } else {
                                        echo $this->Form->postLink(__(' '), ['action' => 'deactivatefee', $fee->id], ['confirm' => __('Are you sure you want to deactivate this fee # {0}?', $fee->name),
-                                              'class' => 'btn btn-round btn-danger fa fa-times-circle', 'title' => 'activate fee']).'&nbsp;';  
+                                              'class' => 'btn btn-round btn-danger fa fa-times-circle', 'title' => 'deactivate fee']).'&nbsp;';  
                                      echo  $this->Html->link(__(' Allocate'), ['action' => 'allocatefees', $fee->id, $this->Generateurl($fee->name)], ['class' => 'btn btn-round btn-info fa fa-notes', 'title' => 'allocate this fee to departments']);
                                       }
                                       ?>
