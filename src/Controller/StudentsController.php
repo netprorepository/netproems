@@ -486,6 +486,152 @@
       }
 
       
+      
+      //go to paystack for payment
+      public function gotopaystack($invoice_id, $student_id) {
+             $transactions_Table = TableRegistry::get('Transactions');
+             $invoices_Table = TableRegistry::get('Invoices');
+             $invoice = $invoices_Table->get($invoice_id);
+             $student = $this->Students->get($student_id);
+             $name = $student->fname.' '.$student->lname;
+          //initialize the transaction before going to paystack
+             $settings = $this->request->getSession()->read('settings');
+
+          $transaction =  $transactions_Table->newEntity();
+          $transaction->student_id = $student_id;
+          $transaction->fee_id = $invoice->fee_id;
+          $transaction->session_id = $settings['session_id'];
+          $transaction->gresponse = 'initialized';
+          $transaction->amount = $invoice->amount;
+          $transaction->payref = uniqid('NetProEms');
+          $transaction->paystatus = 'initialized';
+         
+          // debug(json_encode($transaction, JSON_PRETTY_PRINT)); exit;
+           $transactions_Table->save($transaction);
+
+          $baseurl = "http://www.netproacademy.net/";
+
+          $subacc = 'ACCT_qyal8r4kg6pc6jc'; // sub-account code, you get this when you set up a split account.
+          $cancel_url = $baseurl . 'cancel/' . $transaction->payref . '/';
+          //arrange and go to paystack
+
+          /*           * *********************************** */
+          /* initialize transaction */
+          /*           * ********************************** */
+          $curl = curl_init();
+          curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => json_encode([ 
+                  'callback_url' => 'http://localhost/nerp/students/paymentverification/' . $transaction->payref,
+                  'amount' => $invoice->amount . '00',
+                  'email' => $student->email,
+                  'name' => $name,
+                  // 'subaccount'=> $subacc,
+                  'phone' => $student->phone,
+                  // 'last_name' => $lname,
+                  'reference' => $transaction->payref,
+                  'metadata' => json_encode([
+                      'cancel_action' => $cancel_url,
+                      'name' => $name,
+                      // 'fname' => $fname,
+                      'email' => $student->email,
+                      'phone' => $student->phone,
+                      'transaction_id' => $transaction->id,
+                      'student_id' => $student_id,
+                      'invoice_id' =>$invoice->id,
+                     
+                  ]),
+              ]),
+              CURLOPT_HTTPHEADER => [
+                  "authorization: Bearer sk_test_64a330a5cc8a08c43af1d3673961f083b96ed623",
+                  "content-type: application/json",
+                  "cache-control: no-cache"
+              ],
+          ));
+
+          $response = curl_exec($curl);
+          $err = curl_error($curl);
+          // debug(json_encode( $response, JSON_PRETTY_PRINT));exit;
+
+          if ($err) {
+              // there was an error contacting the Paystack API
+              die('Curl returned error: ' . $err);
+          }
+
+          $tranx = json_decode($response);
+
+          if (!$tranx->status) {
+              // there was an error from the API
+              die('API returned error: ' . $tranx->message);
+          }
+          header('location : '.$tranx->data->authorization_url);
+          //return $tranx->data->authorization_url;
+          
+      }
+      
+      
+      
+       //verify payment and assign value
+    public function paymentverification($ref) {
+        // echo $ref; exit;
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.paystack.co/transaction/verify/" . rawurlencode($ref),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "accept: application/json",
+                "authorization: Bearer sk_test_64a330a5cc8a08c43af1d3673961f083b96ed623",
+                "cache-control: no-cache"
+            ],
+        ));
+
+        //sk_test_7d5d515418c31cf203abbe3f753b1487b7d2a5e2
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        if ($err) {
+            // there was an error contacting the Paystack API
+            die('Curl returned error: ' . $err);
+        }
+
+        $tranx = json_decode($response);
+        // debug( $tranx);
+        if (!$tranx->status) {
+            // there was an error from the API
+            die('API returned error: ' . $tranx->message);
+        }
+
+        // debug($tranx); exit;
+        $trans_id = $tranx->data->metadata->transaction_id;
+        $email = $tranx->data->metadata->email;
+        $name = $tranx->data->metadata->name;
+        $invoice_id = $tranx->data->metadata->invoice_id;
+        //update transaction record
+        $transaction = $this->Transactions->get($trans_id);
+        $transaction->status = $tranx->status;
+        $transaction->amount = $tranx->data->amount / 100;
+        $transaction->paystatus = 'completed';
+        $transaction->gresponse = $tranx->data->status;
+        $this->Transactions->save($transaction);
+       // update invoice
+           $invoices_Table = TableRegistry::get('Invoices');
+        $invoice = $invoices_Table->get($invoice_id);
+        $invoice->paystatus = $tranx->data->status;
+        $invoices_Table->save($invoice);
+        //send payment alert via email
+       // $this->payconfirmationmail($email,$name,$transaction->amount);
+       
+        $this->Flash->success('Your application is complete. We will get back to you shortly ');
+        return $this->redirect(['action' => 'invoices']);
+    }
+    
+      
+      
+      
 
       /**
        * Delete method
