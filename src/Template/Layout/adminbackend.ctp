@@ -14,7 +14,7 @@
 
         <!-- Custom fonts for this template-->
         <?=
-          $this->Html->css(['all.min', 'sb-admin-2.min', 'dataTables.bootstrap4.min', 'daterangepicker', 'bootstrap-timepicker.min', 'custom','select2.min','summernote/summernote'])
+          $this->Html->css(['all.min', 'sb-admin-2.min', 'dataTables.bootstrap4.min', 'daterangepicker', 'bootstrap-timepicker.min', 'custom', 'select2.min', 'summernote/summernote'])
         ?>
         <?= $this->fetch('meta') ?>
         <?= $this->fetch('css') ?>
@@ -73,25 +73,75 @@
                                   <?php
                                   echo $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], ['title' => 'manage admins', 'class' => 'collapse-item']);
                                   echo $this->Html->link('New Admin', ['controller' => 'Users', 'action' => 'newadmin'], ['title' => 'add new admin', 'class' => 'collapse-item']);
-                                  echo'<h6 class="collapse-header">Manage Academics:</h6>';
-                                  echo $this->Html->link('Manage Faculties', ['controller' => 'Faculties', 'action' => 'managefaculties'], ['title' => 'manage faculties', 'class' => 'collapse-item']);
-                                  echo $this->Html->link('Manage Departments', ['controller' => 'Departments', 'action' => 'managedepartments'], ['title' => 'manage departments', 'class' => 'collapse-item']);
-                                  echo $this->Html->link('Manage Programes', ['controller' => 'Programes', 'action' => 'manageprogrames'], ['title' => 'manage programes', 'class' => 'collapse-item']);
-                                  echo'<h6 class="collapse-header">Manage Fees:</h6>';
-                                  echo $this->Html->link('Manage Fees', ['controller' => 'Fees', 'action' => 'managefees'], ['title' => 'manage fees', 'class' => 'collapse-item']);
-                                  echo'<h6 class="collapse-header">Fee Allocations:</h6>';
-                                  echo $this->Html->link('Allocate Fees', ['controller' => 'Feeallocations', 'action' => 'managefeeallocations'], ['title' => 'manage fee allocations', 'class' => 'collapse-item']);
-                                  echo'<h6 class="collapse-header">Roles:</h6>';
-                                  echo $this->Html->link('Manage Roles', ['controller' => 'Roles', 'action' => 'manageroles'], ['title' => 'manage roles', 'class' => 'collapse-item']);
-
-                                  echo'<h6 class="collapse-header">Settings:</h6>';
-                                  echo $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1], ['title' => 'update system system', 'class' => 'collapse-item']);
-                                  ?>
+                                echo '<h6 class="collapse-header">Manage Teachers</h6>';
+                                  echo $this->Html->link('Manage Teacher', ['controller' => 'Teachers', 'action' => 'manageteachers'], ['title' => 'Manage Teachers', 'class' => 'collapse-item']);
+      echo $this->Html->link('Assign Subject', ['controller' => 'Teachers', 'action' => 'assignsubjectstoteacher'], ['title' => 'Assign Subjects', 'class' => 'collapse-item']);
+     
+                                    ?>
                               </div>
                           </div>
                       </li>
 
                        <li class="nav-item">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#roles" aria-expanded="true" aria-controls="collapseTwo">
+                              <i class="fas fa-fw fa-cog"></i>
+                              <span>Roles</span>
+                          </a>
+                          <div id="roles" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                              <div class="bg-white py-2 collapse-inner rounded">
+                                  <h6 class="collapse-header">Manage Roles:</h6>
+                                  <?php
+                               
+                                  echo $this->Html->link('Manage Roles', ['controller' => 'Roles', 'action' => 'manageroles'], ['title' => 'manage roles', 'class' => 'collapse-item']);
+ ?> </div>
+                          </div>
+                      </li>
+                      
+                       <li class="nav-item">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#fees" aria-expanded="true" aria-controls="collapseTwo">
+                              <i class="fas fa-fw fa-cog"></i>
+                              <span>Finance</span>
+                          </a>
+                          <div id="fees" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                              <div class="bg-white py-2 collapse-inner rounded">
+                             <?php  echo'<h6 class="collapse-header">Manage Fees:</h6>';
+                                  echo $this->Html->link('Manage Fees', ['controller' => 'Fees', 'action' => 'managefees'], ['title' => 'manage fees', 'class' => 'collapse-item']);
+                                  echo'<h6 class="collapse-header">Fee Allocations:</h6>';
+                                  echo $this->Html->link('Allocate To Department', ['controller' => 'Feeallocations', 'action' => 'managefeeallocations'], ['title' => 'manage fee allocations', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Allocate To Student', ['controller' => 'Feeallocations', 'action' => 'managefeeallocations'], ['title' => 'manage fee allocations', 'class' => 'collapse-item']);
+                                  
+                             ?> </div>
+                          </div>
+                      </li>
+                      
+                      
+                      <li class="nav-item">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#academics" aria-expanded="true" aria-controls="collapseTwo">
+                              <i class="fas fa-fw fa-cog"></i>
+                              <span>Academics</span>
+                          </a>
+                          <div id="academics" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                              <div class="bg-white py-2 collapse-inner rounded">
+                                  <h6 class="collapse-header">Manage Academics:</h6>
+                                  <?php
+                               
+                                  echo $this->Html->link('Manage Faculties', ['controller' => 'Faculties', 'action' => 'managefaculties'], ['title' => 'manage faculties', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Manage Departments', ['controller' => 'Departments', 'action' => 'managedepartments'], ['title' => 'manage departments', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Manage Programes', ['controller' => 'Programes', 'action' => 'manageprogrames'], ['title' => 'manage programes', 'class' => 'collapse-item']);
+                                echo ' <h6 class="collapse-header">Manage Subject:</h6>';
+                                  echo $this->Html->link('Manage Subjects', ['controller' => 'Subjects', 'action' => 'managesubjects'], ['title' => 'Manage Subject', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Manage Topics', ['controller' => 'Topics', 'action' => 'managetopics'], ['title' => 'Manage Topics', 'class' => 'collapse-item']);
+                                 
+                                  
+                                  ?> 
+                              
+                              
+                              </div>
+                              
+                          </div>
+                      </li>
+
+                      <li class="nav-item">
                           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
                               <i class="fas fa-fw fa-cog"></i>
                               <span>Students</span>
@@ -100,77 +150,76 @@
                               <div class="bg-white py-2 collapse-inner rounded">
                                   <h6 class="collapse-header">Manage Students:</h6>
                                   <?php
-                                  echo $this->Html->link('Manage Students', ['controller' => 'Students', 'action' => 'managestudents'], ['title' => 'Manage Students', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('List Students', ['controller' => 'Students', 'action' => 'managestudents'], ['title' => 'Manage Students', 'class' => 'collapse-item']);
+                                   echo $this->Html->link('Add Student', ['controller' => 'Students', 'action' => 'newstudent'], ['title' => 'Manage Students', 'class' => 'collapse-item']);
+                                
                                   ?>
-                                   <?php
-                                  echo $this->Html->link('Manage Applicants', ['controller' => 'Students', 'action' => 'manageapplicants'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
-                                 echo $this->Html->link('Application Form', ['controller' => 'Students', 'action' => 'newapplicant'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                 
+                              </div>
+                          </div>
+                      </li>
+                      
+                       <li class="nav-item">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#admission" aria-expanded="true" aria-controls="collapseTwo">
+                              <i class="fas fa-fw fa-cog"></i>
+                              <span>Admission</span>
+                          </a>
+                          <div id="admission" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                              <div class="bg-white py-2 collapse-inner rounded">
+      <?php
+                                  echo $this->Html->link('Application Form', ['controller' => 'Students', 'action' => 'newapplicant'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Direct Admission', ['controller' => 'Students', 'action' => 'newapplicant'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Applicants List', ['controller' => 'Students', 'action' => 'manageapplicants'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
                                  
                                   ?>
                               </div>
                           </div>
                       </li>
 
-                      <li class="nav-item">
-                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree1" aria-expanded="true" aria-controls="collapseTwo">
-                              <i class="fas fa-fw fa-cog"></i>
-                              <span>Subject</span>
-                          </a>
-                          <div id="collapseThree1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                              <div class="bg-white py-2 collapse-inner rounded">
-                                  <h6 class="collapse-header">Manage Subject:</h6>
-                                  <?php
-                                  echo $this->Html->link('Manage Subjects', ['controller' => 'Subjects', 'action' => 'managesubjects'], ['title' => 'Manage Subject', 'class' => 'collapse-item']);
-                                 echo $this->Html->link('Manage Topics', ['controller' => 'Topics', 'action' => 'managetopics'], ['title' => 'Manage Topics', 'class' => 'collapse-item']);
-                                 
-                                  
-                                  ?>
-                              </div>
-                          </div>
-                      </li>
-
-                      <li class="nav-item">
-                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseTwo">
-                              <i class="fas fa-fw fa-cog"></i>
-                              <span>Teacher</span>
-                          </a>
-                          <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                              <div class="bg-white py-2 collapse-inner rounded">
-                                  <h6 class="collapse-header">Manage Teacher:</h6>
-                                  <?php
-                                  echo $this->Html->link('Manage Teacher', ['controller' => 'Teachers', 'action' => 'manageteachers'], ['title' => 'Manage Teachers', 'class' => 'collapse-item']);
-                                  echo $this->Html->link('Assign Subject', ['controller' => 'Teachers', 'action' => 'assignsubjectstoteacher'], ['title' => 'Assign Subjects', 'class' => 'collapse-item']);
-                                  ?>
-                              </div>
-                          </div>
-                      </li>
-
-                  <?php } ?>
+  <?php } ?>
 
                 <!-- Nav Item - Utilities Collapse Menu used for students-->
-                 <?php if ($user['role_id'] == 2) { ?>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas fa-fw fa-wrench"></i>
-                        <span>Utilities</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header"> Utilities:</h6>
-                         <?= $this->Html->link('My Courses', ['controller' => 'Students', 'action' => 'mycourses'], ['title' => 'My Courses', 'class' => 'collapse-item'])?>
-                                 
-                        <?= $this->Html->link('My Invoices', ['controller' => 'Students', 'action' => 'myinvoices'], ['title' => 'My Courses', 'class' => 'collapse-item'])?>
-                        
-                            <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                            <a class="collapse-item" href="utilities-other.html">Other</a>
-                        </div>
-                    </div>
-                </li>
-                 <?php } ?>
+                <?php if ($user['role_id'] == 2 || $user['role_id']==1) { ?>
+                      <li class="nav-item">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+                              <i class="fas fa-fw fa-wrench"></i>
+                              <span>Utilities</span>
+                          </a>
+                          <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                              <div class="bg-white py-2 collapse-inner rounded">
+                                  <h6 class="collapse-header"> Utilities:</h6>
+      <?= $this->Html->link('My Courses', ['controller' => 'Students', 'action' => 'mycourses'], ['title' => 'My Courses', 'class' => 'collapse-item']) ?>
+
+                                  <?= $this->Html->link('My Invoices', ['controller' => 'Students', 'action' => 'myinvoices'], ['title' => 'My Courses', 'class' => 'collapse-item']) ?>
+
+                                  <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                                  <a class="collapse-item" href="utilities-other.html">Other</a>
+                              </div>
+                          </div>
+                      </li>
+  <?php } ?>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
-
+ 
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#settings" aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Settings</span>
+                    </a>
+                    <div id="settings" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            
+<?php
+     
+                                  echo $this->Html->link('System Settings', ['controller' => 'Settings', 'action' => 'editsettings', 1], ['title' => 'update system system', 'class' => 'collapse-item']);
+                               echo $this->Html->link('Logout', ['controller' => 'Users', 'action' => 'logout', 1], ['title' => 'log out', 'class' => 'collapse-item']);
+                                 
+  
+?>
+                        </div>
+                    </div>
+                </li>
                 <!-- Heading -->
                 <div class="sidebar-heading">
                     Addons
@@ -192,16 +241,16 @@
                             <h6 class="collapse-header">Other Pages:</h6>
                             <a class="collapse-item" href="404.html">404 Page</a>
                             <a class="collapse-item" href="blank.html">Blank Page</a>
-                            <?php
-                              if ($user['role_id'] == 3) {
-                                   echo $this->Html->link(__(' My Courses'), ['controller' => 'Teachers', 'action' => 'assignedcourses'], ['class' => 'collapse-item','title'=>'view assigned courese']);
-                                 echo $this->Html->link(__(' Manage Topics'), ['controller' => 'Teachers', 'action' => 'mytopics'], ['class' => 'collapse-item','title'=>'view and update topics']);
-                                 
-                                  echo $this->Html->link(__(' Update Profile'), ['controller' => 'Teachers', 'action' => 'updateprofile'], ['class' => 'collapse-item']);
-                                  echo $this->Html->link(__(' View Profile'), ['controller' => 'Teachers', 'action' => 'viewprofile'], ['class' => 'collapse-item']);
-                                  // echo '<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>';
-                              }
-                            ?>
+<?php
+  if ($user['role_id'] == 3) {
+      echo $this->Html->link(__(' My Courses'), ['controller' => 'Teachers', 'action' => 'assignedcourses'], ['class' => 'collapse-item', 'title' => 'view assigned courese']);
+      echo $this->Html->link(__(' Manage Topics'), ['controller' => 'Teachers', 'action' => 'mytopics'], ['class' => 'collapse-item', 'title' => 'view and update topics']);
+
+      echo $this->Html->link(__(' Update Profile'), ['controller' => 'Teachers', 'action' => 'updateprofile'], ['class' => 'collapse-item']);
+      echo $this->Html->link(__(' View Profile'), ['controller' => 'Teachers', 'action' => 'viewprofile'], ['class' => 'collapse-item']);
+      // echo '<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>';
+  }
+?>
                         </div>
                     </div>
                 </li>
@@ -391,7 +440,7 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $user['fname'] . ' ' . $user['lname'] ?></span>
-                                    <?php echo $this->Html->image($user['passport'], ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']) ?>
+<?php echo $this->Html->image($user['passport'], ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']) ?>
 
                                 </a>
                                 <!-- Dropdown - User Information -->
@@ -424,7 +473,7 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
-                        <?= $this->Flash->render() ?>
+<?= $this->Flash->render() ?>
 
                         <?= $this->fetch('content') ?>
                     </div>
@@ -467,10 +516,10 @@
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <?=
-                          $this->Html->link('Logout', ['controller' => 'Users', 'action' => 'logout', $user['id']], ['title' => 'logout',
-                              'class' => 'btn btn-primary'])
-                        ?>
+<?=
+  $this->Html->link('Logout', ['controller' => 'Users', 'action' => 'logout', $user['id']], ['title' => 'logout',
+      'class' => 'btn btn-primary'])
+?>
 
                     </div>
                 </div>
@@ -479,11 +528,11 @@
 
         <!-- Bootstrap core JavaScript-->
 
-        <?=
-          $this->Html->script(['jquery.min', 'bootstrap.bundle.min', 'jquery.easing.min', 'sb-admin-2.min',
-              'Chart.min', 'chart-pie-demo', 'chart-area-demo', 'jquery.dataTables.min', 'dataTables.bootstrap4.min',
-              'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min','select2.full.min','summernote.init','summernote.min'])
-        ?>
+<?=
+  $this->Html->script(['jquery.min', 'bootstrap.bundle.min', 'jquery.easing.min', 'sb-admin-2.min',
+      'Chart.min', 'chart-pie-demo', 'chart-area-demo', 'jquery.dataTables.min', 'dataTables.bootstrap4.min',
+      'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min', 'select2.full.min', 'summernote.init', 'summernote.min'])
+?>
 
         <?= $this->fetch('script') ?>
 
@@ -497,18 +546,18 @@
             $('#datepicker2').datepicker({
                 autoclose: true
             });
-               $(document).ready(function() {
-        $(".select2_single").select2({
-          placeholder: "Select a from The List",
-          allowClear: true
-        });
-        $(".select2_group").select2({});
-        $(".select2_multiple").select2({
-          maximumSelectionLength: 14,
-          placeholder: "With Max Selection limit 14",
-          allowClear: true
-        });
-      });
+            $(document).ready(function () {
+                $(".select2_single").select2({
+                    placeholder: "Select a from The List",
+                    allowClear: true
+                });
+                $(".select2_group").select2({});
+                $(".select2_multiple").select2({
+                    maximumSelectionLength: 14,
+                    placeholder: "With Max Selection limit 14",
+                    allowClear: true
+                });
+            });
         </script>
     </body>
 
