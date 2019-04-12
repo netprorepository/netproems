@@ -37,6 +37,7 @@ class Fee extends Entity
         'feeallocations' => true,
         'startdate'=> true,
         'enddate' => true,
+        'feetype' => true,
         'departments' => true
     ];
 }
