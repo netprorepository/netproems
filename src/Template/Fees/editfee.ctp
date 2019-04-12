@@ -28,13 +28,18 @@
                                     </div>
                             </div>
                              <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
               <?= $this->Form->control('startdate', ['label' => false, 'class' => 'form-control form-control-user2', 'type' => 'text', 'id' => 'datepicker','placeholder'=>'start date'])?>
                     </div>
-                                       <div class="col-sm-6 mb-3 mb-sm-0">
+                                       <div class="col-sm-4 mb-3 mb-sm-0">
               <?= $this->Form->control('enddate', ['label' => false, 'class' => 'form-control form-control-user2', 'type' => 'text', 'id' => 'datepicker2','placeholder'=>'end date'])?>
                     </div>
+                                  <div class="col-sm-4 mb-3 mb-sm-0">
+              <?php $feetypes = ['enrolled'=>'Enrolled','none_enrolled'=>'None Enrolled'];
+                echo $this->Form->control('feetype', ['options'=>$feetypes,'label' => false, 'class' => 'form-control form-control-user2', 'placeholder'=>'fee type'])?>
+                
 </div>
+                                 </div>
 
                             
                         </fieldset>
