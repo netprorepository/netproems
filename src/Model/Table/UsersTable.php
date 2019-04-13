@@ -60,6 +60,9 @@ class UsersTable extends Table
         $this->hasMany('Logs', [
             'foreignKey' => 'user_id'
         ]);
+         $this->hasMany('Topics', [
+            'foreignKey' => 'user_id'
+        ]);
     }
 
     /**
