@@ -360,11 +360,12 @@
       
       //shows the teacher all her topics
       public function mytopics(){
-           $teacher = $this->Teachers->find()
-                   ->where(['user_id'=>$this->Auth->user('id')])
-                   ->contain(['Subjects.Topics']);
-           debug(json_encode($teacher, JSON_PRETTY_PRINT)); exit;
-          $this->set('teacher', $teacher);
+           $topics_Table = TableRegistry::get('Topics');
+           $mytopics = $topics_Table->find()
+                   ->where(['Topics.user_id'=>$this->Auth->user('id')])
+                   ->contain(['Subjects']);
+      //     debug(json_encode($mytopics, JSON_PRETTY_PRINT)); exit;
+          $this->set('mytopics', $mytopics);
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
