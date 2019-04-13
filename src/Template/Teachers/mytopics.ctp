@@ -5,8 +5,7 @@ $userrole = $this->request->getSession()->read('usersroles');
 <!-- Begin Page Content -->
         <div class="container-fluid">
 
-         <div style="padding-bottom: 10px; margin-bottom: 20px;"><?= $this->Html->link(__(' '), ['action' => 'add'],
-                            ['class'=>'btn-circle btn-lg fa fa-plus float-right','title'=>'add new subject']) ?>
+         <div style="padding-bottom: 10px; margin-bottom: 20px;">
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Manage Topics</h1></div>
 
@@ -22,41 +21,32 @@ $userrole = $this->request->getSession()->read('usersroles');
                     <tr>
               
                         <th >Subject</th>
-                        <th>Topics</th>
-                        <th >Admin</th>
-                       
-               
-                        <th>Actions</th>
+                        <th>Topic</th>
+                      <th>Actions</th>
             </tr>
         </thead>
         <tfoot>
                  <tr>
               
                         <th >Subject</th>
-                        <th>Topics</th>
-                        <th >Admin</th>
-                        
-               
+                        <th>Topic</th>
+                   
                         <th>Actions</th>
             </tr>
         </tfoot>
         <tbody>
-            <?php foreach ($teacher->subjects as $subject){
-     foreach ($subject->topics as $topic){ 
-             ?>
+            <?php foreach ($mytopics as $topic){  ?>
             <tr>
               
                 <td><?= $topic->has('subject') ? $this->Html->link($topic->subject->name, ['controller' => 'Subjects', 'action' => 'view', $topic->subject->id]) : '' ?></td>
                <td><?= h($topic->title) ?></td>
-                <td><?= $topic->user->fname?></td>
-                
-                <td class="actions">
+             <td class="actions">
                     <?= $this->Html->link(__(' '), ['action' => 'viewcontents', $topic->id,$this->GenerateUrl($topic->title)],['class'=>'btn btn-info fa fa-eye','title'=>'view topics']) ?>
                     <?= $this->Html->link(__(' '), ['action' => 'edittopic', $topic->id,$this->GenerateUrl($topic->title)],['class'=>'btn btn-primary fa fa-edit','title'=>'update topic']) ?>
                     <?= $this->Form->postLink(__(' '), ['action' => 'delete', $topic->id], ['confirm' => __('Are you sure you want to delete # {0}?', $topic->title),'class'=>'fa fa-times btn btn-danger']) ?>
                 </td>
             </tr>
-            <?php }} ?>
+            <?php } ?>
                
                   </tbody>
                 </table>
