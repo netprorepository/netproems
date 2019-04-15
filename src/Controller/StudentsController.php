@@ -479,7 +479,9 @@
            $invoices_Table = TableRegistry::get('Invoices');
             $myinvoices =  $invoices_Table->find()
                     ->contain(['Fees','Sessions'])
-                    ->where(['student_id'=>$student_id,'paystatus'=>'Unpaid']);
+                    ->where(['student_id'=>$student_id,
+                        //'paystatus'=>'Unpaid'
+                        ]);
             //debug(json_encode( $myinvoices, JSON_PRETTY_PRINT));exit;
           $this->set('myinvoices',  $myinvoices);
            $this->viewBuilder()->setLayout('adminbackend');
@@ -566,8 +568,9 @@
               // there was an error from the API
               die('API returned error: ' . $tranx->message);
           }
-          header('location : '.$tranx->data->authorization_url);
+        //  header('location : '.$tranx->data->authorization_url);
           //return $tranx->data->authorization_url;
+          return $this->redirect($tranx->data->authorization_url); 
           
       }
       
@@ -606,34 +609,126 @@
         }
 
         // debug($tranx); exit;
+         $transactions_Table = TableRegistry::get('Transactions');
         $trans_id = $tranx->data->metadata->transaction_id;
         $email = $tranx->data->metadata->email;
         $name = $tranx->data->metadata->name;
         $invoice_id = $tranx->data->metadata->invoice_id;
         //update transaction record
-        $transaction = $this->Transactions->get($trans_id);
+        $transaction = $transactions_Table->get($trans_id);
         $transaction->status = $tranx->status;
         $transaction->amount = $tranx->data->amount / 100;
         $transaction->paystatus = 'completed';
         $transaction->gresponse = $tranx->data->status;
-        $this->Transactions->save($transaction);
+        $transactions_Table->save($transaction);
        // update invoice
            $invoices_Table = TableRegistry::get('Invoices');
         $invoice = $invoices_Table->get($invoice_id);
         $invoice->paystatus = $tranx->data->status;
+        $invoice->payday = date('d M Y H:i a');
         $invoices_Table->save($invoice);
         //send payment alert via email
        // $this->payconfirmationmail($email,$name,$transaction->amount);
        
-        $this->Flash->success('Your application is complete. We will get back to you shortly ');
-        return $this->redirect(['action' => 'invoices']);
+        $this->Flash->success('Your payment was successful.');
+        return $this->redirect(['action' => 'invoices',$tranx->data->metadata->student_id]);
     }
     
-      
-      
-      
+    
+    
+    //student method for viewing their profile
+    public function viewprofile(){
+        $student = $this->Students->find()
+                 ->where(['user_id'=>$this->Auth->user('id')])
+                 ->contain(['Users','Departments','States','Countries'])->first();
+        $this->set('student',  $student);
+           $this->viewBuilder()->setLayout('adminbackend');
+        
+    }
 
-      /**
+    
+    
+    //student method for updating their profile
+    public function updateprofile(){
+         $student = $this->Students->find()
+                 ->where(['user_id'=>$this->Auth->user('id')])
+                 ->contain(['Users','Departments','States','Countries'])->first();
+         
+          if ($this->request->is(['patch', 'post', 'put'])) {
+              $userscontroller = new UsersController();
+              //upload files
+              //upload o level
+              $imagearray = $this->request->getData('olevelresulturls');
+              if (!empty($imagearray['tmp_name'])) {
+                  $waec_cert = $userscontroller->addimage($imagearray);
+              } else {
+                  $waec_cert = $student->olevelresulturl;
+              }
+
+              //upload birth cert
+              $birth_imagearray = $this->request->getData('birthcerturls');
+              if (!empty($birth_imagearray['tmp_name'])) {
+                  $birth_cert = $userscontroller->addimage($birth_imagearray);
+              } else {
+                  $birth_cert = $student->birthcerturl;
+              }
+
+
+              //upload other file
+              $other_imagearray = $this->request->getData('othercertss');
+              if (!empty($other_imagearray['tmp_name'])) {
+                  $other_cert = $userscontroller->addimage($other_imagearray);
+              } else {
+                  $other_cert = $student->othercerts;
+              }
+
+
+              //upload other file
+              $passport_imagearray = $this->request->getData('passporturls');
+              if (!empty($passport_imagearray['tmp_name'])) {
+                  $passport = $userscontroller->addimage($passport_imagearray);
+              } else {
+                  $passport = $student->passporturl;
+              }
+              $student = $this->Students->patchEntity($student, $this->request->getData());
+             if(!empty($passport)) {$student->passporturl = $passport;}
+              if ($this->Students->save($student)) {
+                  $this->Flash->success(__('The student data has been updated successfully.'));
+
+                  return $this->redirect(['action' => 'viewprofile']);
+              }
+              $this->Flash->error(__('Profile data could not be updated. Please, try again.'));
+          }
+         // $departments = $this->Students->Departments->find('list', ['limit' => 200]);
+          $states = $this->Students->States->find('list', ['limit' => 200]);
+          $countries = $this->Students->Countries->find('list', ['limit' => 200]);
+          $fees = $this->Students->Fees->find('list', ['limit' => 200]);
+          $subjects = $this->Students->Subjects->find('list', ['limit' => 200]);
+          $this->set(compact('student', 'states', 'countries', 'users', 'fees', 'subjects'));
+          $this->viewBuilder()->setLayout('adminbackend');
+    }
+
+    
+
+
+
+
+    //function that returns the states on the drop down
+    public function getstates($country_id){
+           $statestable = TableRegistry::get('States');
+         $states = $statestable->find('list')
+         ->where(['country_id'=>$country_id]);
+         $this->set(compact('states'));
+         //debug(json_encode($states , JSON_PRETTY_PRINT)); exit;
+        
+    }
+
+
+   
+    
+
+
+    /**
        * Delete method
        *
        * @param string|null $id Student id.
