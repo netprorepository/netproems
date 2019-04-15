@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
-
+ use Cake\Mailer\Email;
+  use Cake\Event\Event;
+  use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 
 /**
@@ -18,7 +20,7 @@ class SessionsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function managesessions()
     {
         $this->paginate = [
             'contain' => ['Users']
@@ -26,6 +28,7 @@ class SessionsController extends AppController
         $sessions = $this->paginate($this->Sessions);
 
         $this->set(compact('sessions'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -49,20 +52,31 @@ class SessionsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function newsession()
     {
         $session = $this->Sessions->newEntity();
         if ($this->request->is('post')) {
             $session = $this->Sessions->patchEntity($session, $this->request->getData());
+            $session->user_id = $this->Auth->user('id');
             if ($this->Sessions->save($session)) {
+                //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Added a New Session ". $session->name;
+                $user_id = $this->Auth->user('id');
+                $description = "Created new session " . $session->name;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                 $this->Flash->success(__('The session has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managesessions']);
             }
             $this->Flash->error(__('The session could not be saved. Please, try again.'));
         }
-        $users = $this->Sessions->Users->find('list', ['limit' => 200]);
-        $this->set(compact('session', 'users'));
+       // $users = $this->Sessions->Users->find('list', ['limit' => 200]);
+       // $this->set(compact('session', 'users'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -72,7 +86,7 @@ class SessionsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function updatesession($id = null)
     {
         $session = $this->Sessions->get($id, [
             'contain' => []
@@ -80,14 +94,24 @@ class SessionsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $session = $this->Sessions->patchEntity($session, $this->request->getData());
             if ($this->Sessions->save($session)) {
+                 //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a session ".$session->name;
+                $user_id = $this->Auth->user('id');
+                $description = "Updated a Session " . $session->name;
+                $ip = $this->request->clientIp();
+                $type = "Edit";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                 $this->Flash->success(__('The session has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'managesessions']);
             }
             $this->Flash->error(__('The session could not be saved. Please, try again.'));
         }
-        $users = $this->Sessions->Users->find('list', ['limit' => 200]);
+       // $users = $this->Sessions->Users->find('list', ['limit' => 200]);
         $this->set(compact('session', 'users'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
