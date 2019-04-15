@@ -201,7 +201,7 @@
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
- 
+  <?php if ( $user['role_id']==1) { ?>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#settings" aria-expanded="true" aria-controls="collapsePages">
                         <i class="fas fa-fw fa-folder"></i>
@@ -220,6 +220,7 @@
                         </div>
                     </div>
                 </li>
+  <?php } ?>
                 <!-- Heading -->
                 <div class="sidebar-heading">
                     Addons
@@ -229,46 +230,68 @@
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
                         <i class="fas fa-fw fa-folder"></i>
-                        <span>Pages</span>
+                        <span>Academics</span>
                     </a>
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Login Screens:</h6>
-                            <a class="collapse-item" href="login.html">Login</a>
-                            <a class="collapse-item" href="register.html">Register</a>
-                            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                            <div class="collapse-divider"></div>
-                            <h6 class="collapse-header">Other Pages:</h6>
-                            <a class="collapse-item" href="404.html">404 Page</a>
-                            <a class="collapse-item" href="blank.html">Blank Page</a>
+                            <h6 class="collapse-header">Course Manager:</h6>
+                           
 <?php
   if ($user['role_id'] == 3) {
       echo $this->Html->link(__(' My Courses'), ['controller' => 'Teachers', 'action' => 'assignedcourses'], ['class' => 'collapse-item', 'title' => 'view assigned courese']);
       echo $this->Html->link(__(' Manage Topics'), ['controller' => 'Teachers', 'action' => 'mytopics'], ['class' => 'collapse-item', 'title' => 'view and update topics']);
 
-      echo $this->Html->link(__(' Update Profile'), ['controller' => 'Teachers', 'action' => 'updateprofile'], ['class' => 'collapse-item']);
-      echo $this->Html->link(__(' View Profile'), ['controller' => 'Teachers', 'action' => 'viewprofile'], ['class' => 'collapse-item']);
-      // echo '<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>';
-  }
+       }
+  if ($user['role_id'] == 2) {
+      echo $this->Html->link(__(' My Courses'), ['controller' => 'Students', 'action' => 'mycourses'], ['class' => 'collapse-item', 'title' => 'view assigned courese']);
+     // echo $this->Html->link(__(' My Topics'), ['controller' => 'Students', 'action' => 'mytopics'], ['class' => 'collapse-item', 'title' => 'view topics']);
+
+       }
 ?>
                         </div>
                     </div>
                 </li>
+                
+              <?php  if ($user['role_id'] == 2 || $user['role_id'] == 3) {?>
+                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#myaccount" aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>My Account</span>
+                    </a>
+                    <div id="myaccount" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            
+<?php
+     if($user['role_id'] == 3){
+                             echo $this->Html->link(__(' Update Profile'), ['controller' => 'Teachers', 'action' => 'updateprofile'], ['class' => 'collapse-item','title'=>'update my profile']);
+      echo $this->Html->link(__(' View Profile'), ['controller' => 'Teachers', 'action' => 'viewprofile'], ['class' => 'collapse-item','title'=>'view my profile']);
+     }
+     if($user['role_id'] == 2){
+         echo $this->Html->link(__(' View Profile'), ['controller' => 'Students', 'action' => 'viewprofile'], ['class' => 'collapse-item','title'=>'view my profile']);
+      echo $this->Html->link(__(' My Invoices'), ['controller' => 'Students', 'action' => 'myinvoices'], ['class' => 'collapse-item','title'=>'view my invoices']);
+     
+     }
+?>
+                            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        </div>
+                    </div>
+                </li>
+              <?php  }?>
 
-                <!-- Nav Item - Charts -->
+                <!--  
                 <li class="nav-item">
                     <a class="nav-link" href="charts.html">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Charts</span></a>
                 </li>
 
-                <!-- Nav Item - Tables -->
+               
                 <li class="nav-item">
                     <a class="nav-link" href="tables.html">
                         <i class="fas fa-fw fa-table"></i>
                         <span>Tables</span></a>
                 </li>
-
+-->
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
