@@ -26,28 +26,28 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                
-                <th scope="col"><?= __('Name') ?></th>
+                <th style="padding: 10px">Name</th>
              
-                <th scope="col"><?= __('Dept code') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                <th style="padding: 10px">Dept code </th>
+<!--                <th style="padding: 10px">Actions</th>-->
             </tr>
             <?php foreach ($fee->departments as $departments): ?>
             <tr>
               
-                <td><?= h($departments->name) ?></td>
+                <td style="padding: 10px"><?= h($departments->name) ?></td>
                 
-                <td><?= h($departments->deptcode) ?></td>
-                <td class="actions">
+                <td style="padding: 10px"><?= h($departments->deptcode) ?></td>
+<!--                <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Departments', 'action' => 'view', $departments->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Departments', 'action' => 'edit', $departments->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['controller' => 'Departments', 'action' => 'delete', $departments->id], ['confirm' => __('Are you sure you want to delete # {0}?', $departments->id)]) ?>
-                </td>
+                </td>-->
             </tr>
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
     </div>
-    <div class="related">
+<!--    <div class="related">
         <h4><?= __(' Fee Allocations') ?></h4>
         <?php if (!empty($fee->feeallocations)): ?>
         <table cellpadding="0" cellspacing="0">
@@ -77,5 +77,5 @@
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
-    </div>
+    </div>-->
 </div>
