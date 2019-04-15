@@ -69,10 +69,10 @@ class SessionsTable extends Table
             ->requirePresence('name', 'create')
             ->notEmpty('name');
 
-        $validator
-            ->dateTime('createdate')
-            ->requirePresence('createdate', 'create')
-            ->notEmpty('createdate');
+//        $validator
+//            ->dateTime('createdate')
+//            ->requirePresence('createdate', 'create')
+//            ->notEmpty('createdate');
 
         return $validator;
     }
