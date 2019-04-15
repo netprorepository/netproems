@@ -21,11 +21,12 @@ class InvoicesController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Fees', 'Students']
+            'contain' => ['Fees', 'Students','Sessions']
         ];
         $invoices = $this->paginate($this->Invoices);
 
         $this->set(compact('invoices'));
+        $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
