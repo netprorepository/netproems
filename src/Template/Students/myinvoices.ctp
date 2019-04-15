@@ -24,7 +24,7 @@ $userrole = $this->request->getSession()->read('usersroles');
           
                  <th >Fee Name</th>
                 <th>Amount</th>
-                <th>Date</th>
+                <th>Deadline</th>
                  <th>Session</th>
                 <th>Status</th>
                 <th >Action</th>
@@ -38,7 +38,7 @@ $userrole = $this->request->getSession()->read('usersroles');
           
                   <th >Fee Name</th>
                 <th>Amount</th>
-                <th>Date</th>
+                <th>Deadline</th>
                 <th>Status</th>
                 <th >Action</th>
             </tr>
@@ -50,8 +50,8 @@ $userrole = $this->request->getSession()->read('usersroles');
             <tr>
                 
                 <td><?= h($invoice->fee->name) ?></td>
-                <td><?= h($invoice->fee->amount) ?></td>
-                <td><?= h($invoice->fee->startdate) ?></td>
+                <td><?= number_format($invoice->fee->amount) ?></td>
+                <td><?= date('d M Y', strtotime($invoice->fee->startdate)) ?></td>
                <td><?= h($invoice->session->name) ?></td>
                <td ><?php if($invoice->paystatus=="Unpaid"){
                echo (' <span class="badge badge-warning">'.$invoice->paystatus.'</span>');}
@@ -64,10 +64,14 @@ $userrole = $this->request->getSession()->read('usersroles');
         
                 <td class="actions">
                     
-                    <?php if($invoice->paystatus=="Unpaid"){
-                        echo $this->Html->link(__(' Payonline'), ['controller'=>'Transactions','action' => 'gotopaystack', $invoice->id,$invoice->student_id],
-                    
-                    ['class'=>'btn btn-round btn-success fa fa-money','title'=>'pay online']);} ?>
+                    <?php if($invoice->paystatus=="success"){ echo $this->Html->link(__(' Payonline'), ['controller'=>'Students','action' => 'gotopaystack', $invoice->id,$invoice->student_id],
+                            ['class'=>'btn btn-round btn-primary fa fa-money disabled','title'=>'pay online']);
+                    }
+                    else{
+                    echo $this->Html->link(__(' Payonline'), ['controller'=>'Students','action' => 'gotopaystack', $invoice->id,$invoice->student_id],
+                            ['class'=>'btn btn-round btn-primary fa fa-money','title'=>'pay online']);    
+                    }
+                    ?>
                     </td>
             </tr>
             <?php endforeach; ?>
