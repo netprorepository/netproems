@@ -1,59 +1,81 @@
 <?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Invoice[]|\Cake\Collection\CollectionInterface $invoices
- */
+$userdata = $this->request->getSession()->read('usersinfo');
+$userrole = $this->request->getSession()->read('usersroles');
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Invoice'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Fees'), ['controller' => 'Fees', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Fee'), ['controller' => 'Fees', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Students'), ['controller' => 'Students', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Student'), ['controller' => 'Students', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="invoices index large-9 medium-8 columns content">
-    <h3><?= __('Invoices') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
+
+
+<!-- Begin Page Content -->
+        <div class="container-fluid">
+            <div style="padding-bottom: 10px; margin-bottom: 20px;">
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">Invoices</h1></div>
+         
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Invoice</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('fee_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('student_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('createdate') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('amount') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('paystatus') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+          
+                 <th >Fee Name</th>
+                <th>Amount</th>
+                <th>Deadline</th>
+                 <th>Session</th>
+                <th>Status</th>
+                
+               
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($invoices as $invoice): ?>
+                  </thead>
+            
+            
+              <tfoot>
             <tr>
-                <td><?= $this->Number->format($invoice->id) ?></td>
-                <td><?= $invoice->has('fee') ? $this->Html->link($invoice->fee->name, ['controller' => 'Fees', 'action' => 'view', $invoice->fee->id]) : '' ?></td>
-                <td><?= $invoice->has('student') ? $this->Html->link($invoice->student->id, ['controller' => 'Students', 'action' => 'view', $invoice->student->id]) : '' ?></td>
-                <td><?= h($invoice->createdate) ?></td>
-                <td><?= h($invoice->amount) ?></td>
-                <td><?= h($invoice->paystatus) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $invoice->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $invoice->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $invoice->id], ['confirm' => __('Are you sure you want to delete # {0}?', $invoice->id)]) ?>
-                </td>
+          
+                  <th >Fee Name</th>
+                <th>Amount</th>
+                <th>Deadline</th>
+                <th>Status</th>
+             
+            </tr>
+              </tfoot>
+            
+        
+         <tbody>
+            <?php $paidsum = 0; foreach ($invoices as $invoice): ?>
+            <tr>
+                
+                <td><?= h($invoice->fee->name) ?></td>
+                <td><?= number_format($invoice->fee->amount) ?></td>
+                <td><?= h($invoice->fee->enddate) ?></td>
+               <td><?= h($invoice->session->name) ?></td>
+               <td ><?php if($invoice->paystatus=="Unpaid"){
+               echo (' <span class="badge badge-warning">'.$invoice->paystatus.'</span>');}
+                   
+                   else{ $paidsum +=$invoice->fee->amount;
+                        echo (' <span class="badge badge-success">Paid</span>');
+                   }?>
+               </td>
+               
+        
+                
             </tr>
             <?php endforeach; ?>
+            
         </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
-</div>
+        
+                </table>
+                  Total Paid : <span class="text-info" style="text-decoration: underline #00c292 solid;"> <?= number_format($paidsum)?></span>   
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
