@@ -5,6 +5,7 @@
   use Cake\ORM\TableRegistry;
   use Cake\Mailer\Email;
   use Cake\Event\Event;
+  use Cake\Routing\Router;
   use App\Controller\AppController;
 
   /**
@@ -30,7 +31,8 @@
          
           // debug(json_encode($transaction, JSON_PRETTY_PRINT)); exit;
           $this->Transactions->save($transaction);
-
+          //base url
+          $baseUrl = Router::url('/', true);
           $baseurl = "http://www.netproacademy.net/";
 
           $subacc = 'ACCT_qyal8r4kg6pc6jc'; // sub-account code, you get this when you set up a split account.
@@ -46,7 +48,7 @@
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_CUSTOMREQUEST => "POST",
               CURLOPT_POSTFIELDS => json_encode([ 
-                  'callback_url' => 'http://localhost/nerp/transactions/paymentverification/' . $transaction->payref,
+                  'callback_url' => $baseUrl.'transactions/paymentverification/' . $transaction->payref,
                   'amount' => $amount . '00',
                   'email' => $mail,
                   'name' => $name,
@@ -196,12 +198,15 @@
        * @return \Cake\Http\Response|void
        */
       public function index() {
-          $this->paginate = [
-              'contain' => ['Students']
-          ];
-          $transactions = $this->paginate($this->Transactions);
+          
+          $transactions = $this->Transactions->find()
+                  ->contain(['Students','Fees','Sessions'])
+                  ->order(['transdate'=>'DESC']);
+          //get the base url
+          $baseUrl = Router::url('/', true);
 
-          $this->set(compact('transactions'));
+          $this->set(compact('transactions','baseUrl'));
+           $this->viewBuilder()->setLayout('adminbackend');
       }
 
       /**
