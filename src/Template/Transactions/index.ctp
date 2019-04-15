@@ -1,59 +1,74 @@
 <?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Transaction[]|\Cake\Collection\CollectionInterface $transactions
- */
+$userdata = $this->request->getSession()->read('usersinfo');
+$userrole = $this->request->getSession()->read('usersroles');
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Transaction'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Students'), ['controller' => 'Students', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Student'), ['controller' => 'Students', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="transactions index large-9 medium-8 columns content">
-    <h3><?= __('Transactions') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
+
+
+<!-- Begin Page Content -->
+        <div class="container-fluid">
+            <div style="padding-bottom: 10px; margin-bottom: 20px;">
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">Transactions</h1></div>
+         
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('student_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('transdate') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('amount') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('paystatus') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('payref') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('gresponse') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+            <tr>
+                
+                <th scope="col"><?= $this->Paginator->sort('Student') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Transaction Date') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Amount') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Status') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Ref') ?></th>
+               
+              
             </tr>
+            
+                  <tfoot>
+                      <tr>
+                
+                <th scope="col"><?= $this->Paginator->sort('Student') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Transaction Date') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Amount') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Status') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Ref') ?></th>
+               
+              
+            </tr>
+                  </tfoot>
         </thead>
         <tbody>
-            <?php foreach ($transactions as $transaction): ?>
+            <?php $paidsum = 0; foreach ($transactions as $transaction): ?>
             <tr>
-                <td><?= $this->Number->format($transaction->id) ?></td>
-                <td><?= $transaction->has('student') ? $this->Html->link($transaction->student->id, ['controller' => 'Students', 'action' => 'view', $transaction->student->id]) : '' ?></td>
+              
+                <td><?= $transaction->has('student') ? $this->Html->link($transaction->student->fname.' '.$transaction->student->lname, ['controller' => 'Students', 'action' => 'view', $transaction->student->id]) : '' ?></td>
                 <td><?= h($transaction->transdate) ?></td>
-                <td><?= h($transaction->amount) ?></td>
-                <td><?= h($transaction->paystatus) ?></td>
+                <td><?= number_format($transaction->amount) ?></td>
+                <td>
+                    <?php if($transaction->paystatus=="completed"){
+               echo (' <span class="badge badge-success">'.$transaction->paystatus.'</span>');}
+                   
+                   else{ $paidsum +=$transaction->amount;
+                        echo (' <span class="badge badge-info">'.$transaction->paystatus.'</span>');
+                   }?>
+               </td>
                 <td><?= h($transaction->payref) ?></td>
-                <td><?= h($transaction->gresponse) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $transaction->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $transaction->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $transaction->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transaction->id)]) ?>
-                </td>
+               
+                
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
-</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
