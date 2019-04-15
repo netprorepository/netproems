@@ -14,7 +14,7 @@ $userrole = $this->request->getSession()->read('usersroles');
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Student Courses</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Assigned Courses</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -52,7 +52,7 @@ $userrole = $this->request->getSession()->read('usersroles');
               
                 <td class="actions">
                     
-                    <?= $this->Html->link(__(' '), ['controller'=>'Subjects','action' => 'viewcontents', $subject->id,$this->generateurl($subject->name)],
+                    <?= $this->Html->link(__(' '), ['controller'=>'Topics','action' => 'viewcontents', $subject->id,$this->generateurl($subject->name)],
                             ['class'=>'btn btn-round btn-primary fa fa-eye','title'=>'view course contents']) ?>
                     </td>
             </tr>
@@ -67,7 +67,7 @@ $userrole = $this->request->getSession()->read('usersroles');
               
                 <td class="actions">
                     
-                    <?= $this->Html->link(__(' '), ['controller'=>'Subjects','action' => 'viewcontents', $subject->id,$this->generateurl($subject->name)],
+                    <?= $this->Html->link(__(' '), ['controller'=>'Topics','action' => 'viewcontents', $subject->id,$this->generateurl($subject->name)],
                             ['class'=>'btn btn-round btn-primary fa fa-eye','title'=>'view course contents']) ?>
                     </td>
             </tr>
