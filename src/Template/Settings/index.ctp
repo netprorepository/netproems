@@ -73,7 +73,8 @@ $userrole = $this->request->getSession()->read('usersroles');
                                             <td><?= h($setting->staffprefix) ?></td>
                                             <td class="actions">
                                             <!--    <?= $this->Html->link(__('View'), ['action' => 'view', $setting->id]) ?>-->
-                                                <?= $this->Html->link(__('Edit'), ['action' => 'editsettings', $setting->id]) ?>
+                                                <?= $this->Html->link(__('Update'), ['action' => 'editsettings', $setting->id],
+                                                        ['class'=>'btn btn-round btn-primary fa fa-edit','title'=>'update session']) ?>
   <!--  <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $setting->id], ['confirm' => __('Are you sure you want to delete # {0}?', $setting->id)]) ?>-->
                                             </td>
                                         </tr>
