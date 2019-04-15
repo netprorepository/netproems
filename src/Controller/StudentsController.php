@@ -151,6 +151,15 @@
                   $student->olevelresulturl = $waec_cert;
                   //  debug(json_encode( $student, JSON_PRETTY_PRINT)); exit;
                   if ($this->Students->save($student)) {
+                       //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Added a student ".$student->regno;
+                $user_id = $this->Auth->user('id');
+                $description = "Created new department " . $student->fname;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                       //get the student regno
                       $this->getregno($student->id, $student->department_id);
                       $this->Flash->success(__('The student has been saved.'));
@@ -219,6 +228,15 @@
               }
               $student = $this->Students->patchEntity($student, $this->request->getData());
               if ($this->Students->save($student)) {
+                   //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a student ". $student->regno;
+                $user_id = $this->Auth->user('id');
+                $description = "Created new department " . $student->fname;
+                $ip = $this->request->clientIp();
+                $type = "Edit";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                   $this->Flash->success(__('The student data has been updated successfully.'));
 
                   return $this->redirect(['action' => 'managestudents']);
