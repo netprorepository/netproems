@@ -370,6 +370,55 @@
       }
 
       
+      //teachers method for updating a topic
+      public function updatetopic($id){
+           $topics_Table = TableRegistry::get('Topics');
+            $topic = $topics_Table->get($id, [
+              'contain' => ['Subjects']
+          ]);
+          if ($this->request->is(['patch', 'post', 'put'])) {
+              $topic = $topics_Table->patchEntity($topic, $this->request->getData());
+              $topic->updatedon = date('d M Y');
+              if ($topics_Table->save($topic)) {
+                   //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a Topic ".$topic->title;
+                $user_id = $this->Auth->user('id');
+                $description = "Updated a Topic " . $topic->title;
+                $ip = $this->request->clientIp();
+                $type = "Edit";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  $this->Flash->success(__('The topic has been updated.'));
+
+                  return $this->redirect(['action' => 'mytopics']);
+              }
+              $this->Flash->error(__('The topic could not be updated. Please, try again.'));
+          }
+          $subjects = $topics_Table->Subjects->find('list', ['limit' => 200]);
+          // $admins = $this->Topics->Admins->find('list', ['limit' => 200]);
+          $this->set(compact('topic', 'subjects'));
+           $this->viewBuilder()->setLayout('adminbackend');
+          
+      }
+
+      
+
+      //techers method for viewing a topic
+      public function viewtopic($id){
+            $topics_Table = TableRegistry::get('Topics');
+            $topic = $topics_Table->get($id, [
+              'contain' => ['Subjects']
+          ]);
+          $this->set('topic',$topic);  
+           $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      
+
+
+
+
 
 
 
