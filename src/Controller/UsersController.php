@@ -53,8 +53,15 @@ class UsersController extends AppController {
     //the user dashboard
     public function dashboard() {
         $admin = $this->Users->get($this->Auth->user('id'));
-
+         $students_Table = TableRegistry::get('Students');
+         $teachers_Table = TableRegistry::get('Teachers');
+         $subjects_Table = TableRegistry::get('Subjects');
+         $subjects = $subjects_Table->find()->count();
+         $teachers = $teachers_Table->find()->count();
+         $students = $students_Table->find()->where(['status'=>'Admitted'])->count();
+          $pending_students = $students_Table->find()->where(['status'=>'Selected'])->count();
         $this->set('admin', $admin);
+        $this->set(compact('pending_students','students','teachers','subjects'));
         $this->viewBuilder()->setLayout('adminbackend');
     }
 
