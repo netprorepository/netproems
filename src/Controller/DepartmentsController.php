@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
-
+ use Cake\Mailer\Email;
+  use Cake\Event\Event;
+  use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 
 /**
