@@ -57,15 +57,21 @@ $userrole = $this->request->getSession()->read('usersroles');
                echo (' <span class="badge badge-warning">'.$invoice->paystatus.'</span>');}
                    
                    else{
-                        echo (' <span class="badge badge-success">'.$invoice->paystatus.'</span>');
+                        echo (' <span class="badge badge-success">Paid</span>');
                    }?>
                </td>
                
         
                 <td class="actions">
                     
-                    <?= $this->Html->link(__(' Payonline'), ['controller'=>'Transactions','action' => 'gotopaystack', $invoice->id,$invoice->student_id],
-                            ['class'=>'btn btn-round btn-primary fa fa-money','title'=>'pay online']) ?>
+                    <?php if($invoice->paystatus=="success"){ echo $this->Html->link(__(' Payonline'), ['controller'=>'Students','action' => 'gotopaystack', $invoice->id,$invoice->student_id],
+                            ['class'=>'btn btn-round btn-primary fa fa-money disabled','title'=>'pay online']);
+                    }
+                    else{
+                    echo $this->Html->link(__(' Payonline'), ['controller'=>'Students','action' => 'gotopaystack', $invoice->id,$invoice->student_id],
+                            ['class'=>'btn btn-round btn-primary fa fa-money','title'=>'pay online']);    
+                    }
+                    ?>
                     </td>
             </tr>
             <?php endforeach; ?>
