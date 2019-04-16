@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-sm-4 mb-3 mb-sm-0"> 
 
-                                    <?= $this->Form->control('department_id', ['options' => $departments, 'label' => 'Select Department', 'empty' => 'Select Departments', 'class' => 'select2_multiple form-control form-control-user']) ?>
+                                    <?= $this->Form->control('department_id', ['options' => $departments, 'label' => 'Select Department', 'empty' => 'Select Departments', 'class' => 'form-control form-control-user']) ?>
                                 </div>
 
                                 <div class="col-sm-4 mb-3 mb-sm-0">               
@@ -64,7 +64,7 @@
 
                                 <div class="col-sm-4 mb-3 mb-sm-0">
                                     <?= $this->Form->control('othercertss', ['label' => 'Others', 'placeholder' => 'Other Cert',
-                                          'class' => 'form-control form-control-user2', 'required', 'type' => 'file'])
+                                          'class' => 'form-control form-control-user2', 'type' => 'file'])
                                     ?>
 
                                 </div>
@@ -77,12 +77,12 @@
                                 </div>
                                 
                                  <div class="col-sm-4 mb-3 mb-sm-0">
-<?= $this->Form->control('country_id', ['options' => $countries, 'label' => 'Select Country', 'empty' => 'Select Country', 'class' => 'select2_multiple form-control form-control-user', 'multiple' => false]) ?>
+<?= $this->Form->control('country_id', ['options' => $countries, 'label' => 'Select Country', 'empty' => 'Select Country', 'class' => 'form-control form-control-user', 'multiple' => false,'onChange'=>'getstates(this.value)']) ?>
 
                                 </div>
 
                                 <div class="col-sm-4 mb-3 mb-sm-0">
-<?= $this->Form->control('state_id', ['options' => $states, 'label' => 'Select State', 'empty' => 'Select State', 'class' => 'select2_multiple form-control form-control-user', 'multiple' => false]) ?>
+<?= $this->Form->control('state_id', ['options' => $states, 'label' => 'Select State', 'empty' => 'Select State', 'class' => 'form-control form-control-user', 'multiple' => false,'id'=>'states1']) ?>
                                 </div>
    
                             </div>
@@ -151,7 +151,7 @@
 
                             <div class="form-group row">        
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-<?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Select Subjects', 'empty' => 'Select Subjects', 'class' => 'select2_multiple form-control form-control-user', 'required']) ?> 
+<?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Select Subjects', 'empty' => 'Select Subjects', 'class' => 'select2_multiple form-control form-control-user']) ?> 
                                 </div>
                             </div>
 
@@ -173,3 +173,22 @@
     </div>
 
 </div>
+
+<script>
+    
+        function getstates(stateid){ 
+
+    $.ajax({
+        url: '../Students/getstates/'+stateid,
+        method: 'GET',
+        dataType: 'text',
+        success: function(response) {
+           // console.log(response);
+            document.getElementById('states1').innerHTML = "";
+            document.getElementById('states1').innerHTML = response;
+            //location.href = redirect;
+        }
+    });
+
+}
+    </script>
