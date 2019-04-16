@@ -96,3 +96,42 @@
                 </div>-->
 
 <!-- assign subjects  Modal-->
+<<<<<<< HEAD
+=======
+<div class="modal fade" id="assignsubjects" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Subjects/Teacher Assignment</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="col-lg-12">
+                <div class="p-">
+                    <div class="text-center">
+                        <h1 class="h4 text-gray-900 mb-4">Assign Subjects To Teacher</h1>
+                    </div>
+                    <?= $this->Form->create(null, ['url' => ['controller' => 'Teachers', 'action' => 'assignsubjects']]) ?>
+                    <fieldset>
+
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <?= $this->Form->control('user_id', ['options' => $users, 'label' => 'Select Teacher', 'empty' => 'Select Teacher', 'class' => 'form-control form-control-user2']) ?>
+                                <br />
+                            </div>
+
+                            <div class="col-sm-12">
+                                <?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Assign Subjects', 'class' => 'form-control form-control-user2']) ?>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <br /> <br />
+                    <?= $this->Form->button('Assign', ['class' => 'btn btn-primary btn-user btn-block']) ?>
+                    <?= $this->Form->end() ?> <br /> <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+>>>>>>> origin/dev1

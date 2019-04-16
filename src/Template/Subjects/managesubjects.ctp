@@ -24,8 +24,8 @@ $userrole = $this->request->getSession()->read('usersroles');
                     <tr>
                         <th> NAME</th>
                        <th>CODE</th>
-                       <th>LOAD</th>
-                       <th>CREATED DATE</th>
+                       <th>CREDIT UNIT</th>
+                      
                        <th>ACTIONS</th>
                     </tr>
                   </thead>
@@ -33,8 +33,8 @@ $userrole = $this->request->getSession()->read('usersroles');
                     <tr>
                        <th> NAME</th>
                        <th>CODE</th>
-                       <th>LOAD</th>
-                       <th>CREATED DATE</th>
+                       <th>CREDIT UNIT</th>
+                       
                        <th>ACTIONS</th>
                     </tr>
                   </tfoot>
@@ -45,7 +45,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                                             <td><?= h($subjects->name) ?></td>
                                             <td><?= h($subjects->subjectcode) ?></td>
                                             <td><?= $subjects->creditload ?></td>
-                                            <td><?= $subjects->created_date ?></td>
+                                            
 
 
                                             <td class="actions">

@@ -17,11 +17,12 @@ use Cake\ORM\Entity;
  * @property string $cv
  * @property string $qualification
  * @property \Cake\I18n\FrozenTime $date_created
+ * @property string $passport
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Country $country
  * @property \App\Model\Entity\State $state
- * @property \App\Model\Entity\SubjectTeacher[] $subject_teachers
+ * @property \App\Model\Entity\Subject[] $subjects
  */
 class Teacher extends Entity
 {
@@ -46,9 +47,10 @@ class Teacher extends Entity
         'cv' => true,
         'qualification' => true,
         'date_created' => true,
+        'passport' => true,
         'user' => true,
         'country' => true,
         'state' => true,
-        'subject_teachers' => true
+        'subjects' => true
     ];
 }

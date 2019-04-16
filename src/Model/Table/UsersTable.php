@@ -38,21 +38,21 @@ class UsersTable extends Table
         parent::initialize($config);
 
         $this->setTable('users');
-        $this->setDisplayField('id');
+        $this->setDisplayField('username');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Roles', [
             'foreignKey' => 'role_id',
             'joinType' => 'INNER'
         ]);
-      /*  $this->belongsTo('Countries', [
+        $this->belongsTo('Countries', [
             'foreignKey' => 'country_id',
-            'joinType' => 'INNER'
+            //'joinType' => 'INNER'
         ]);
         $this->belongsTo('States', [
             'foreignKey' => 'state_id',
-            'joinType' => 'INNER'
-        ]);*/
+           // 'joinType' => 'INNER'
+        ]);
         $this->belongsTo('Departments', [
             'foreignKey' => 'department_id',
             'joinType' => 'INNER'
