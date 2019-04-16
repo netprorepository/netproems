@@ -85,6 +85,7 @@ class Student extends Entity
         'country' => true,
         'user' => true,
         'fees' => true,
+        'gender' => true,
         'subjects' => true
     ];
 }
