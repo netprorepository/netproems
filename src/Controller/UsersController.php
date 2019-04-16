@@ -376,5 +376,15 @@ class UsersController extends AppController {
     }
     
     
-
+    
+    //admin method for viewing her profile
+    public function myprofile(){
+         $admin = $this->Users->get($this->Auth->user('id'), [
+            'contain' => ['Roles', 'Departments', 'Countries', 'States']
+        ]);
+        $this->set('admin', $admin);
+        
+        $this->viewBuilder()->setLayout('adminbackend');
+        
+    }
 }
