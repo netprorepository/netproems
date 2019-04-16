@@ -33,6 +33,7 @@
                 <?php
                   $user = $this->request->getSession()->read('usersinfo');
                   $settings = $this->request->getSession()->read('settings');
+                  $is_owing =  $this->request->getSession()->read('is_owing');
                 ?>
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
@@ -97,6 +98,23 @@
                           </div>
                       </li>
                       
+                      <li class="nav-item">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#invoices" aria-expanded="true" aria-controls="collapseTwo">
+                              <i class="fas fa-fw fa-cog"></i>
+                              <span>Reports</span>
+                          </a>
+                          <div id="invoices" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                              <div class="bg-white py-2 collapse-inner rounded">
+                                  <h6 class="collapse-header">Manage Reports:</h6>
+                                  <?php
+                               
+                                  echo $this->Html->link('View Invoices', ['controller' => 'Invoices', 'action' => 'index'], ['title' => 'view invoices', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('View Transactions', ['controller' => 'Transactions', 'action' => 'index'], ['title' => 'view transactions', 'class' => 'collapse-item']);
+
+                                  ?> </div>
+                          </div>
+                      </li>
+                      
                        <li class="nav-item">
                           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#fees" aria-expanded="true" aria-controls="collapseTwo">
                               <i class="fas fa-fw fa-cog"></i>
@@ -131,7 +149,8 @@
                                 echo ' <h6 class="collapse-header">Manage Subject:</h6>';
                                   echo $this->Html->link('Manage Subjects', ['controller' => 'Subjects', 'action' => 'managesubjects'], ['title' => 'Manage Subject', 'class' => 'collapse-item']);
                                   echo $this->Html->link('Manage Topics', ['controller' => 'Topics', 'action' => 'managetopics'], ['title' => 'Manage Topics', 'class' => 'collapse-item']);
-                                 
+                                  echo ' <h6 class="collapse-header">Manage Subject:</h6>';
+                                  echo $this->Html->link('Manage Sessions', ['controller' => 'Sessions', 'action' => 'managesessions'], ['title' => 'manage manage sessions', 'class' => 'collapse-item']);
                                   
                                   ?> 
                               
@@ -152,6 +171,7 @@
                                   <?php
                                   echo $this->Html->link('List Students', ['controller' => 'Students', 'action' => 'managestudents'], ['title' => 'Manage Students', 'class' => 'collapse-item']);
                                    echo $this->Html->link('Add Student', ['controller' => 'Students', 'action' => 'newstudent'], ['title' => 'Manage Students', 'class' => 'collapse-item']);
+                                 echo $this->Html->link('Import Students', ['controller' => 'Students', 'action' => 'importstudents'], ['title' => 'bulk import Students', 'class' => 'collapse-item']);
                                 
                                   ?>
                                  
@@ -168,7 +188,7 @@
                               <div class="bg-white py-2 collapse-inner rounded">
       <?php
                                   echo $this->Html->link('Application Form', ['controller' => 'Students', 'action' => 'newapplicant'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
-                                  echo $this->Html->link('Direct Admission', ['controller' => 'Students', 'action' => 'newapplicant'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Direct Admission', ['controller' => 'Students', 'action' => 'newstudent'], ['title' => 'Direct admision', 'class' => 'collapse-item']);
                                   echo $this->Html->link('Applicants List', ['controller' => 'Students', 'action' => 'manageapplicants'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
                                  
                                   ?>
@@ -178,7 +198,7 @@
 
   <?php } ?>
 
-                <!-- Nav Item - Utilities Collapse Menu used for students-->
+                <!-- Nav Item - Utilities Collapse Menu used for students
                 <?php if ($user['role_id'] == 2 || $user['role_id']==1) { ?>
                       <li class="nav-item">
                           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
@@ -192,12 +212,12 @@
 
                                   <?= $this->Html->link('My Invoices', ['controller' => 'Students', 'action' => 'myinvoices'], ['title' => 'My Courses', 'class' => 'collapse-item']) ?>
 
-                                  <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                                  <a class="collapse-item" href="utilities-other.html">Other</a>
+                                  
                               </div>
                           </div>
                       </li>
   <?php } ?>
+                -->
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
@@ -225,7 +245,7 @@
                 <div class="sidebar-heading">
                     Addons
                 </div>
-
+ <?php  if ($user['role_id'] == 2 || $user['role_id'] == 3) {?>
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
@@ -242,17 +262,16 @@
       echo $this->Html->link(__(' Manage Topics'), ['controller' => 'Teachers', 'action' => 'mytopics'], ['class' => 'collapse-item', 'title' => 'view and update topics']);
 
        }
-  if ($user['role_id'] == 2) {
+  if ($user['role_id'] == 2 & empty($is_owing)) {
       echo $this->Html->link(__(' My Courses'), ['controller' => 'Students', 'action' => 'mycourses'], ['class' => 'collapse-item', 'title' => 'view assigned courese']);
-     // echo $this->Html->link(__(' My Topics'), ['controller' => 'Students', 'action' => 'mytopics'], ['class' => 'collapse-item', 'title' => 'view topics']);
-
+    
        }
 ?>
                         </div>
                     </div>
                 </li>
                 
-              <?php  if ($user['role_id'] == 2 || $user['role_id'] == 3) {?>
+ <?php } if ($user['role_id'] == 2 || $user['role_id'] == 3) {?>
                  <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#myaccount" aria-expanded="true" aria-controls="collapsePages">
                         <i class="fas fa-fw fa-folder"></i>
@@ -266,13 +285,16 @@
                              echo $this->Html->link(__(' Update Profile'), ['controller' => 'Teachers', 'action' => 'updateprofile'], ['class' => 'collapse-item','title'=>'update my profile']);
       echo $this->Html->link(__(' View Profile'), ['controller' => 'Teachers', 'action' => 'viewprofile'], ['class' => 'collapse-item','title'=>'view my profile']);
      }
-     if($user['role_id'] == 2){
+     if($user['role_id'] == 2 & empty($is_owing)){
          echo $this->Html->link(__(' View Profile'), ['controller' => 'Students', 'action' => 'viewprofile'], ['class' => 'collapse-item','title'=>'view my profile']);
       echo $this->Html->link(__(' My Invoices'), ['controller' => 'Students', 'action' => 'myinvoices'], ['class' => 'collapse-item','title'=>'view my invoices']);
      
      }
+     echo $this->Html->link(__(' Change Password'), ['controller' => 'Users', 'action' => 'changepassword'], ['class' => 'collapse-item','title'=>'change my password']);
+    
 ?>
                             <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                            
                         </div>
                     </div>
                 </li>
@@ -468,19 +490,24 @@
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>
-
+                                  <?php if ( $user['role_id']==1) {  
+                                                                 
+                                     echo $this->Html->link(
+             $this->Html->tag('i', '', array('class' => 'fas fa-cogs fa-sm fa-fw mr-2 text-gray-400')).' Profile', 
+             array('controller' => 'Users', 'action' => 'myprofile'), array('escape' => false,'class'=>'dropdown-item')
+          );
+                                      
+                             echo $this->Html->link(
+             $this->Html->tag('i', '', array('class' => 'fas fa-cogs fa-sm fa-fw mr-2 text-gray-400')).' System Settings', 
+             array('controller' => 'Settings', 'action' => 'editsettings',1), array('escape' => false,'class'=>'dropdown-item','title'=>'update system settings')
+          );
+                                
+                                   echo $this->Html->link(
+             $this->Html->tag('i', '', array('class' => 'fas fa-cogs fa-sm fa-fw mr-2 text-gray-400')).' Activity Log', 
+             array('controller' => 'Logs', 'action' => 'mylogs'), array('escape' => false,'class'=>'dropdown-item','title'=>'activity logs')
+          );
+                                   
+                                 }?>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
