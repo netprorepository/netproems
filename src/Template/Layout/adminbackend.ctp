@@ -293,7 +293,7 @@
      echo $this->Html->link(__(' Change Password'), ['controller' => 'Users', 'action' => 'changepassword'], ['class' => 'collapse-item','title'=>'change my password']);
     
 ?>
-                            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                          
                             
                         </div>
                     </div>
