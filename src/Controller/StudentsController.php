@@ -6,6 +6,10 @@
   use Cake\Event\Event;
   use Cake\ORM\TableRegistry;
   use App\Controller\AppController;
+  use PhpOffice\PhpSpreadsheet\Spreadsheet;
+  use PhpOffice\PhpSpreadsheet\IOFactory;
+  use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+  use PhpOffice\PhpSpreadsheet\Helper;
 
   /**
    * Students Controller
@@ -149,24 +153,27 @@
                   $student->passporturl = $passport;
                   $student->birthcerturl = $birth_cert;
                   $student->olevelresulturl = $waec_cert;
+                  $student->status = "Selected";
                   //  debug(json_encode( $student, JSON_PRETTY_PRINT)); exit;
                   if ($this->Students->save($student)) {
-                       //log activity
-                $usercontroller = new UsersController();
-               
-                 $title = "Added a student ".$student->regno;
-                $user_id = $this->Auth->user('id');
-                $description = "Created new department " . $student->fname;
-                $ip = $this->request->clientIp();
-                $type = "Add";
-                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                      //log activity
+                      $usercontroller = new UsersController();
+
+                      $title = "Added a student " . $student->regno;
+                      $user_id = $this->Auth->user('id');
+                      $description = "Created new department " . $student->fname;
+                      $ip = $this->request->clientIp();
+                      $type = "Add";
+                      $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                       //get the student regno
                       $this->getregno($student->id, $student->department_id);
                       $this->Flash->success(__('The student has been saved.'));
 
-                      return $this->redirect(['action' => 'managestudents']);
+                      return $this->redirect(['action' => 'manageapplicants']);
                   }
                   $this->Flash->error(__('The student could not be saved. Please, try again.'));
+              } else {
+                  $this->Flash->error(__('The student user data could not be saved. Please, try again.'));
               }
           }
           $departments = $this->Students->Departments->find('list', ['limit' => 200]);
@@ -228,15 +235,15 @@
               }
               $student = $this->Students->patchEntity($student, $this->request->getData());
               if ($this->Students->save($student)) {
-                   //log activity
-                $usercontroller = new UsersController();
-               
-                 $title = "Updated a student ". $student->regno;
-                $user_id = $this->Auth->user('id');
-                $description = "Created new department " . $student->fname;
-                $ip = $this->request->clientIp();
-                $type = "Edit";
-                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  //log activity
+                  $usercontroller = new UsersController();
+
+                  $title = "Updated a student " . $student->regno;
+                  $user_id = $this->Auth->user('id');
+                  $description = "Created new department " . $student->fname;
+                  $ip = $this->request->clientIp();
+                  $type = "Edit";
+                  $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                   $this->Flash->success(__('The student data has been updated successfully.'));
 
                   return $this->redirect(['action' => 'managestudents']);
@@ -389,27 +396,32 @@
                           ->contain(['Fees', 'Subjects', 'Departments'])->first();
           $counter = 0;
           foreach ($student->fees as $fee) {
-              //check if this fee has been paid
-              if($this->checkpayment($student->id, $fee->id)==0){
+              //check for any fee assigned to this student and if this fee has been paid
+              if ($this->checkpayment($student->id, $fee->id) == 0) {
                   //fee has not been paid, check if there is an invoice for it already
-                  if($this->checkinvoice($student->id, $fee->id)==1){
+                  $is_owing = 'is_owing';
+                  $this->request->getSession()->write('is_owing', $is_owing);
+
+                  if ($this->checkinvoice($student->id, $fee->id) == 1) {
                       //there is an unpaid invoice, take him to his invoices
-                     return $this->redirect(['action' => 'invoices',$student->id]);
-                      
-                  }else{
+                      return $this->redirect(['action' => 'invoices', $student->id]);
+                  } else {
                       $counter++;
                       //no invoices, create new one
-                      $this->creatnewinvoice($student->id, $fee->id,$fee->amount);
+                      $this->creatnewinvoice($student->id, $fee->id, $fee->amount);
                   }
-                  
               }
-               
           }
-          if($counter>0){ //if new invoice was created, take the student to the invoice
-            return $this->redirect(['action' => 'invoices',$student->id]);  
+          if ($counter > 0) { //if new invoice was created, take the student to the invoice
+              return $this->redirect(['action' => 'invoices', $student->id]);
+          }
+          //check if this is an applicant and has paid all the fees and admit the applicant
+          if ($student->status == 'Selected') {
+              $student->status = 'Admitted';
+              $this->Students->save($student);
           }
 
-          
+
           $this->set('student', $student);
           $this->viewBuilder()->setLayout('adminbackend');
       }
@@ -443,81 +455,66 @@
           return 0;
       }
 
-      
-      
       //method that shows a student all her courses
-      public function mycourses(){
-         $mycourses =  $this->Students->find()
-                 ->where(['user_id'=>$this->Auth->user('id')])
-                 ->contain(['Subjects','Departments.Subjects'])->first();
-        //  debug(json_encode( $mycourses, JSON_PRETTY_PRINT));exit;
-          $this->set('mycourses',$mycourses);
+      public function mycourses() {
+          $mycourses = $this->Students->find()
+                          ->where(['user_id' => $this->Auth->user('id')])
+                          ->contain(['Subjects', 'Departments.Subjects'])->first();
+          //  debug(json_encode( $mycourses, JSON_PRETTY_PRINT));exit;
+          $this->set('mycourses', $mycourses);
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
-
-
 //method that shows the student his invoices
-      public function myinvoices(){
-          $student =  $this->Students->find()
-                 ->where(['user_id'=>$this->Auth->user('id')])
-                 ->contain(['Invoices.Fees','Invoices.Sessions','Fees'])->first();
-         //   debug(json_encode(  $student, JSON_PRETTY_PRINT));exit;
-          $this->set('student',  $student);
-           $this->viewBuilder()->setLayout('adminbackend');
-          
+      public function myinvoices() {
+          $student = $this->Students->find()
+                          ->where(['user_id' => $this->Auth->user('id')])
+                          ->contain(['Invoices.Fees', 'Invoices.Sessions', 'Fees'])->first();
+          //   debug(json_encode(  $student, JSON_PRETTY_PRINT));exit;
+          $this->set('student', $student);
+          $this->viewBuilder()->setLayout('adminbackend');
       }
 
-
-
-
-
-
-
-
       //method that creates invoices for students
-      private function creatnewinvoice($student_id, $fee_id,$amount){
-        //  echo 'yest i got here'; exit;
+      private function creatnewinvoice($student_id, $fee_id, $amount) {
+          //  echo 'yest i got here'; exit;
           //get the invoice table
-           $invoices_Table = TableRegistry::get('Invoices');
-           $invoice = $invoices_Table->newEntity();
-           $invoice->student_id = $student_id;
-           $invoice->fee_id = $fee_id;
-           $invoice->amount = $amount;
-           $invoice->session_id = 1;
-           $invoice->invoiceid = "NETEMS/".$fee_id.'/'.$student_id;
-          $invoices_Table->save( $invoice);
+          $invoices_Table = TableRegistry::get('Invoices');
+          $invoice = $invoices_Table->newEntity();
+          $invoice->student_id = $student_id;
+          $invoice->fee_id = $fee_id;
+          $invoice->amount = $amount;
+          $invoice->session_id = 1;
+          $invoice->invoiceid = "NETEMS/" . $fee_id . '/' . $student_id;
+          $invoices_Table->save($invoice);
           return;
       }
 
-      
 //method that shows a student all his invoices
-      public function invoices($student_id){
-         //get the invoice table
-           $invoices_Table = TableRegistry::get('Invoices');
-            $myinvoices =  $invoices_Table->find()
-                    ->contain(['Fees','Sessions'])
-                    ->where(['student_id'=>$student_id,
-                        //'paystatus'=>'Unpaid'
-                        ]);
-            //debug(json_encode( $myinvoices, JSON_PRETTY_PRINT));exit;
-          $this->set('myinvoices',  $myinvoices);
-           $this->viewBuilder()->setLayout('adminbackend');
+      public function invoices($student_id) {
+          //get the invoice table
+          $invoices_Table = TableRegistry::get('Invoices');
+          $myinvoices = $invoices_Table->find()
+                  ->contain(['Fees', 'Sessions'])
+                  ->where(['student_id' => $student_id,
+                  //'paystatus'=>'Unpaid'
+          ]);
+          //debug(json_encode( $myinvoices, JSON_PRETTY_PRINT));exit;
+          $this->set('myinvoices', $myinvoices);
+          $this->viewBuilder()->setLayout('adminbackend');
       }
 
-      
-      
       //go to paystack for payment
       public function gotopaystack($invoice_id, $student_id) {
-             $transactions_Table = TableRegistry::get('Transactions');
-             $invoices_Table = TableRegistry::get('Invoices');
-             $invoice = $invoices_Table->get($invoice_id);
-             $student = $this->Students->get($student_id);
-             $name = $student->fname.' '.$student->lname;
+          $transactions_Table = TableRegistry::get('Transactions');
+          $invoices_Table = TableRegistry::get('Invoices');
+          $invoice = $invoices_Table->get($invoice_id);
+          $student = $this->Students->get($student_id);
+          $name = $student->fname . ' ' . $student->lname;
           //initialize the transaction before going to paystack
-             $settings = $this->request->getSession()->read('settings');
+          $settings = $this->request->getSession()->read('settings');
 
-          $transaction =  $transactions_Table->newEntity();
+          $transaction = $transactions_Table->newEntity();
           $transaction->student_id = $student_id;
           $transaction->fee_id = $invoice->fee_id;
           $transaction->session_id = $settings['session_id'];
@@ -525,9 +522,9 @@
           $transaction->amount = $invoice->amount;
           $transaction->payref = uniqid('NetProEms');
           $transaction->paystatus = 'initialized';
-         
+
           // debug(json_encode($transaction, JSON_PRETTY_PRINT)); exit;
-           $transactions_Table->save($transaction);
+          $transactions_Table->save($transaction);
 
           $baseurl = "http://www.netproacademy.net/";
 
@@ -543,7 +540,7 @@
               CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => json_encode([ 
+              CURLOPT_POSTFIELDS => json_encode([
                   'callback_url' => 'http://localhost/nerp/students/paymentverification/' . $transaction->payref,
                   'amount' => $invoice->amount . '00',
                   'email' => $student->email,
@@ -560,8 +557,7 @@
                       'phone' => $student->phone,
                       'transaction_id' => $transaction->id,
                       'student_id' => $student_id,
-                      'invoice_id' =>$invoice->id,
-                     
+                      'invoice_id' => $invoice->id,
                   ]),
               ]),
               CURLOPT_HTTPHEADER => [
@@ -586,92 +582,84 @@
               // there was an error from the API
               die('API returned error: ' . $tranx->message);
           }
-        //  header('location : '.$tranx->data->authorization_url);
+          //  header('location : '.$tranx->data->authorization_url);
           //return $tranx->data->authorization_url;
-          return $this->redirect($tranx->data->authorization_url); 
-          
+          return $this->redirect($tranx->data->authorization_url);
       }
-      
-      
-      
-       //verify payment and assign value
-    public function paymentverification($ref) {
-        // echo $ref; exit;
 
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.paystack.co/transaction/verify/" . rawurlencode($ref),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                "accept: application/json",
-                "authorization: Bearer sk_test_64a330a5cc8a08c43af1d3673961f083b96ed623",
-                "cache-control: no-cache"
-            ],
-        ));
+      //verify payment and assign value
+      public function paymentverification($ref) {
+          // echo $ref; exit;
 
-        //sk_test_7d5d515418c31cf203abbe3f753b1487b7d2a5e2
+          $curl = curl_init();
+          curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://api.paystack.co/transaction/verify/" . rawurlencode($ref),
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_HTTPHEADER => [
+                  "accept: application/json",
+                  "authorization: Bearer sk_test_64a330a5cc8a08c43af1d3673961f083b96ed623",
+                  "cache-control: no-cache"
+              ],
+          ));
 
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
+          //sk_test_7d5d515418c31cf203abbe3f753b1487b7d2a5e2
 
-        if ($err) {
-            // there was an error contacting the Paystack API
-            die('Curl returned error: ' . $err);
-        }
+          $response = curl_exec($curl);
+          $err = curl_error($curl);
 
-        $tranx = json_decode($response);
-        // debug( $tranx);
-        if (!$tranx->status) {
-            // there was an error from the API
-            die('API returned error: ' . $tranx->message);
-        }
+          if ($err) {
+              // there was an error contacting the Paystack API
+              die('Curl returned error: ' . $err);
+          }
 
-        // debug($tranx); exit;
-         $transactions_Table = TableRegistry::get('Transactions');
-        $trans_id = $tranx->data->metadata->transaction_id;
-        $email = $tranx->data->metadata->email;
-        $name = $tranx->data->metadata->name;
-        $invoice_id = $tranx->data->metadata->invoice_id;
-        //update transaction record
-        $transaction = $transactions_Table->get($trans_id);
-        $transaction->status = $tranx->status;
-        $transaction->amount = $tranx->data->amount / 100;
-        $transaction->paystatus = 'completed';
-        $transaction->gresponse = $tranx->data->status;
-        $transactions_Table->save($transaction);
-       // update invoice
-           $invoices_Table = TableRegistry::get('Invoices');
-        $invoice = $invoices_Table->get($invoice_id);
-        $invoice->paystatus = $tranx->data->status;
-        $invoice->payday = date('d M Y H:i a');
-        $invoices_Table->save($invoice);
-        //send payment alert via email
-       // $this->payconfirmationmail($email,$name,$transaction->amount);
-       
-        $this->Flash->success('Your payment was successful.');
-        return $this->redirect(['action' => 'invoices',$tranx->data->metadata->student_id]);
-    }
-    
-    
-    
-    //student method for viewing their profile
-    public function viewprofile(){
-        $student = $this->Students->find()
-                 ->where(['user_id'=>$this->Auth->user('id')])
-                 ->contain(['Users','Departments','States','Countries'])->first();
-        $this->set('student',  $student);
-           $this->viewBuilder()->setLayout('adminbackend');
-        
-    }
+          $tranx = json_decode($response);
+          // debug( $tranx);
+          if (!$tranx->status) {
+              // there was an error from the API
+              die('API returned error: ' . $tranx->message);
+          }
 
-    
-    
-    //student method for updating their profile
-    public function updateprofile(){
-         $student = $this->Students->find()
-                 ->where(['user_id'=>$this->Auth->user('id')])
-                 ->contain(['Users','Departments','States','Countries'])->first();
-         
+          // debug($tranx); exit;
+          $transactions_Table = TableRegistry::get('Transactions');
+          $trans_id = $tranx->data->metadata->transaction_id;
+          $email = $tranx->data->metadata->email;
+          $name = $tranx->data->metadata->name;
+          $invoice_id = $tranx->data->metadata->invoice_id;
+          //update transaction record
+          $transaction = $transactions_Table->get($trans_id);
+          $transaction->status = $tranx->status;
+          $transaction->amount = $tranx->data->amount / 100;
+          $transaction->paystatus = 'completed';
+          $transaction->gresponse = $tranx->data->status;
+          $transactions_Table->save($transaction);
+          // update invoice
+          $invoices_Table = TableRegistry::get('Invoices');
+          $invoice = $invoices_Table->get($invoice_id);
+          $invoice->paystatus = $tranx->data->status;
+          $invoice->payday = date('d M Y H:i a');
+          $invoices_Table->save($invoice);
+          //send payment alert via email
+          // $this->payconfirmationmail($email,$name,$transaction->amount);
+
+          $this->Flash->success('Your payment was successful.');
+          return $this->redirect(['action' => 'invoices', $tranx->data->metadata->student_id]);
+      }
+
+      //student method for viewing their profile
+      public function viewprofile() {
+          $student = $this->Students->find()
+                          ->where(['user_id' => $this->Auth->user('id')])
+                          ->contain(['Users', 'Departments', 'States', 'Countries'])->first();
+          $this->set('student', $student);
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      //student method for updating their profile
+      public function updateprofile() {
+          $student = $this->Students->find()
+                          ->where(['user_id' => $this->Auth->user('id')])
+                          ->contain(['Users', 'Departments', 'States', 'Countries'])->first();
+
           if ($this->request->is(['patch', 'post', 'put'])) {
               $userscontroller = new UsersController();
               //upload files
@@ -709,7 +697,9 @@
                   $passport = $student->passporturl;
               }
               $student = $this->Students->patchEntity($student, $this->request->getData());
-             if(!empty($passport)) {$student->passporturl = $passport;}
+              if (!empty($passport)) {
+                  $student->passporturl = $passport;
+              }
               if ($this->Students->save($student)) {
                   $this->Flash->success(__('The student data has been updated successfully.'));
 
@@ -717,36 +707,127 @@
               }
               $this->Flash->error(__('Profile data could not be updated. Please, try again.'));
           }
-         // $departments = $this->Students->Departments->find('list', ['limit' => 200]);
+          // $departments = $this->Students->Departments->find('list', ['limit' => 200]);
           $states = $this->Students->States->find('list', ['limit' => 200]);
           $countries = $this->Students->Countries->find('list', ['limit' => 200]);
           $fees = $this->Students->Fees->find('list', ['limit' => 200]);
           $subjects = $this->Students->Subjects->find('list', ['limit' => 200]);
           $this->set(compact('student', 'states', 'countries', 'users', 'fees', 'subjects'));
           $this->viewBuilder()->setLayout('adminbackend');
-    }
+      }
 
-    
+      //function that returns the states on the drop down
+      public function getstates($country_id) {
+          $statestable = TableRegistry::get('States');
+          $states = $statestable->find('list')
+                  ->where(['country_id' => $country_id]);
+          $this->set(compact('states'));
+          //debug(json_encode($states , JSON_PRETTY_PRINT)); exit;
+      }
 
+      //admin method for bulk import of students
+      public function importstudents() {
 
-
-
-    //function that returns the states on the drop down
-    public function getstates($country_id){
-           $statestable = TableRegistry::get('States');
-         $states = $statestable->find('list')
-         ->where(['country_id'=>$country_id]);
-         $this->set(compact('states'));
-         //debug(json_encode($states , JSON_PRETTY_PRINT)); exit;
-        
-    }
-
-
-   
-    
+          if ($this->request->is(['patch', 'post', 'put'])) {
 
 
-    /**
+              $department_id = $this->request->data('department_id');
+
+              $filename = $this->request->data['students']['name'];
+              $ext = pathinfo($filename, PATHINFO_EXTENSION);
+              $allowedext = ['csv', 'xlsx'];
+              if ($this->request->data['students']['error']) {
+                  $this->Flash->error(__('Sorry, there is a problem with the file. Please check and try again'));
+
+                  return $this->redirect(['action' => 'importstudents']);
+              }
+              if (!in_array($ext, $allowedext)) {
+                  $this->Flash->error(__('Sorry, only csv or xlsx files can be uploaded.'));
+
+                  return $this->redirect(['action' => 'importstudents']);
+              } else {
+                  $helper = new Helper\Sample();
+                  debug($helper);
+                  $inputFileName = $this->request->data['students']['tmp_name'];
+                  $spreadsheet = IOFactory::load($inputFileName);
+                  $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+                  $count = 0; $old = 0;
+                  $inserted = 0;
+                  foreach ($sheetData as $data) {
+                      $count++;
+
+                      if ($count > 1) {
+                    //debug(json_encode($data, JSON_PRETTY_PRINT)); exit;
+                          $department = $this->Students->Departments->get($department_id);
+
+                          // echo strtolower($department->departmentname).' '. strtolower($data['G']).'</br>';
+                          //echo strtolower($program->programname).' '. strtolower($data['H']).'</br>';
+                          //echo strtolower($faculty->facultyname).' '. strtolower($data['F']); exit;
+
+                          if ((strtolower(trim($department->name)) == strtolower(trim($data['D'])))) {
+                              // echo strtolower($faculty->facultyname).' '. strtolower($data['F']); exit;
+                              //create login data for the student
+                              $user_id = $this->getlogindetails($data['E'], $data['A'], $data['B'], ' ');
+                              if (!is_numeric($user_id)) {
+                                  $this->Flash->error(__('Sorry, there is a problem with the file. Unable to create user data. Please check and try again'));
+
+                                  return $this->redirect(['action' => 'importstudents']);
+                              }
+                              //create a new student object
+                              $student = $this->Students->newEntity();
+                              $student->regno = $data['J'];
+                              $student->fname = $data['A'];
+                              $student->lname = $data['B'];
+                              $student->status = 'Admitted';
+                              $student->gender = $data['I'];
+                              $student->dob = $data['C'];
+                              $student->country_id = 160;
+                              $student->state_id = 2648;
+                              $student->department_id = $department_id;
+                              $student->email = $data['E'];
+                              $student->address = $data['F'];
+                              $student->phone = $data['G'];
+                              $student->admissiondate = $data['H'];
+                              $student->user_id =  $user_id;
+
+                              // check if student exists in the database already.
+                              $oldstudent = $this->Students->find()->where(['regno' => $data['J']])->first();
+                              //  debug(json_encode($oldstudent, JSON_PRETTY_PRINT)); exit;
+                              if (empty($oldstudent)) {
+                                  //save the student
+                                  $this->Students->save($student);
+                                  $inserted++;
+                              }
+                              else{ $old++;
+                             $message = $old++.' Student(s) could not be uploaded because their regno already exists';
+
+                                 
+                              }
+                          } else {
+                              $this->Flash->error(__('Sorry, the selected department, didn\'t match that in the csv file you are uploading...'));
+
+                              return $this->redirect(['action' => 'importstudents']);
+                          }
+
+                          // debug(json_encode($data['F'], JSON_PRETTY_PRINT)); exit;
+                      }
+                  }
+                  $this->Flash->success(__($inserted . ' Students have been uploaded successfully. '.$message));
+
+                  return $this->redirect(['action' => 'importstudents']);
+              }
+          }
+
+          $departments = $this->Students->Departments->find('list', ['limit' => 200])->order(['name' => 'DESC']);
+          $states = $this->Students->States->find('list', ['limit' => 200]);
+          $countries = $this->Students->Countries->find('list', ['limit' => 200]);
+
+          $this->set(compact('states', 'departments', 'countries'));
+
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      /**
        * Delete method
        *
        * @param string|null $id Student id.
