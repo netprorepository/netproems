@@ -760,13 +760,13 @@
                     //debug(json_encode($data, JSON_PRETTY_PRINT)); exit;
                           $department = $this->Students->Departments->get($department_id);
 
-                          // echo strtolower($department->departmentname).' '. strtolower($data['G']).'</br>';
-                          //echo strtolower($program->programname).' '. strtolower($data['H']).'</br>';
-                          //echo strtolower($faculty->facultyname).' '. strtolower($data['F']); exit;
-
                           if ((strtolower(trim($department->name)) == strtolower(trim($data['D'])))) {
-                              // echo strtolower($faculty->facultyname).' '. strtolower($data['F']); exit;
-                              //create login data for the student
+                              
+                              // check if student exists in the database already.
+                              $oldstudent = $this->Students->find()->where(['regno' => $data['J']])->first();
+                              //  debug(json_encode($oldstudent, JSON_PRETTY_PRINT)); exit;
+                              if (empty($oldstudent)) {
+                                   //create login data for the student
                               $user_id = $this->getlogindetails($data['E'], $data['A'], $data['B'], ' ');
                               if (!is_numeric($user_id)) {
                                   $this->Flash->error(__('Sorry, there is a problem with the file. Unable to create user data. Please check and try again'));
@@ -789,11 +789,6 @@
                               $student->phone = $data['G'];
                               $student->admissiondate = $data['H'];
                               $student->user_id =  $user_id;
-
-                              // check if student exists in the database already.
-                              $oldstudent = $this->Students->find()->where(['regno' => $data['J']])->first();
-                              //  debug(json_encode($oldstudent, JSON_PRETTY_PRINT)); exit;
-                              if (empty($oldstudent)) {
                                   //save the student
                                   $this->Students->save($student);
                                   $inserted++;
@@ -803,6 +798,7 @@
 
                                  
                               }
+                        
                           } else {
                               $this->Flash->error(__('Sorry, the selected department, didn\'t match that in the csv file you are uploading...'));
 
