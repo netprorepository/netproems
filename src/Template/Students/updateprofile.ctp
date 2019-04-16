@@ -154,7 +154,7 @@
         method: 'GET',
         dataType: 'text',
         success: function(response) {
-            console.log(response);
+           // console.log(response);
             document.getElementById('states1').innerHTML = "";
             document.getElementById('states1').innerHTML = response;
             //location.href = redirect;
