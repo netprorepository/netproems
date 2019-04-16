@@ -64,7 +64,7 @@
                                 </div>   
                                 
                                 <div class="col-sm-6">
-                                    <?= $this->Form->control('session_id', ['options'=>$sessions,'label' => 'Select Session', 'class' => 'form-control form-control-user']) ?>
+                                    <?= $this->Form->control('session_id', ['options'=>$sessions,'label' => 'Select Session', 'class' => 'form-control form-control-user2']) ?>
                                 </div>
                             </div> 
                             <br /> <br />
