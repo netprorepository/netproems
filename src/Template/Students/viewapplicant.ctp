@@ -151,7 +151,7 @@
 
                             <div class="form-group row">        
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-<?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Select Subjects', 'empty' => 'Select Subjects', 'class' => 'select2_multiple form-control form-control-user', 'required']) ?> 
+<?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Select Subjects', 'empty' => 'Select Subjects', 'class' => 'select2_multiple form-control form-control-user']) ?> 
                                 </div>
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                    <?php $status = ['Selected'=>'Selected','Pending'=>'Pending','Rejected'=>'Rejected'];
