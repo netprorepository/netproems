@@ -7,7 +7,9 @@
                 <!--          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>-->
                 <div class="col-lg-12">
                     <div class="p-5">
-                        <div class="text-center">
+                        <div class="text-center"> 
+                            <?= $this->Html->link(__(' '), ['action' => 'downloadformat'],
+                                    ['class'=>'btn-circle btn-lg fa fa-plus float-right','title'=>'download data format']) ?>
                             <h1 class="h4 text-gray-900 mb-4">Students Bulk Import </h1>
                         </div>
     <?= $this->Form->create(null,['type'=>'file']) ?>
@@ -36,3 +38,23 @@
 
 </div>
 
+<script>
+    
+    function calldownloder(){
+        $.ajax({
+            alert('am called');
+        url: '../Students/downloadformat',
+        method: 'GET',
+        dataType: 'text',
+        success: function(response) {
+          console.log(response);
+           // document.getElementById('states1').innerHTML = "";
+           // document.getElementById('states1').innerHTML = response;
+            //location.href = redirect;
+        }
+    });
+    }
+    
+    </script>
+    
+  
