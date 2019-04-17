@@ -1,7 +1,7 @@
 <?php
 
   namespace App\Controller;
-
+ use Cake\Routing\Router;
   use Cake\Mailer\Email;
   use Cake\Event\Event;
   use Cake\ORM\TableRegistry;
@@ -34,7 +34,9 @@
                   ->where(['status' => 'Admitted'])
                   ->order(['joindate' => 'DESC']);
 
-          $this->set(compact('students'));
+          $departments = $this->Students->Departments->find('list', ['limit' => 200])->order(['name' => 'DESC']);
+
+          $this->set(compact('students', 'departments'));
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
@@ -371,8 +373,8 @@
                       $amount = 2000;
                       $url = $transactionController->gotopaystack($email, $student->phone, $name, $amount, $student->id);
                       $this->Flash->success(__('Your application has been submitted successfully. The admin officer would go through'
-                                      . 'you application and contact you shortly. You can also check your application status by simply loging into the system'
-                                      . 'with the email address you just provided and a default password of student123'));
+                                      . ' your application and contact you shortly. You can also check your application status by simply loging into the system'
+                                      . ' with the email address you just provided and a default password of student123'));
 
                       return $this->redirect($url);
                   }
@@ -730,7 +732,7 @@
 
           if ($this->request->is(['patch', 'post', 'put'])) {
 
-
+              $message = " ";
               $department_id = $this->request->data('department_id');
 
               $filename = $this->request->data['students']['name'];
@@ -751,54 +753,52 @@
                   $inputFileName = $this->request->data['students']['tmp_name'];
                   $spreadsheet = IOFactory::load($inputFileName);
                   $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-                  $count = 0; $old = 0;
+                  $count = 0;
+                  $old = 0;
                   $inserted = 0;
                   foreach ($sheetData as $data) {
                       $count++;
 
                       if ($count > 1) {
-                    //debug(json_encode($data, JSON_PRETTY_PRINT)); exit;
+                          //debug(json_encode($data, JSON_PRETTY_PRINT)); exit;
                           $department = $this->Students->Departments->get($department_id);
 
                           if ((strtolower(trim($department->name)) == strtolower(trim($data['D'])))) {
-                              
+
                               // check if student exists in the database already.
                               $oldstudent = $this->Students->find()->where(['regno' => $data['J']])->first();
                               //  debug(json_encode($oldstudent, JSON_PRETTY_PRINT)); exit;
                               if (empty($oldstudent)) {
-                                   //create login data for the student
-                              $user_id = $this->getlogindetails($data['E'], $data['A'], $data['B'], ' ');
-                              if (!is_numeric($user_id)) {
-                                  $this->Flash->error(__('Sorry, there is a problem with the file. Unable to create user data. Please check and try again'));
+                                  //create login data for the student
+                                  $user_id = $this->getlogindetails($data['E'], $data['A'], $data['B'], ' ');
+                                  if (!is_numeric($user_id)) {
+                                      $this->Flash->error(__('Sorry, there is a problem with the file. Unable to create user data. Please check and try again'));
 
-                                  return $this->redirect(['action' => 'importstudents']);
-                              }
-                              //create a new student object
-                              $student = $this->Students->newEntity();
-                              $student->regno = $data['J'];
-                              $student->fname = $data['A'];
-                              $student->lname = $data['B'];
-                              $student->status = 'Admitted';
-                              $student->gender = $data['I'];
-                              $student->dob = $data['C'];
-                              $student->country_id = 160;
-                              $student->state_id = 2648;
-                              $student->department_id = $department_id;
-                              $student->email = $data['E'];
-                              $student->address = $data['F'];
-                              $student->phone = $data['G'];
-                              $student->admissiondate = $data['H'];
-                              $student->user_id =  $user_id;
+                                      return $this->redirect(['action' => 'importstudents']);
+                                  }
+                                  //create a new student object
+                                  $student = $this->Students->newEntity();
+                                  $student->regno = $data['J'];
+                                  $student->fname = $data['A'];
+                                  $student->lname = $data['B'];
+                                  $student->status = 'Admitted';
+                                  $student->gender = $data['I'];
+                                  $student->dob = $data['C'];
+                                  $student->country_id = 160;
+                                  $student->state_id = 2648;
+                                  $student->department_id = $department_id;
+                                  $student->email = $data['E'];
+                                  $student->address = $data['F'];
+                                  $student->phone = $data['G'];
+                                  $student->admissiondate = $data['H'];
+                                  $student->user_id = $user_id;
                                   //save the student
                                   $this->Students->save($student);
                                   $inserted++;
+                              } else {
+                                  $old++;
+                                  $message = $old++ . ' Student(s) could not be uploaded because their regno already exists';
                               }
-                              else{ $old++;
-                             $message = $old++.' Student(s) could not be uploaded because their regno already exists';
-
-                                 
-                              }
-                        
                           } else {
                               $this->Flash->error(__('Sorry, the selected department, didn\'t match that in the csv file you are uploading...'));
 
@@ -808,7 +808,7 @@
                           // debug(json_encode($data['F'], JSON_PRETTY_PRINT)); exit;
                       }
                   }
-                  $this->Flash->success(__($inserted . ' Students have been uploaded successfully. '.$message));
+                  $this->Flash->success(__($inserted . ' Students have been uploaded successfully. ' . $message));
 
                   return $this->redirect(['action' => 'importstudents']);
               }
@@ -840,6 +840,31 @@
           }
 
           return $this->redirect(['action' => 'managestudents']);
+      }
+
+      //method that downloads the student data format
+      public function downloadformat() {
+          $url = Router::url('/', true);
+          $ext = pathinfo("students_format.xlsx", PATHINFO_EXTENSION);
+       // echo  basename($pathtofile."cvs/students_format.xlsx"); exit;
+          $filename = "students_format.xlsx";
+          header('Content-Type: ' . $ext);
+          header('Content-Length: ' . filesize("cvs/students_format.xlsx"));
+          header('Content-Disposition: attachment;filename="' . $filename . '"');
+          header("Cache-control: private");
+          readfile("cvs/students_format.xlsx");
+          return;
+      }
+
+      //admin method for getting students in a department
+      public function getstudentsindept($deptid) {
+          $students = $this->Students->find()
+                  ->contain(['Departments'])
+                  ->where(['department_id' => $deptid, 'status' => 'Admitted']);
+
+          $departments = $this->Students->Departments->find('list', ['limit' => 200])->order(['name' => 'DESC']);
+          $this->set('students', $students);
+          $this->set('departments', $departments);
       }
 
       // allow unrestricted pages
