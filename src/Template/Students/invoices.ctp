@@ -50,7 +50,7 @@ $userrole = $this->request->getSession()->read('usersroles');
             <tr>
                 
                 <td><?= h($invoice->fee->name) ?></td>
-                <td><?= h($invoice->fee->amount) ?></td>
+                <td><?= number_format($invoice->fee->amount) ?></td>
                 <td><?= h($invoice->fee->startdate) ?></td>
                <td><?= h($invoice->session->name) ?></td>
                <td ><?php if($invoice->paystatus=="Unpaid"){
