@@ -77,12 +77,12 @@
                                 </div>
                                 
                                  <div class="col-sm-4 mb-3 mb-sm-0">
-<?= $this->Form->control('country_id', ['options' => $countries, 'label' => 'Select Country', 'empty' => 'Select Country', 'class' => 'select2_multiple form-control form-control-user', 'multiple' => false]) ?>
+<?= $this->Form->control('country_id', ['options' => $countries, 'label' => 'Select Country', 'empty' => 'Select Country', 'class' => 'select2_multiple form-control form-control-user', 'multiple' => false,'onChange'=>'getstates(this.value)']) ?>
 
                                 </div>
 
                                 <div class="col-sm-4 mb-3 mb-sm-0">
-<?= $this->Form->control('state_id', ['options' => $states, 'label' => 'Select State', 'empty' => 'Select State', 'class' => 'select2_multiple form-control form-control-user', 'multiple' => false]) ?>
+<?= $this->Form->control('state_id', ['options' => $states, 'label' => 'Select State', 'empty' => 'Select State', 'class' => 'select2_multiple form-control form-control-user', 'multiple' => false,'id'=>'states1']) ?>
                                 </div>
    
                             </div>
@@ -156,3 +156,21 @@
     </div>
 
 </div>
+<script>
+    
+        function getstates(stateid){ 
+
+    $.ajax({
+        url: '../Students/getstates/'+stateid,
+        method: 'GET',
+        dataType: 'text',
+        success: function(response) {
+           // console.log(response);
+            document.getElementById('states1').innerHTML = "";
+            document.getElementById('states1').innerHTML = response;
+            //location.href = redirect;
+        }
+    });
+
+}
+    </script>
