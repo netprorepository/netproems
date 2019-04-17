@@ -25,10 +25,11 @@ $userrole = $this->request->getSession()->read('usersroles');
           
                  <th scope="col"><?= $this->Paginator->sort('first Name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('last Name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('M Name') ?></th>
+               
                 <th scope="col"><?= $this->Paginator->sort('DOB') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date Applied') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Department') ?></th>
+                 <th>Status</th>
 <!--                <th scope="col"><?= $this->Paginator->sort('olevelresulturl') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('jamb') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('birthcerturl') ?></th>
@@ -57,10 +58,11 @@ $userrole = $this->request->getSession()->read('usersroles');
           
                  <th scope="col"><?= $this->Paginator->sort('first Name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('last Name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('M Name') ?></th>
+               
                 <th scope="col"><?= $this->Paginator->sort('DOB') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date Applied') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Department') ?></th>
+                <th>Status</th>
 <!--                <th scope="col"><?= $this->Paginator->sort('olevelresulturl') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('jamb') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('birthcerturl') ?></th>
@@ -90,10 +92,11 @@ $userrole = $this->request->getSession()->read('usersroles');
                 
                 <td><?= h($student->fname) ?></td>
                 <td><?= h($student->lname) ?></td>
-                <td><?= h($student->mname) ?></td>
+             
                 <td><?= h($student->dob) ?></td>
                 <td><?= h(date('D, d M Y H:i a', strtotime($student->joindate))) ?></td>
-                <td><?= $student->has('department') ? $this->Html->link($student->department->name, ['controller' => 'Departments', 'action' => 'view', $student->department->id]) : '' ?></td>
+                <td><?= $student->has('department') ? $this->Html->link($student->department->name, ['controller' => 'Departments', 'action' => 'viewdepartment', $student->department->id]) : '' ?></td>
+                <td><?= h($student->status) ?></td>
 <!--                <td><?= h($student->olevelresulturl) ?></td>
                 <td><?= $this->Number->format($student->jamb) ?></td>
                 <td><?= h($student->birthcerturl) ?></td>
