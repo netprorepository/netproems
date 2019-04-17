@@ -6,6 +6,34 @@ $userrole = $this->request->getSession()->read('usersroles');
 
 <!-- Begin Page Content -->
         <div class="container-fluid">
+            <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Search Transaction </h1>
+                        </div>
+    <?= $this->Form->create(null) ?>
+    <fieldset>
+        <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+        <?php
+            echo $this->Form->control('startdate',['label' => 'Start Date', 'placeholder' => 'Start Date',
+      'class' => 'form-control form-control-user2','type' => 'text', 'id' => 'datepicker']);
+            
+            ?>
+        </div>
+             <div class="col-sm-6 mb-3 mb-sm-0">
+        <?php
+            echo $this->Form->control('enddate',['label' => 'End Date', 'placeholder' => 'End Date',
+      'class' => 'form-control form-control-user2','type' => 'text', 'id' => 'datepicker2']);
+            
+            ?>
+        </div>
+       
+            </div>
+    </fieldset>
+   <br /> <br />
+                    <?= $this->Form->button('Search', ['class' => 'btn btn-primary btn-user btn-block']) ?>   
+                        <?= $this->Form->end() ?>
+                    </div>
             <div style="padding-bottom: 10px; margin-bottom: 20px;">
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Transactions</h1></div>
