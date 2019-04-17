@@ -43,7 +43,6 @@ use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\Utility\Inflector;
 use Cake\Utility\Security;
- use Cake\Routing\Router;
 
 /**
  * Uncomment block of code below if you want to use `.env` file during development.
@@ -124,10 +123,6 @@ if ($isCli) {
 if ($isCli) {
     require __DIR__ . '/bootstrap_cli.php';
 }
-
-//define the current url
-$BASEURL = Router::url('/', true);
-  define($BASEURL, $BASEURL);
 
 /*
  * Set the full base URL.
