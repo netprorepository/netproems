@@ -49,6 +49,9 @@ class Teacher extends Entity
         'date_created' => true,
         'passport' => true,
         'user' => true,
+        'firstname'=>true,
+        'lastname'=> true,
+        'middlename' => true,
         'country' => true,
         'state' => true,
         'subjects' => true
