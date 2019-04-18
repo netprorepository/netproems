@@ -10,11 +10,14 @@ use Cake\Validation\Validator;
  * Departments Model
  *
  * @property \App\Model\Table\FacultiesTable|\Cake\ORM\Association\BelongsTo $Faculties
- * @property |\Cake\ORM\Association\HasMany $Feeallocations
+ * @property \App\Model\Table\DstudentsTable|\Cake\ORM\Association\HasMany $Dstudents
+ * @property \App\Model\Table\FeeallocationsTable|\Cake\ORM\Association\HasMany $Feeallocations
  * @property \App\Model\Table\ProgramesTable|\Cake\ORM\Association\HasMany $Programes
- * @property |\Cake\ORM\Association\HasMany $Subjects
+ * @property \App\Model\Table\StudentsTable|\Cake\ORM\Association\HasMany $Students
+ * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\HasMany $Subjects
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\HasMany $Users
- * @property |\Cake\ORM\Association\BelongsToMany $Fees
+ * @property \App\Model\Table\FeesTable|\Cake\ORM\Association\BelongsToMany $Fees
+ * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\BelongsToMany $Subjects
  *
  * @method \App\Model\Entity\Department get($primaryKey, $options = [])
  * @method \App\Model\Entity\Department newEntity($data = null, array $options = [])
@@ -46,10 +49,16 @@ class DepartmentsTable extends Table
             'foreignKey' => 'faculty_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasMany('Dstudents', [
+            'foreignKey' => 'department_id'
+        ]);
         $this->hasMany('Feeallocations', [
             'foreignKey' => 'department_id'
         ]);
         $this->hasMany('Programes', [
+            'foreignKey' => 'department_id'
+        ]);
+        $this->hasMany('Students', [
             'foreignKey' => 'department_id'
         ]);
         $this->hasMany('Subjects', [
@@ -58,13 +67,15 @@ class DepartmentsTable extends Table
         $this->hasMany('Users', [
             'foreignKey' => 'department_id'
         ]);
-         $this->hasMany('Students', [
-            'foreignKey' => 'department_id'
-        ]);
         $this->belongsToMany('Fees', [
             'foreignKey' => 'department_id',
             'targetForeignKey' => 'fee_id',
             'joinTable' => 'departments_fees'
+        ]);
+        $this->belongsToMany('Subjects', [
+            'foreignKey' => 'department_id',
+            'targetForeignKey' => 'subject_id',
+            'joinTable' => 'departments_subjects'
         ]);
     }
 
