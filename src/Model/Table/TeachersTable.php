@@ -38,7 +38,7 @@ class TeachersTable extends Table
         parent::initialize($config);
 
         $this->setTable('teachers');
-        $this->setDisplayField('id');
+        $this->setDisplayField('firstname');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Users', [
