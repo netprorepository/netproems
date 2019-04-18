@@ -34,9 +34,9 @@
        * @return \Cake\Http\Response|void
        * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
        */
-      public function view($id = null) {
+      public function viewsubject($id = null) {
           $subject = $this->Subjects->get($id, [
-              'contain' => ['Departments', 'Teachers.Users']
+              'contain' => ['Departments', 'Teachers']
           ]);
           
           $this->set('subject', $subject);
@@ -48,11 +48,21 @@
        *
        * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
        */
-      public function add() {
+      public function newsubject() {
           $subject = $this->Subjects->newEntity();
           if ($this->request->is('post')) {
               $subject = $this->Subjects->patchEntity($subject, $this->request->getData());
+              $subject->user_id = $this->Auth->user('id');
               if ($this->Subjects->save($subject)) {
+                  //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Added a new subject ".$subject->name;
+                $user_id = $this->Auth->user('id');
+                $description = "Created a new Subject " . $subject->name;
+                $ip = $this->request->clientIp();
+                $type = "Add";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                   $this->Flash->success(__('The subject has been saved.'));
 
                   return $this->redirect(['action' => 'managesubjects']);
@@ -60,8 +70,9 @@
               $this->Flash->error(__('The subject could not be saved. Please, try again.'));
           }
           $departments = $this->Subjects->Departments->find('list', ['limit' => 200]);
-          $users = $this->Subjects->Users->find('list', ['limit' => 200]);
-          $this->set(compact('subject', 'departments', 'users'));
+        $students = $this->Subjects->Students->find('list', ['limit' => 200]);
+        $teachers = $this->Subjects->Teachers->find('list', ['limit' => 200]);
+        $this->set(compact('subject', 'users', 'departments', 'students', 'teachers'));
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
@@ -72,22 +83,32 @@
        * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
        * @throws \Cake\Network\Exception\NotFoundException When record not found.
        */
-      public function edit($id = null) {
+      public function updatesubject($id = null) {
           $subject = $this->Subjects->get($id, [
               'contain' => []
           ]);
           if ($this->request->is(['patch', 'post', 'put'])) {
               $subject = $this->Subjects->patchEntity($subject, $this->request->getData());
               if ($this->Subjects->save($subject)) {
-                  $this->Flash->success(__('The subject has been saved.'));
+                   //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Updated a subject ".$subject->name;
+                $user_id = $this->Auth->user('id');
+                $description = "Updated a Subject " . $subject->name;
+                $ip = $this->request->clientIp();
+                $type = "Edit";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  $this->Flash->success(__('The subject has been updated.'));
 
                   return $this->redirect(['action' => 'managesubjects']);
               }
               $this->Flash->error(__('The subject could not be saved. Please, try again.'));
           }
           $departments = $this->Subjects->Departments->find('list', ['limit' => 200]);
-          $users = $this->Subjects->Users->find('list', ['limit' => 200]);
-          $this->set(compact('subject', 'departments', 'users'));
+        $students = $this->Subjects->Students->find('list', ['limit' => 200]);
+        $teachers = $this->Subjects->Teachers->find('list', ['limit' => 200]);
+        $this->set(compact('subject', 'users', 'departments', 'students', 'teachers'));
 
           $this->viewBuilder()->setLayout('adminbackend');
       }
@@ -103,12 +124,21 @@
           $this->request->allowMethod(['post', 'delete']);
           $subject = $this->Subjects->get($id);
           if ($this->Subjects->delete($subject)) {
+               //log activity
+                $usercontroller = new UsersController();
+               
+                 $title = "Deleted a subject ".$subject->name;
+                $user_id = $this->Auth->user('id');
+                $description = "Deleted a Subject " . $subject->name;
+                $ip = $this->request->clientIp();
+                $type = "Delete";
+                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
               $this->Flash->success(__('The subject has been deleted.'));
           } else {
               $this->Flash->error(__('The subject could not be deleted. Please, try again.'));
           }
 
-          return $this->redirect(['action' => 'index']);
+          return $this->redirect(['action' => 'managesubjects']);
       }
 
       public function managesubjects() {
@@ -125,14 +155,9 @@
       public function changesubjectstatus($id, $status) {
           $subjects = $this->Subjects->get($id);
           $subjects->status = $status;
-          if ($status == 1) {
-              $mystatus = "Enabled";
-          } else if ($status == 0) {
-              $mystatus = "Disabled";
-          }
-
+      
           if ($this->Subjects->save($subjects)) {
-              $this->Flash->success(__('Subject status ' . $mystatus));
+              $this->Flash->success(__('Subject status has been changed'));
           } else {
               $this->Flash->error(__('Unable to change Subjects status. Please, try again.'));
           }
