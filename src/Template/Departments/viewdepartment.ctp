@@ -32,7 +32,39 @@
                   echo h($fee->name.'  -  N'.number_format($fee->amount,2)).'<br />';
                   
                    }} ?>
-                 
+               
+                  <?php if (!empty($department->subjects)){?>
+                   <br /> <strong>Courses</strong>
+                   <table class="table table-bordered table-striped table-hover" width="100%" cellspacing="0">
+                       
+                       <thead>
+            <tr>
+          
+                <th >Name</th>
+                <th >Course Code</th>
+              
+                <th>Credit Load</th>
+                
+            </tr>
+                  </thead>
+                      <tbody>
+                 <?php foreach ($department->subjects as $subject){?>
+                          <tr>
+                              <td>
+                                  <?=$subject->name?>
+                              </td>
+                              <td>
+                                  <?=$subject->subjectcode?>
+                              </td>
+                              <td>
+                                  <?=$subject->creditload?>
+                              </td>
+                          </tr>
+          
+                  <?php }}?>
+                      </tbody>
+                   </table>
+                   <hr />
                 </div>
               </div>
 
