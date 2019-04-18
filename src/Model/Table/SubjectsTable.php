@@ -11,9 +11,10 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\DepartmentsTable|\Cake\ORM\Association\BelongsTo $Departments
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- * @property |\Cake\ORM\Association\BelongsToMany $Teachers
-=======
- * @property \App\Model\Table\SubjectTeachersTable|\Cake\ORM\Association\HasMany $SubjectTeachers
+ * @property \App\Model\Table\TopicsTable|\Cake\ORM\Association\HasMany $Topics
+ * @property \App\Model\Table\DepartmentsTable|\Cake\ORM\Association\BelongsToMany $Departments
+ * @property \App\Model\Table\StudentsTable|\Cake\ORM\Association\BelongsToMany $Students
+ * @property \App\Model\Table\TeachersTable|\Cake\ORM\Association\BelongsToMany $Teachers
  *
  * @method \App\Model\Entity\Subject get($primaryKey, $options = [])
  * @method \App\Model\Entity\Subject newEntity($data = null, array $options = [])
@@ -49,14 +50,23 @@ class SubjectsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasMany('Topics', [
+            'foreignKey' => 'subject_id'
+        ]);
+        $this->belongsToMany('Departments', [
+            'foreignKey' => 'subject_id',
+            'targetForeignKey' => 'department_id',
+            'joinTable' => 'departments_subjects'
+        ]);
+        $this->belongsToMany('Students', [
+            'foreignKey' => 'subject_id',
+            'targetForeignKey' => 'student_id',
+            'joinTable' => 'subjects_students'
+        ]);
         $this->belongsToMany('Teachers', [
             'foreignKey' => 'subject_id',
             'targetForeignKey' => 'teacher_id',
             'joinTable' => 'subjects_teachers'
-        ]);
-        $this->hasMany('Topics', [
-            'foreignKey' => 'subject_id',
-            
         ]);
     }
 
@@ -89,6 +99,15 @@ class SubjectsTable extends Table
             ->requirePresence('creditload', 'create')
             ->notEmpty('creditload');
 
+//        $validator
+//            ->dateTime('created_date')
+//            ->requirePresence('created_date', 'create')
+//            ->notEmpty('created_date');
+//
+//        $validator
+//            ->integer('status')
+//            ->requirePresence('status', 'create')
+//            ->notEmpty('status');
 
         return $validator;
     }
