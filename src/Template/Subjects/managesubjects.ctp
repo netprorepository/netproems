@@ -5,7 +5,7 @@ $userrole = $this->request->getSession()->read('usersroles');
 <!-- Begin Page Content -->
         <div class="container-fluid">
 
-         <div style="padding-bottom: 10px; margin-bottom: 20px;"><?= $this->Html->link(__(' '), ['action' => 'add'],
+         <div style="padding-bottom: 10px; margin-bottom: 20px;"><?= $this->Html->link(__(' '), ['action' => 'newsubject'],
                             ['class'=>'btn-circle btn-lg fa fa-plus float-right','title'=>'add new subject']) ?>
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Manage Subject</h1></div>
@@ -47,8 +47,8 @@ $userrole = $this->request->getSession()->read('usersroles');
 
 
                                             <td class="actions">
-                                                <?= $this->Html->link(__('View'), ['action' => 'view', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-info fa fa-eye']) ?>
-                                                <?= $this->Html->link(__('Edit'), ['controller'=>'Topics','action' => 'edit', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-primary fa fa-edit']) ?>
+                                                <?= $this->Html->link(__('View'), ['action' => 'viewsubject', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-info fa fa-eye']) ?>
+                                                <?= $this->Html->link(__('Update'), ['controller'=>'Subjects','action' => 'updatesubject', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-primary fa fa-edit']) ?>
                                               <?= $this->Html->link(__('Add Contaent'), ['controller'=>'Topics','action' => 'addtopic', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-success fa fa-eye','title'=>'add contents']) ?> 
                                                  <?= $this->Html->link(__('View Contaents'), ['controller'=>'Topics','action' => 'viewcontents', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view contents']) ?> 
  <?php if ($subjects->status == 1){
