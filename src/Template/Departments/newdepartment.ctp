@@ -37,6 +37,17 @@
                                     ?>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                            <?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Assign Subjects', 'empty' => 'Select Subjects', 'class' => 'select2_multiple form-control form-control-user']) ?> 
+
+                                </div>
+                                <div class="col-sm-6">
+                                  <?= $this->Form->control('fees._ids', ['options' => $fees, 'label' => 'Select Fees', 'empty' => 'Select Fees', 'class' => 'select2_multiple form-control form-control-user', 'required']) ?>
+
+                                </div>
+                            </div>
+                                
                         </fieldset>
                         <br /> <br />
                         <?= $this->Form->button('Submit', ['class' => 'btn btn-primary btn-user btn-block']) ?>
