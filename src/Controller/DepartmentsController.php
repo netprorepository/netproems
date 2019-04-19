@@ -41,7 +41,7 @@ class DepartmentsController extends AppController
     public function viewdepartment($id = null)
     {
         $department = $this->Departments->get($id, [
-            'contain' => ['Faculties', 'Programes','Fees']
+            'contain' => ['Faculties', 'Programes','Fees','Subjects']
         ]);
 
         $this->set('department', $department);
@@ -74,8 +74,10 @@ class DepartmentsController extends AppController
             }
             $this->Flash->error(__('The department could not be saved. Please, try again.'));
         }
-        $faculties = $this->Departments->Faculties->find('list', ['limit' => 200])->order(['name'=>'ASC']);
-        $this->set(compact('department', 'faculties'));
+         $faculties = $this->Departments->Faculties->find('list', ['limit' => 200]);
+        $subjects = $this->Departments->Subjects->find('list', ['limit' => 200]);
+        $fees = $this->Departments->Fees->find('list', ['limit' => 200]);
+        $this->set(compact('department', 'faculties', 'subjects', 'fees'));
          $this->viewBuilder()->setLayout('adminbackend');
     }
 
@@ -110,8 +112,10 @@ class DepartmentsController extends AppController
             }
             $this->Flash->error(__('The department could not be updated. Please, try again.'));
         }
-        $faculties = $this->Departments->Faculties->find('list', ['limit' => 200])->order(['name'=>'ASC']);
-        $this->set(compact('department', 'faculties'));
+         $faculties = $this->Departments->Faculties->find('list', ['limit' => 200]);
+        $subjects = $this->Departments->Subjects->find('list', ['limit' => 200]);
+        $fees = $this->Departments->Fees->find('list', ['limit' => 200]);
+        $this->set(compact('department', 'faculties', 'subjects', 'fees'));
         $this->viewBuilder()->setLayout('adminbackend');
     }
 
