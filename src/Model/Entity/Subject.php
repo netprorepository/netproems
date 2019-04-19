@@ -15,9 +15,11 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $created_date
  * @property int $status
  *
- * @property \App\Model\Entity\Department $department
+ * @property \App\Model\Entity\Department[] $departments
  * @property \App\Model\Entity\User $user
- * @property \App\Model\Entity\SubjectTeacher[] $subject_teachers
+ * @property \App\Model\Entity\Topic[] $topics
+ * @property \App\Model\Entity\Student[] $students
+ * @property \App\Model\Entity\Teacher[] $teachers
  */
 class Subject extends Entity
 {
@@ -39,8 +41,10 @@ class Subject extends Entity
         'user_id' => true,
         'created_date' => true,
         'status' => true,
-        'department' => true,
+        'departments' => true,
         'user' => true,
-        'subject_teachers' => true
+        'topics' => true,
+        'students' => true,
+        'teachers' => true
     ];
 }
