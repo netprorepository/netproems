@@ -14,8 +14,13 @@ use Cake\ORM\Entity;
  * @property string $deptcode
  *
  * @property \App\Model\Entity\Faculty $faculty
+ * @property \App\Model\Entity\Dstudent[] $dstudents
+ * @property \App\Model\Entity\Feeallocation[] $feeallocations
  * @property \App\Model\Entity\Programe[] $programes
+ * @property \App\Model\Entity\Student[] $students
+ * @property \App\Model\Entity\Subject[] $subjects
  * @property \App\Model\Entity\User[] $users
+ * @property \App\Model\Entity\Fee[] $fees
  */
 class Department extends Entity
 {
@@ -36,7 +41,12 @@ class Department extends Entity
         'faculty_id' => true,
         'deptcode' => true,
         'faculty' => true,
+        'dstudents' => true,
+        'feeallocations' => true,
         'programes' => true,
-        'users' => true
+        'students' => true,
+        'subjects' => true,
+        'users' => true,
+        'fees' => true
     ];
 }
