@@ -85,7 +85,7 @@
        */
       public function updatesubject($id = null) {
           $subject = $this->Subjects->get($id, [
-              'contain' => []
+              'contain' => ['Departments','Teachers']
           ]);
           if ($this->request->is(['patch', 'post', 'put'])) {
               $subject = $this->Subjects->patchEntity($subject, $this->request->getData());
