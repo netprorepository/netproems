@@ -41,7 +41,7 @@ class StudentsTable extends Table
         parent::initialize($config);
 
         $this->setTable('students');
-        $this->setDisplayField('id');
+        $this->setDisplayField('fname');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Departments', [
