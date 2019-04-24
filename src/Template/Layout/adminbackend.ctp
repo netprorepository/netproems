@@ -116,11 +116,11 @@
                       </li>
                       
                         <li class="nav-item">
-                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#invoices" aria-expanded="true" aria-controls="collapseTwo">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#results" aria-expanded="true" aria-controls="collapseTwo">
                               <i class="fas fa-fw fa-cog"></i>
                               <span>Resultts</span>
                           </a>
-                          <div id="invoices" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                          <div id="results" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                               <div class="bg-white py-2 collapse-inner rounded">
                                   <h6 class="collapse-header">Manage Results:</h6>
                                   <?php
@@ -283,6 +283,7 @@
        }
   if ($user['role_id'] == 2 & empty($is_owing)) {
       echo $this->Html->link(__(' My Courses'), ['controller' => 'Students', 'action' => 'mycourses'], ['class' => 'collapse-item', 'title' => 'view assigned courese']);
+     echo $this->Html->link(__(' My Results'), ['controller' => 'Results', 'action' => 'myresults'], ['class' => 'collapse-item', 'title' => 'check results']);
     
        }
 ?>
