@@ -867,9 +867,26 @@
           $this->set('departments', $departments);
       }
 
+      
+      //student method for checking their application status
+      public function checkstatus($application_id){
+          $applicant = $this->Students->find()->where(['application_no'=>$application_id])->first();
+          
+                  $this->set(compact('applicant'));
+      }
+
+
+
+
+
+
+
+
+
+
       // allow unrestricted pages
       public function beforeFilter(Event $event) {
-          $this->Auth->allow(['newapplicant']);
+          $this->Auth->allow(['newapplicant','getstates','checkstatus']);
       }
 
   }
