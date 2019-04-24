@@ -18,9 +18,15 @@ elseif($applicant->status ==='Selected'){ ?>
 <?php }else{?>
 <div class="alert alert-danger alert-dismissible">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <strong>Sorry </strong> Your Application has been unsuccessful.
+  <strong>Hey! </strong> You are probably our student already.
 </div>
-<?php }} ?>
+<?php }}else{ ?>
+<div class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Sorry! :  </strong> We could not find your details. Please ensure you are entering the right application number.
+</div>
+<?php } ?>
+
 
 
 
