@@ -5,7 +5,7 @@
  ?>
 <div class="alert alert-info alert-dismissible">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <strong>Success!</strong> Your Application is still being considered;
+  <strong>Success!</strong> Your Application is still being considered. We will get back to you shortly.
 </div>
 <?php }
 elseif($applicant->status ==='Selected'){ ?>
