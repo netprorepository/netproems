@@ -4,9 +4,15 @@
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
+                <br />
+                 
                 <!--          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>-->
                 <div class="col-lg-12">
                     <div class="p-5">
+                        <div class="col-auto">
+                            <button class="btn btn-info float-right" title="click to check your application status"
+                                    data-toggle="modal" data-target="#myModal" >Check Application Status</button>
+                 </div>
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Application Form</h1>
                         </div>
@@ -174,3 +180,94 @@
 
 }
     </script>
+    
+    <!-- The Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg bg-info">
+          <h4 class="modal-title" style="color: white; align-self: center">Check Your Application Status</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+         <?= $this->Form->create(null,['url'=>['controller'=>'Students','action'=>'checkstatus'],'id'=>'statuscheck']) ?>
+          <div class="col-sm-12 mb-3 mb-sm-0">
+<?= $this->Form->control('application_no', ['label' => false, 'placeholder' => 'Enter your application Number',
+      'class' => 'form-control form-control-user2', 'required','id'=>'application_id'])
+?>
+                                </div>
+          
+          <div class="col-sm-12 mb-3 mb-sm-0" id="res">
+              
+          </div>
+          
+          <br /> <br />
+          <?= $this->Form->button('Check Status', ['class' => 'btn btn-primary btn-sm','onClick'=>'submitCheckForm()']) ?>
+<?= $this->Form->end() ?>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+    
+    
+    <script language="javascript" type="text/javascript">
+    function submitCheckForm() {
+       var application_no = document.getElementById('application_id').value;
+      // alert(application_no);
+        
+   
+     $.ajax({
+        url: '../Students/checkstatus/'+application_no,
+        method: 'GET',
+        dataType: 'text',
+        success: function(response) {
+            console.log(response);
+            document.getElementById('res').innerHTML = "";
+            document.getElementById('res').innerHTML = response;
+            //location.href = redirect;
+            
+        }
+    });   
+    event.preventDefault();
+    }
+</script>
+    
+    
+    
+    <script>
+        $(function() {
+    //hang on event of form with id=myform
+    $("#myform").submit(function(e) {
+
+        //prevent Default functionality
+        e.preventDefault();
+
+        //get the action-url of the form
+        var actionurl = e.currentTarget.action;
+
+        //do your own request an handle the results
+        $.ajax({
+                url: actionurl,
+                type: 'post',
+                dataType: 'application/json',
+                data: $("#myform").serialize(),
+                success: function(data) {
+                    ... do something with the data...
+                }
+        });
+
+    });
+
+});
+        
+        </script>
