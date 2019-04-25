@@ -214,6 +214,23 @@
                               </div>
                           </div>
                       </li>
+                      
+                       <li class="nav-item">
+                          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#messages" aria-expanded="true" aria-controls="collapseTwo">
+                              <i class="fas fa-fw fa-cog"></i>
+                              <span>Messages</span>
+                          </a>
+                          <div id="messages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                              <div class="bg-white py-2 collapse-inner rounded">
+      <?php
+                                  echo $this->Html->link('Message To Students', ['controller' => 'Students', 'action' => 'newmessagetostudents'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Message To Teachers', ['controller' => 'Users', 'action' => 'newmessagetoteachers'], ['title' => 'Direct admision', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Message To Parents', ['controller' => 'Users', 'action' => 'newmessagetoparents'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                 
+                                  ?>
+                              </div>
+                          </div>
+                      </li>
 
   <?php } ?>
 
