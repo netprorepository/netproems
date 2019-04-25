@@ -268,6 +268,8 @@
           $department = $department_Table->get($dept_id);
           $student = $this->Students->get($student_id);
           $student->regno = date('Y') . '/' . $department->deptcode . '/' . $student_id;
+          //generate the application no
+          $student->application_no = 'Netpro/'.$department->deptcode.'/'.date('Y').'/'. $student_id;
           $this->Students->save($student);
           return;
       }
@@ -877,6 +879,17 @@
 
 
 
+  
+    //admin method for sending a message to students
+    public function newmessagetostudents(){
+        
+        if ($this->request->is('post')) {
+            
+        }
+        $students = $this->Students->find('list');
+        $this->set('students',$students);
+        $this->viewBuilder()->setLayout('adminbackend');
+    }
 
 
 
