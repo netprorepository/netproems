@@ -346,6 +346,13 @@ class UsersController extends AppController {
         return $this->redirect(['action' => 'index']);
     }
 
+    
+  
+
+
+
+
+
     // allow unrestricted pages
     public function beforeFilter(Event $event) {
         // $this->Auth->allow(['add']);
