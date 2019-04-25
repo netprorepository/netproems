@@ -322,6 +322,58 @@
           $this->set(compact('departments'));
       }
 
+      
+      
+      
+      //student method for checking their results
+      public function myresults(){
+          $student = $this->Results->Students->find()->contain(['Departments'])
+                  ->where(['user_id'=>$this->Auth->user('id')])->first();
+          if ($this->request->is('post')) {
+              
+               $session_id = $this->request->data('session_id');
+              $semester_id = $this->request->data('semester_id');
+              $course_id = $this->request->data('subject_id');
+               $conditions = [];
+              if (!empty($semester_id)) {
+                  $conditions['Results.semester_id'] = $semester_id;    
+              }
+              if (!empty($course_id)) {
+               $conditions['Results.subject_id'] = $course_id;    
+              }
+               if (!empty($session_id)) {
+               $conditions['Results.session_id'] = $session_id;    
+              }
+               $results = $this->Results->find()
+                      ->contain([ 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions'])
+                       ->where(['student_id'=> $student->id])
+                      ->where( $conditions);
+               //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
+              $this->set('results',$results);
+              
+          }else{
+              $results = $this->Results->find()
+                      ->contain([ 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions'])
+                       ->where(['student_id'=> $student->id]);
+                      
+               //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
+              $this->set('results',$results);
+          }
+          
+           $subjects = $this->Results->Subjects->find('list', ['limit' => 200]);
+          $semesters = $this->Results->Semesters->find('list', ['limit' => 200]);
+          $sessions = $this->Results->Sessions->find('list', ['limit' => 200]);
+           $this->set(compact('result',  'subjects', 'semesters', 'sessions','student'));
+         
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      
+
+
+
+
+
       /**
        * Delete method
        *
