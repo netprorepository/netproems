@@ -43,6 +43,7 @@ class Teacher extends Entity
         'country_id' => true,
         'state_id' => true,
         'phone' => true,
+        'department_id' => true,
         'profile' => true,
         'cv' => true,
         'qualification' => true,
@@ -54,6 +55,7 @@ class Teacher extends Entity
         'middlename' => true,
         'country' => true,
         'state' => true,
+        'department' => true,
         'subjects' => true
     ];
 }
