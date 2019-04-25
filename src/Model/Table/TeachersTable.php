@@ -49,6 +49,10 @@ class TeachersTable extends Table
             'foreignKey' => 'country_id',
             'joinType' => 'INNER'
         ]);
+         $this->belongsTo('Departments', [
+            'foreignKey' => 'department_id',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsTo('States', [
             'foreignKey' => 'state_id',
             'joinType' => 'INNER'
