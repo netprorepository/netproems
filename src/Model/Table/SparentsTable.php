@@ -95,10 +95,10 @@ class SparentsTable extends Table
             ->requirePresence('mothersjob', 'create')
             ->notEmpty('mothersjob');
 
-        $validator
-            ->integer('pemailaddress')
-            ->requirePresence('pemailaddress', 'create')
-            ->notEmpty('pemailaddress');
+//        $validator
+//            ->integer('pemailaddress')
+//            ->requirePresence('pemailaddress', 'create')
+//            ->notEmpty('pemailaddress');
 
         return $validator;
     }
