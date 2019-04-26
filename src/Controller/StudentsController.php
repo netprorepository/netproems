@@ -1,7 +1,8 @@
 <?php
 
   namespace App\Controller;
- use Cake\Routing\Router;
+
+  use Cake\Routing\Router;
   use Cake\Mailer\Email;
   use Cake\Event\Event;
   use Cake\ORM\TableRegistry;
@@ -101,10 +102,28 @@
        *
        * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
        */
+      //admin method for direct entry
       public function newstudent() {
+           $parentsTable = TableRegistry::get('Sparents');
           $student = $this->Students->newEntity();
+           $parent = $parentsTable->newEntity();
+          
           if ($this->request->is('post')) {
               $userscontroller = new UsersController();
+             
+              //create parent login details
+              $fathername = $this->request->getData('fathersname');
+              $mothername = $this->request->getData('mothersname');
+              $pemail = $this->request->getData('pemailaddress');
+              $pmname = "";
+              $parentuserid = $this->parentlogindata($pemail, $fathername, $mothername, $pmname);
+              if(is_numeric($parentuserid)){
+                  $parent =  $parentsTable->patchEntity($parent, $this->request->getData());
+                $parent->user_id = $parentuserid;
+                $parent->pemailaddress = $pemail;
+               // debug(json_encode( $parent , JSON_PRETTY_PRINT)); exit;
+                $parentsTable->save($parent);
+              }
               //upload files
               //upload o level
               $imagearray = $this->request->getData('olevelresulturls');
@@ -139,10 +158,7 @@
               } else {
                   $passport = " ";
               }
-
-
-
-              //create login data
+              //create student login data
               $email = $this->request->getData('email');
               $fname = $this->request->getData('fname');
               $lname = $this->request->getData('lname');
@@ -156,7 +172,8 @@
                   $student->birthcerturl = $birth_cert;
                   $student->olevelresulturl = $waec_cert;
                   $student->status = "Selected";
-                  //  debug(json_encode( $student, JSON_PRETTY_PRINT)); exit;
+                  $student->sparent_id = $parent->id;
+                  // debug(json_encode( $student, JSON_PRETTY_PRINT)); exit;
                   if ($this->Students->save($student)) {
                       //log activity
                       $usercontroller = new UsersController();
@@ -183,8 +200,9 @@
           $countries = $this->Students->Countries->find('list', ['limit' => 200]);
           $users = $this->Students->Users->find('list', ['limit' => 200]);
           $fees = $this->Students->Fees->find('list', ['limit' => 200]);
+           $levels = $this->Students->Levels->find('list');
           $subjects = $this->Students->Subjects->find('list', ['limit' => 200]);
-          $this->set(compact('student', 'departments', 'states', 'countries', 'users', 'fees', 'subjects'));
+          $this->set(compact('student','levels', 'departments', 'states', 'countries', 'users', 'fees', 'subjects'));
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
@@ -269,7 +287,7 @@
           $student = $this->Students->get($student_id);
           $student->regno = date('Y') . '/' . $department->deptcode . '/' . $student_id;
           //generate the application no
-          $student->application_no = 'Netpro/'.$department->deptcode.'/'.date('Y').'/'. $student_id;
+          $student->application_no = 'Netpro' . $department->deptcode . date('Y') . $student_id;
           $this->Students->save($student);
           return;
       }
@@ -290,6 +308,33 @@
               return "Failed";
           }
       }
+      
+      
+      //method that creates a parent login details
+      private function parentlogindata($email, $fname, $lname, $mname){
+          $users_Table = TableRegistry::get('Users');
+          $user = $users_Table->newEntity();
+          $user->role_id = 4;
+          $user->password = "parent123";
+          $user->username = $email;
+          $user->fname = $fname;
+          $user->lname = $lname;
+          $user->mname = $mname;
+          if ($users_Table->save($user)) {
+              return $user->id;
+          } else {
+              return "Failed";
+          }
+          
+      }
+
+
+
+
+
+
+
+
 
       //mail funtion that informs the student that admission has been offered to them
       private function studentselectionmail($emailaddress, $fname, $lname) {
@@ -315,9 +360,25 @@
 
       //the application method that allows student to apply online
       public function newapplicant() {
+          $parentsTable = TableRegistry::get('Sparents');
           $student = $this->Students->newEntity();
+           $parent = $parentsTable->newEntity();
           if ($this->request->is('post')) {
               $userscontroller = new UsersController();
+              
+              //create parent login details
+              $fathername = $this->request->getData('fathersname');
+              $mothername = $this->request->getData('mothersname');
+              $pemail = $this->request->getData('pemailaddress');
+              $pmname = "";
+              $parentuserid = $this->parentlogindata($pemail, $fathername, $mothername, $pmname);
+              if(is_numeric($parentuserid)){
+                  $parent =  $parentsTable->patchEntity($parent, $this->request->getData());
+                $parent->user_id = $parentuserid;
+                $parent->pemailaddress = $pemail;
+               // debug(json_encode( $parent , JSON_PRETTY_PRINT)); exit;
+                $parentsTable->save($parent);
+              }
               //upload files
               //upload o level
               $imagearray = $this->request->getData('olevelresulturls');
@@ -361,10 +422,12 @@
               if (is_numeric($userid)) {
                   $student = $this->Students->patchEntity($student, $this->request->getData());
                   $student->user_id = $userid;
+                  $student->level_id = 1;
                   $student->othercerts = $other_cert;
                   $student->passporturl = $passport;
                   $student->birthcerturl = $birth_cert;
                   $student->olevelresulturl = $waec_cert;
+                  $student->sparent_id = $parent->id;
                   //  debug(json_encode( $student, JSON_PRETTY_PRINT)); exit;
                   if ($this->Students->save($student)) {
                       //get the student regno
@@ -848,7 +911,7 @@
       public function downloadformat() {
           $url = Router::url('/', true);
           $ext = pathinfo("students_format.xlsx", PATHINFO_EXTENSION);
-       // echo  basename($pathtofile."cvs/students_format.xlsx"); exit;
+          // echo  basename($pathtofile."cvs/students_format.xlsx"); exit;
           $filename = "students_format.xlsx";
           header('Content-Type: ' . $ext);
           header('Content-Length: ' . filesize("cvs/students_format.xlsx"));
@@ -869,29 +932,192 @@
           $this->set('departments', $departments);
       }
 
-      
       //student method for checking their application status
-      public function checkstatus($application_id){
-          $applicant = $this->Students->find()->where(['application_no'=>$application_id])->first();
-          
-                  $this->set(compact('applicant'));
+      public function checkstatus($application_id) {
+          $applicant = $this->Students->find()->where(['application_no' => $application_id])->first();
+          // debug(json_encode($applicant, JSON_PRETTY_PRINT)); exit;
+          $this->set(compact('applicant'));
       }
 
+      //admin method for sending a message to students
+      public function newmessagetostudents() {
+
+          if ($this->request->is('post')) {
+
+              $student_ids = $this->request->getData('student._ids');
+              $dept_id = $this->request->getData('department_id');
+              $subject = $this->request->getData('subject');
+              $message = $this->request->getData('message');
+              $count = 0;
+              //check if we are sending to all students in the selected department
+              if (!empty($dept_id && empty($student_ids))) {
+                  $students = $this->Students->find()->where(['department_id' => $dept_id]);
+                  foreach ($students as $student) {
+                      $greeting = 'Hello ' . $student->fname . ' ' . $student->lname . '<br />';
+
+                      $message .= $greeting;
+                      $message .= '<br /><br />';
+                      $this->messagetostudents($student->email, $subject, $message);
+                      $count++;
+                  }
+              } elseif (!empty($dept_id && !empty($student_ids))) {
+                  //we are sending to selected students in a selected department
+                  foreach ($student_ids as $id) {
+                      $student = $this->Students->get($id);
+                      $greeting = 'Hello ' . $student->fname . ' ' . $student->lname . '<br />';
+
+                      $message .= $greeting;
+                      $message .= '<br /><br />';
+                      $this->messagetostudents($student->email, $subject, $message);
+                      $count++;
+                      // echo $id; exit;
+                  }
+              }
+              //log activity
+              $usercontroller = new UsersController();
+
+              $title = "Sent a mail to some students ";
+              $user_id = $this->Auth->user('id');
+              $description = "Sent mail to a total of" . $count . " students ";
+              $ip = $this->request->clientIp();
+              $type = "Add";
+              $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+              $this->Flash->success(__('Message has been sent to ' . $count . ' students'));
+              return $this->redirect(['action' => 'newmessagetostudents']);
+              //debug(json_encode( $student_ids, JSON_PRETTY_PRINT)); exit;  
+          }
+          $departments = $this->Students->Departments->find('list', ['limit' => 200])->order(['name' => 'DESC']);
+          $students = $this->Students->find('list')->where(['status' => 'Admitted']);
+          $this->set(compact('students', 'departments'));
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      //admin method that sends a message to selected students
+      private function messagetostudents($emailaddress, $subject, $message) {
+
+          $message .= '<br /><br />'
+                  . 'Kind Regards,<br />'
+                  . 'NetPro EMS. <br />';
+
+          $email = new Email('default');
+          $email->setFrom(['no-reply@netpro.com.ng' => 'NetPro Int\'l Ltd']);
+          $email->setTo($emailaddress);
+          // $email->setBcc(['chukwudi@netpro.com.ng']);
+          $email->setEmailFormat('html');
+          $email->setSubject($subject);
+          $email->send($message);
+          return;
+      }
+
+      //student method for contacting admin
+      public function contactadmin() {
+          if ($this->request->is('post')) {
+              $subject = $this->request->getData('subject');
+              $message = $this->request->getData('message');
+              //get admin email from session
+              $settings = $this->request->getSession()->read('settings');
+              //call the mailling function
+
+              if ($this->messagetostudents($settings->email, $subject, $message)) {
+                  // debug(json_encode($settings, JSON_PRETTY_PRINT)); exit; 
+                  $this->Flash->success(__('Message has been sent to admin'));
+                  return $this->redirect(['action' => 'messagetoadmin']);
+              } else {
+                  $this->Flash->error(__('Sorry, unable to send message, please try again'));
+                  return $this->redirect(['action' => 'messagetoadmin']);
+              }
+          }
+
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      //students method for contacting their teacher
+      public function contactlecturer() {
+          $teachers_Table = TableRegistry::get('Teachers');
+          $student = $this->Students->find()->where(['user_id' => $this->Auth->user('id')])->first();
+
+          if ($this->request->is('post')) {
+              $subject = $this->request->getData('subject');
+              $message = $this->request->getData('message');
+              $teacher_id = $this->request->getData('teacher_id');
+              if (!empty($teacher_id)) {
+                  $teacher = $teachers_Table->get($teacher_id, ['contain' => ['Users']]);
+                  //call the mailing function
+                  if ($this->messagetostudents($teacher->user->username, $subject, $message)) {
+                      $this->Flash->success(__('Message has been sent to ' . $teacher->firstname . ' ' . $teacher->lastname));
+                      return $this->redirect(['action' => 'contactlecturer']);
+                  } else {
+                      $this->Flash->error(__('Sorry, unable to send message. Please try again'));
+                      return $this->redirect(['action' => 'contactlecturer']);
+                  }
+              }
+          }
+          $teachers = $teachers_Table->find('list')->where(['department_id' => $student->department_id]);
+          $this->set(compact('teachers'));
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      //method that populates the dropdown for admin to send email to students
+      public function getstudentsformail($deptid) {
+          $students = $this->Students->find('list')->where(['department_id' => $deptid]);
+          $this->set(compact('students'));
+      }
+
+      //admin method for promoting students
+      public function promotestudents() {
+          $students = $this->Students->find()
+                  ->contain(['Departments', 'Levels'])
+                  ->where(['status' => 'Admitted'])
+                  ->order(['joindate' => 'DESC']);
+          if ($this->request->is('post')) {
+              $level_id = $this->request->getData('slevel_id');
+             
+             $count = 0;
+            // echo $level_id; exit;
+              //ensure at least a student is selected
+              if (!empty($this->request->getData('studentids'))) {
+                  foreach ($this->request->getData('studentids') as $student_id) {
+                      if(is_numeric($student_id)){
+                          $student = $this->Students->get($student_id);
+                          $student->level_id =  $level_id;
+                          $this->Students->save($student);
+                          // debug(json_encode( $this->request->getData(), JSON_PRETTY_PRINT)); exit;
+                          $count++;
+                       //echo "value : " . $value . '<br/>';    
+                      }
+                     
+                  }
+                   $this->Flash->success(__($count.' Students have been promoted to level '.$level_id));
+                      return $this->redirect(['action' => 'promotestudents']);
+              }else{
+                $this->Flash->error(__(' Unable to promote student. It seems like you did not select any student after all'));
+                      return $this->redirect(['action' => 'promotestudents']);  
+              }
 
 
-  
-    //admin method for sending a message to students
-    public function newmessagetostudents(){
-        
-        if ($this->request->is('post')) {
-            
-        }
-        $students = $this->Students->find('list');
-        $this->set('students',$students);
-        $this->viewBuilder()->setLayout('adminbackend');
-    }
+              // debug(json_encode($this->request->getData('studentids'), JSON_PRETTY_PRINT)); exit;
+          }
+          $departments = $this->Students->Departments->find('list', ['limit' => 200])->order(['name' => 'DESC']);
+           $levels = $this->Students->Levels->find('list');
+          $this->set(compact('students','levels'));
+          $this->set(compact('students', 'departments'));
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+      
+      
+      
+      //admin method that gets the students to be promoted
+      public function getstudentstopromote($deptid){
+          $students = $this->Students->find()
+                  ->contain(['Departments','Levels'])
+                  ->where(['department_id' => $deptid, 'status' => 'Admitted']);
 
-
+          $departments = $this->Students->Departments->find('list', ['limit' => 200])->order(['name' => 'DESC']);
+          $levels = $this->Students->Levels->find('list');
+          $this->set(compact('students','levels'));
+          $this->set('departments', $departments);
+          
+      }
 
 
 
@@ -899,7 +1125,7 @@
 
       // allow unrestricted pages
       public function beforeFilter(Event $event) {
-          $this->Auth->allow(['newapplicant','getstates','checkstatus']);
+          $this->Auth->allow(['newapplicant', 'getstates', 'checkstatus']);
       }
 
   }
