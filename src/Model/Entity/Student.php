@@ -33,11 +33,19 @@ use Cake\ORM\Entity;
  * @property string $regno
  * @property string $status
  * @property string $admissiondate
+ * @property string $gender
+ * @property string $application_no
+ * @property int $level_id
+ * @property int $sparent_id
  *
  * @property \App\Model\Entity\Department $department
  * @property \App\Model\Entity\State $state
  * @property \App\Model\Entity\Country $country
  * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Level $level
+ * @property \App\Model\Entity\Parent $parent
+ * @property \App\Model\Entity\Invoice[] $invoices
+ * @property \App\Model\Entity\Transaction[] $transactions
  * @property \App\Model\Entity\Fee[] $fees
  * @property \App\Model\Entity\Subject[] $subjects
  */
@@ -69,7 +77,6 @@ class Student extends Entity
         'country_id' => true,
         'address' => true,
         'phone' => true,
-        'level_id' => true,
         'fathersname' => true,
         'mothersname' => true,
         'fatherphone' => true,
@@ -81,13 +88,19 @@ class Student extends Entity
         'regno' => true,
         'status' => true,
         'admissiondate' => true,
+        'gender' => true,
+        'application_no' => true,
+        'level_id' => true,
+        'sparent_id' => true,
         'department' => true,
         'state' => true,
-        'level' => true,
         'country' => true,
         'user' => true,
+        'level' => true,
+        'sparent' => true,
+        'invoices' => true,
+        'transactions' => true,
         'fees' => true,
-        'gender' => true,
         'subjects' => true
     ];
 }
