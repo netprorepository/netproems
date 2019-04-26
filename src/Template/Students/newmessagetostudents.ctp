@@ -10,22 +10,38 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">New Message To Students</h1>
                         </div>
-                         <?= $this->Form->create() ?>
-                         <div class="col-sm-12">
-                                    <?= $this->Form->control('user._ids', ['label' =>'Select Teacher','options'=>$teachers, 'class' => 'select2_multiple form-control', 'placeholder' => 'Select Teacher', 'empty' => 'Select Teacher']) ?>
+                        <?= $this->Form->create() ?>
+                        <div class="form-group row">
+                            <!--                                <div class="col-sm-4 mb-3 mb-sm-0">
+                            <?= $this->Form->radio('sendtoall', ['SendToAll', 'SendToSome'], ['style' => 'padding: 10px; margin: 10px;']) ?>
+                                                            </div>-->
+                            <div class="col-sm-4 mb-3 mb-sm-0">
+                                <?= $this->Form->control('department_id', ['label' => 'Select Department', 'options' => $departments, 'required', 'class' => 'select2_multiple form-control form-control-user2', 'empty' => 'Select Department', 'onChange' => 'getstudents(this.value)']) ?>
+                            </div>
+                            <div class="col-sm-8">
+                                <?= $this->Form->control('subject', ['label' => 'Title', 'required', 'class' => 'form-control form-control-user2', 'placeholder' => 'message title']) ?>
+                            </div>    
 
-                                </div>
+                        </div>
+
+
+
+                        <div class="col-sm-12">
+                            <?= $this->Form->control('student._ids', ['label' => 'Select Student(s)', 'options' => $students, 'id' => 'studentstomail', 'class' => 'select2_multiple form-control', 'empty' => 'Select Student(s)']) ?>
+
+                        </div>
                         <br />
-                        
-                         <?= $this->Form->control('message',['label'=>'Message  * :', 'type'=>'textarea'
-                ,'placeholder'=>'job descriptions','class'=>'ckeditor'])?>
-	    
-	    
-                        
-                        
-                         <br /> <br />
+
+                        <?= $this->Form->control('message', ['label' => 'Message  * :', 'type' => 'textarea'
+                              , 'placeholder' => 'your message', 'class' => 'ckeditor','required'])
+                        ?>
+
+
+
+
+                        <br /> <br />
                         <?= $this->Form->button('Send', ['class' => 'btn btn-primary btn-user btn-block']) ?>
-                        <?= $this->Form->end() ?>
+<?= $this->Form->end() ?>
                     </div>
                 </div>
             </div>
@@ -34,7 +50,24 @@
 
 </div>
 <?=
-  $this->Html->script(['jquery.min','ckeditor/ckeditor'])
+  $this->Html->script(['jquery.min', 'ckeditor/ckeditor'])
 ?>
 
-        <?= $this->fetch('script') ?>
+<?= $this->fetch('script') ?>
+
+<script>
+    function getstudents(deptid) {
+        $.ajax({
+            url: '../Students/getstudentsformail/' + deptid,
+            method: 'GET',
+            dataType: 'text',
+            success: function (response) {
+                // console.log(response);
+                document.getElementById('studentstomail').innerHTML = "";
+                document.getElementById('studentstomail').innerHTML = response;
+                //location.href = redirect;
+            }
+        });
+    }
+
+</script>
