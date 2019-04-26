@@ -70,7 +70,8 @@ class UsersController extends AppController {
         //ensure admin is loggeding
         $this->isloggedin();
 
-        $admins = $this->Users->find()->contain(['Roles']);
+        $admins = $this->Users->find()->where(['role_id'=>1])
+                ->contain(['Roles']);
 
 
         $this->set('admins', $admins);
@@ -394,4 +395,52 @@ class UsersController extends AppController {
         $this->viewBuilder()->setLayout('adminbackend');
         
     }
+    
+    
+    
+     //method for uploading cvs
+      public function uploadcv($file, $folder) {
+          $extension = ['.docx', '.doc', '.pdf', '.txt'];
+        //  $finfo = new \finfo(FILEINFO_MIME_TYPE);
+
+          // $file_type = $finfo->file(h($file['tmp_name']), FILEINFO_MIME_TYPE);
+          // $ext = pathinfo($file_type, PATHINFO_EXTENSION);
+          $ext = strrchr($file['name'], '.');
+          // echo $ext; exit;
+          if (in_array($ext, $extension)) {
+              $file_name = md5(uniqid($file['name'], true)) . time();
+
+              if (!file_exists($folder . $file_name . $ext)) {
+                  $file_name = $file_name . $ext;
+
+                  move_uploaded_file($file["tmp_name"], $folder . $file_name);
+
+                  chmod($folder . $file_name, 0644);
+                  return $message = $file_name;
+              } else {
+                  $filename = basename($file_name, $ext);
+                  $newFileName = crypt($filename . time()) . "." . $ext;
+                  // echo $file_name; exit;
+                  move_uploaded_file($file["tmp_name"], $folder . $newFileName);
+                  chmod($folder . $newFileName, 0644);
+                  return $message = $newFileName;
+              }
+          } else {
+              return $message = 'Unable to upload image, please ensure you are uploading a jpg,png,gif or Jpeg file. ';
+              // debug(json_encode( $error, JSON_PRETTY_PRINT)); exit;
+          }
+
+
+          // return $message = "images upload successful";
+//          if (!(($file_type == ".doc") || ($file_type == ".docx") || ($file_type == ".pdf") ||
+//                  ($file_type == ".txt"))) {
+//              throw new \Exception('This is unacceptable!. image must be of type : gif, jpeg, png or jpg and less than 2mb .');
+//          }
+      }
+    
+    
+    
+    
+    
+    
 }
