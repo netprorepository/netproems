@@ -13,9 +13,13 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\StatesTable|\Cake\ORM\Association\BelongsTo $States
  * @property \App\Model\Table\CountriesTable|\Cake\ORM\Association\BelongsTo $Countries
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- * @property |\Cake\ORM\Association\HasMany $Invoices
- * @property |\Cake\ORM\Association\HasMany $Transactions
+ * @property \App\Model\Table\LevelsTable|\Cake\ORM\Association\BelongsTo $Levels
+ * @property |\Cake\ORM\Association\BelongsTo $Sparents
+ * @property \App\Model\Table\InvoicesTable|\Cake\ORM\Association\HasMany $Invoices
+ * @property |\Cake\ORM\Association\HasMany $Results
+ * @property \App\Model\Table\TransactionsTable|\Cake\ORM\Association\HasMany $Transactions
  * @property \App\Model\Table\FeesTable|\Cake\ORM\Association\BelongsToMany $Fees
+ * @property |\Cake\ORM\Association\BelongsToMany $Sparents
  * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\BelongsToMany $Subjects
  *
  * @method \App\Model\Entity\Student get($primaryKey, $options = [])
@@ -61,14 +65,17 @@ class StudentsTable extends Table
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('Levels', [
-            'foreignKey' => 'leve_id',
+            'foreignKey' => 'level_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Parents', [
-            'foreignKey' => 'parent_id',
+        $this->belongsTo('Sparents', [
+            'foreignKey' => 'sparent_id',
             'joinType' => 'INNER'
         ]);
         $this->hasMany('Invoices', [
+            'foreignKey' => 'student_id'
+        ]);
+        $this->hasMany('Results', [
             'foreignKey' => 'student_id'
         ]);
         $this->hasMany('Transactions', [
@@ -78,6 +85,11 @@ class StudentsTable extends Table
             'foreignKey' => 'student_id',
             'targetForeignKey' => 'fee_id',
             'joinTable' => 'fees_students'
+        ]);
+        $this->belongsToMany('Sparents', [
+            'foreignKey' => 'student_id',
+            'targetForeignKey' => 'sparent_id',
+            'joinTable' => 'sparents_students'
         ]);
         $this->belongsToMany('Subjects', [
             'foreignKey' => 'student_id',
@@ -220,6 +232,18 @@ class StudentsTable extends Table
 //            ->maxLength('admissiondate', 54)
 //            ->allowEmpty('admissiondate');
 
+        $validator
+            ->scalar('gender')
+            ->maxLength('gender', 32)
+            ->requirePresence('gender', 'create')
+            ->notEmpty('gender');
+
+//        $validator
+//            ->scalar('application_no')
+//            ->maxLength('application_no', 66)
+//            ->requirePresence('application_no', 'create')
+//            ->notEmpty('application_no');
+
         return $validator;
     }
 
@@ -237,6 +261,8 @@ class StudentsTable extends Table
         $rules->add($rules->existsIn(['state_id'], 'States'));
         $rules->add($rules->existsIn(['country_id'], 'Countries'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->existsIn(['level_id'], 'Levels'));
+        $rules->add($rules->existsIn(['sparent_id'], 'Sparents'));
 
         return $rules;
     }
