@@ -41,13 +41,28 @@
 
                                     <?= $this->Form->control('department_id', ['options' => $departments, 'label' => 'Select Department', 'empty' => 'Select Departments', 'class' => 'form-control form-control-user']) ?>
                                 </div>
+                                
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+        <?php
+            echo $this->Form->control('level_id',['options'=>$levels,'required','label'=>'Select Level','class' => 'form-control form-control-user2']);
+        ?>
+        </div>
 
-                                <div class="col-sm-4 mb-3 mb-sm-0">               
+                                
+                            </div>
+                             <div class="form-group row">
+                                 <div class="col-sm-6 mb-3 mb-sm-0">
+                               <?php $gender = ['Male'=>'Male', 'Female'=>'Female'];
+                                 echo $this->Form->control('gender', ['label' => 'Gender', 'placeholder' => 'Gender',
+      'class' => 'form-control form-control-user2', 'options' => $gender])
+?>      
+                                 </div>
+                                 <div class="col-sm-6 mb-3 mb-sm-0">               
 <?= $this->Form->control('olevelresulturls', ['label' => 'O\'Level Cert', 'placeholder' => 'olevel cert',
       'class' => 'form-control form-control-user2', 'type' => 'file'])
 ?>
                                 </div>
-                            </div>
+                                  </div>
 
                             <div class="form-group row">
                                 <div class="col-sm-4 mb-3 mb-sm-0">
@@ -152,6 +167,9 @@
                             <div class="form-group row">        
                                 <div class="col-sm-6 mb-3 mb-sm-0">
 <?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Select Subjects', 'empty' => 'Select Subjects', 'class' => 'select2_multiple form-control form-control-user']) ?> 
+                                </div>
+                                 <div class="col-sm-6 mb-3 mb-sm-0">
+<?= $this->Form->control('pemailaddress', ['label' =>'Parent\'s Email Address', 'placeholder' => 'parent email address',  'required', 'class'=> 'form-control form-control-user']) ?> 
                                 </div>
                             </div>
 
