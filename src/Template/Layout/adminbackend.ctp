@@ -191,6 +191,7 @@
                                   echo $this->Html->link('List Students', ['controller' => 'Students', 'action' => 'managestudents'], ['title' => 'Manage Students', 'class' => 'collapse-item']);
                                    echo $this->Html->link('Add Student', ['controller' => 'Students', 'action' => 'newstudent'], ['title' => 'Manage Students', 'class' => 'collapse-item']);
                                  echo $this->Html->link('Import Students', ['controller' => 'Students', 'action' => 'importstudents'], ['title' => 'bulk import Students', 'class' => 'collapse-item']);
+                                 echo $this->Html->link('Students Promotion', ['controller' => 'Students', 'action' => 'promotestudents'], ['title' => 'promote Students', 'class' => 'collapse-item']);
                                 
                                   ?>
                                  
@@ -224,7 +225,7 @@
                               <div class="bg-white py-2 collapse-inner rounded">
       <?php
                                   echo $this->Html->link('Message To Students', ['controller' => 'Students', 'action' => 'newmessagetostudents'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
-                                  echo $this->Html->link('Message To Teachers', ['controller' => 'Users', 'action' => 'newmessagetoteachers'], ['title' => 'Direct admision', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Message To Teachers', ['controller' => 'Teachers', 'action' => 'newmessagetoteachers'], ['title' => 'Direct admision', 'class' => 'collapse-item']);
                                   echo $this->Html->link('Message To Parents', ['controller' => 'Users', 'action' => 'newmessagetoparents'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
                                  
                                   ?>
@@ -335,8 +336,36 @@
                         </div>
                     </div>
                 </li>
+              <?php  }
+              
+              if ($user['role_id'] == 2 || $user['role_id'] == 3) {?>
+                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#messaging" aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Messaging</span>
+                    </a>
+                    <div id="messaging" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            
+<?php
+     if($user['role_id'] == 3){
+                             echo $this->Html->link(__(' Contact Admin'), ['controller' => 'Teachers', 'action' => 'messagetoadmin'], ['class' => 'collapse-item','title'=>'send a message to the system admin']);
+      echo $this->Html->link(__(' Message To Students'), ['controller' => 'Teachers', 'action' => 'messagetostudents'], ['class' => 'collapse-item','title'=>'send message to my students']);
+     }
+     if($user['role_id'] == 2 & empty($is_owing)){
+         echo $this->Html->link(__(' Contact Admin'), ['controller' => 'Students', 'action' => 'contactadmin'], ['class' => 'collapse-item','title'=>'contact system admin']);
+      echo $this->Html->link(__(' Contact Lecturer'), ['controller' => 'Students', 'action' => 'contactlecturer'], ['class' => 'collapse-item','title'=>'contact lecturer']);
+     
+     }
+       
+?>
+                          
+                            
+                        </div>
+                    </div>
+                </li>
               <?php  }?>
-
+                
                 <!--  
                 <li class="nav-item">
                     <a class="nav-link" href="charts.html">
@@ -618,7 +647,8 @@
 <?=
   $this->Html->script(['jquery.min', 'bootstrap.bundle.min', 'jquery.easing.min', 'sb-admin-2.min',
       'Chart.min', 'chart-pie-demo', 'chart-area-demo', 'jquery.dataTables.min', 'dataTables.bootstrap4.min',
-      'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min', 'select2.full.min', 'summernote.init', 'summernote.min'])
+      'datatables-demo', 'bootstrap-timepicker.min', 'bootstrap-datepicker.min', 'select2.full.min', 
+      'summernote.init', 'summernote.min','employerscript'])
 ?>
 
         <?= $this->fetch('script') ?>
@@ -640,8 +670,8 @@
                 });
                 $(".select2_group").select2({});
                 $(".select2_multiple").select2({
-                    maximumSelectionLength: 14,
-                    placeholder: "With Max Selection limit 14",
+                   // maximumSelectionLength: 14,
+                   // placeholder: "With Max Selection limit 14",
                     allowClear: true
                 });
             });
