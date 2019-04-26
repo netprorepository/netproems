@@ -2,6 +2,7 @@
 
   namespace App\Controller;
 
+  use Cake\Mailer\Email;
   use Cake\ORM\TableRegistry;
   use App\Controller\AppController;
 
@@ -42,7 +43,7 @@
       //admin method for viewing a teacher detail
       public function viewteacher($id = null) {
           $teacher = $this->Teachers->get($id, [
-              'contain' => ['Users', 'Countries', 'States', 'Subjects', 'Users.Departments']
+              'contain' => ['Users', 'Countries', 'States', 'Subjects', 'Departments']
           ]);
 
           //used for subject assignment
@@ -73,7 +74,7 @@
               header('Content-Disposition: attachment;filename="' . $teacher->cv . '"');
               header("Cache-control: private");
           }
-          
+
           readfile("cvs/" . $teacher->cv);
           return;
       }
@@ -86,7 +87,33 @@
       public function newteacher() {
           $teacher = $this->Teachers->newEntity();
           if ($this->request->is('post')) {
+              
+              $email = $this->request->getData('username');
+              $fname = $this->request->getData('firstname');
+              $lname = $this->request->getData('lastname');
+              $mname = $this->request->getData('middlename');
+              $user_id = $this->getlogindetails($email, $fname, $lname, $mname);
+              if(is_numeric($user_id)){
+                     //upload passport
+           $imagearray = $this->request->getData('passports');
+            if (!empty($imagearray['tmp_name'])) {
+                $userscontroller = new UsersController();
+                $image_name = $userscontroller->addimage($imagearray);
+            } else {
+                $image_name = '';
+            }
+            //upload CV
+              $cvfile = $this->request->getData('cvv');
+              if(!empty($cvfile['tmp_name'])) {
+                  $cv = $userscontroller->uploadcv($cvfile, "cvs/");
+                  $teacher->cv = $cv;
+              }else{
+              $cv = "";    
+              }
               $teacher = $this->Teachers->patchEntity($teacher, $this->request->getData());
+              $teacher->user_id = $user_id;
+              $teacher->passport = $image_name;
+              $teacher->cv = $cv;
               if ($this->Teachers->save($teacher)) {
                   //log activity
                   $usercontroller = new UsersController();
@@ -100,17 +127,38 @@
                   $this->Flash->success(__('The teacher has been saved.'));
 
                   return $this->redirect(['action' => 'manageteachers']);
-              }
+          }}
               $this->Flash->error(__('The teacher could not be saved. Please, try again.'));
           }
+          $departments = $this->Teachers->Departments->find('list', ['limit' => 200]);
           $users = $this->Teachers->Users->find('list', ['limit' => 200]);
           $countries = $this->Teachers->Countries->find('list', ['limit' => 200]);
           $states = $this->Teachers->States->find('list', ['limit' => 200]);
           $subjects = $this->Teachers->Subjects->find('list', ['limit' => 200]);
-          $this->set(compact('teacher', 'users', 'countries', 'states', 'subjects'));
+          $this->set(compact('teacher', 'users', 'countries', 'states', 'subjects','departments'));
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
+      
+        //method that creates login details for the new teacher
+      private function getlogindetails($email, $fname, $lname, $mname) {
+          $users_Table = TableRegistry::get('Users');
+          $user = $users_Table->newEntity();
+          $user->role_id = 3;
+          $user->password = "teacher123";
+          $user->username = $email;
+          $user->fname = $fname;
+          $user->lname = $lname;
+          $user->mname = $mname;
+          if ($users_Table->save($user)) {
+              return $user->id;
+          } else {
+              return "Failed";
+          }
+      }
+      
+      
+      
       //the teachers dashboard
       public function dashboard() {
           $teacher = $this->Teachers->find()->where(['user_id' => $this->Auth->user('id')])->first();
@@ -201,11 +249,11 @@
               $cvfile = $this->request->getData('ccv');
               if (!empty($cvfile['tmp_name'])) {
                   $cv = $userscontroller->uploadcv($cvfile, "cvs/");
-                    $teacher->cv = $cv;
+                  $teacher->cv = $cv;
               }
 
               $teacher = $this->Teachers->patchEntity($teacher, $this->request->getData());
-            
+
               if ($this->Teachers->save($teacher)) {
                   //log activity
                   $usercontroller = new UsersController();
@@ -308,25 +356,21 @@
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
-      
-      
       //method that shows the teacher only her assigned courses
-      public function assignedcourses(){
-           $teacher = $this->Teachers->find()
-                   ->where(['user_id' => $this->Auth->user('id')])
-                          ->contain([ 'Subjects'])->first();
+      public function assignedcourses() {
+          $teacher = $this->Teachers->find()
+                          ->where(['user_id' => $this->Auth->user('id')])
+                          ->contain(['Subjects'])->first();
 
           $this->set('teacher', $teacher);
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
-      
-      
       //teachers method for addint a topic to a course
-      public function addtopic($subject_id){
-            $topics_Table = TableRegistry::get('Topics');
-            $subjects_Table = TableRegistry::get('Subjects');
-            $subject = $subjects_Table->get($subject_id);
+      public function addtopic($subject_id) {
+          $topics_Table = TableRegistry::get('Topics');
+          $subjects_Table = TableRegistry::get('Subjects');
+          $subject = $subjects_Table->get($subject_id);
           $topic = $topics_Table->newEntity();
           if ($this->request->is('post')) {
               $topic = $topics_Table->patchEntity($topic, $this->request->getData());
@@ -334,15 +378,15 @@
               $topic->subject_id = $subject_id;
 
               if ($topics_Table->save($topic)) {
-                   //log activity
-                $usercontroller = new UsersController();
-               
-                 $title = "Added a Topic ".$topic->title;
-                $user_id = $this->Auth->user('id');
-                $description = "Added a Topic " . $topic->title;
-                $ip = $this->request->clientIp();
-                $type = "Add";
-                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  //log activity
+                  $usercontroller = new UsersController();
+
+                  $title = "Added a Topic " . $topic->title;
+                  $user_id = $this->Auth->user('id');
+                  $description = "Added a Topic " . $topic->title;
+                  $ip = $this->request->clientIp();
+                  $type = "Add";
+                  $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                   $this->Flash->success(__('The topic has been saved.'));
 
                   return $this->redirect(['action' => 'assignedcourses']);
@@ -351,44 +395,40 @@
           }
           $subjects = $this->Teachers->Subjects->find('list', ['limit' => 200]);
           // $admins = $this->Topics->Admins->find('list', ['limit' => 200]);
-          $this->set(compact('topic', 'subjects','subject'));
+          $this->set(compact('topic', 'subjects', 'subject'));
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
-      
-      
-      
       //shows the teacher all her topics
-      public function mytopics(){
-           $topics_Table = TableRegistry::get('Topics');
-           $mytopics = $topics_Table->find()
-                   ->where(['Topics.user_id'=>$this->Auth->user('id')])
-                   ->contain(['Subjects']);
-      //     debug(json_encode($mytopics, JSON_PRETTY_PRINT)); exit;
+      public function mytopics() {
+          $topics_Table = TableRegistry::get('Topics');
+          $mytopics = $topics_Table->find()
+                  ->where(['Topics.user_id' => $this->Auth->user('id')])
+                  ->contain(['Subjects']);
+          //     debug(json_encode($mytopics, JSON_PRETTY_PRINT)); exit;
           $this->set('mytopics', $mytopics);
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
-      
       //teachers method for updating a topic
-      public function updatetopic($id){
-           $topics_Table = TableRegistry::get('Topics');
-            $topic = $topics_Table->get($id, [
+      public function updatetopic($id) {
+          $topics_Table = TableRegistry::get('Topics');
+          $topic = $topics_Table->get($id, [
               'contain' => ['Subjects']
           ]);
           if ($this->request->is(['patch', 'post', 'put'])) {
               $topic = $topics_Table->patchEntity($topic, $this->request->getData());
               $topic->updatedon = date('d M Y');
               if ($topics_Table->save($topic)) {
-                   //log activity
-                $usercontroller = new UsersController();
-               
-                 $title = "Updated a Topic ".$topic->title;
-                $user_id = $this->Auth->user('id');
-                $description = "Updated a Topic " . $topic->title;
-                $ip = $this->request->clientIp();
-                $type = "Edit";
-                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  //log activity
+                  $usercontroller = new UsersController();
+
+                  $title = "Updated a Topic " . $topic->title;
+                  $user_id = $this->Auth->user('id');
+                  $description = "Updated a Topic " . $topic->title;
+                  $ip = $this->request->clientIp();
+                  $type = "Edit";
+                  $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                   $this->Flash->success(__('The topic has been updated.'));
 
                   return $this->redirect(['action' => 'mytopics']);
@@ -398,29 +438,18 @@
           $subjects = $topics_Table->Subjects->find('list', ['limit' => 200]);
           // $admins = $this->Topics->Admins->find('list', ['limit' => 200]);
           $this->set(compact('topic', 'subjects'));
-           $this->viewBuilder()->setLayout('adminbackend');
-          
+          $this->viewBuilder()->setLayout('adminbackend');
       }
-
-      
 
       //techers method for viewing a topic
-      public function viewtopic($id){
-            $topics_Table = TableRegistry::get('Topics');
-            $topic = $topics_Table->get($id, [
+      public function viewtopic($id) {
+          $topics_Table = TableRegistry::get('Topics');
+          $topic = $topics_Table->get($id, [
               'contain' => ['Subjects']
           ]);
-          $this->set('topic',$topic);  
-           $this->viewBuilder()->setLayout('adminbackend');
+          $this->set('topic', $topic);
+          $this->viewBuilder()->setLayout('adminbackend');
       }
-
-      
-
-
-
-
-
-
 
       /**
        * Delete method
@@ -450,4 +479,136 @@
           return $this->redirect(['action' => 'manageteachers']);
       }
 
+      //admin method for sending messages to teachers
+      public function newmessagetoteachers() {
+          $usersTable = TableRegistry::get('Users');
+          if ($this->request->is('post')) {
+              $teachers_ids = $this->request->getData('user._ids');
+
+              $subject = $this->request->getData('subject');
+              $message = $this->request->getData('message');
+              $count = 0;
+              //check if a teacher was selected
+              if (!empty($teachers_ids)) {
+                  //some teachers have been selected, send to them alone
+                  foreach ($teachers_ids as $tid) {
+                      $teacher_mail = $usersTable->get($tid);
+                      $this->messagetoteachers($teacher_mail->username, $subject, $message);
+                      $count++;
+                  }
+              } else { //no employee was selected that means we are sending to all 
+                  $employees = $usersTable->find()->where(['role_id' => 3]);
+                  foreach ($employees as $employee) {
+                      $this->messagetoteachers($employee->username, $subject, $message);
+                      $count++;
+                  }
+              }
+              //log activity
+              $usercontroller = new UsersController();
+
+              $title = "Sent a mail to employees ";
+              $user_id = $this->Auth->user('id');
+              $description = "Sent mail to a total of" . $count . " employees ";
+              $ip = $this->request->clientIp();
+              $type = "Add";
+              $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+              $this->Flash->success(__('Message has been sent to ' . $count . ' employees'));
+              return $this->redirect(['action' => 'newmessagetoteachers']);
+          }
+
+          $teachers = $usersTable->find('list')->where(['role_id' => 3]);
+          $this->set(compact('teachers'));
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+
+      //admin method that sends a message to selected employees
+      private function messagetoteachers($emailaddress, $subject, $message) {
+
+          $message .= '<br /><br />'
+                  . 'Kind Regards,<br />'
+                  . 'NetPro EMS. <br />';
+
+          $email = new Email('default');
+          $email->setFrom(['no-reply@netpro.com.ng' => 'NetPro Int\'l Ltd']);
+          $email->setTo($emailaddress);
+          // $email->setBcc(['chukwudi@netpro.com.ng']);
+          $email->setEmailFormat('html');
+          $email->setSubject($subject);
+          $email->send($message);
+          return;
+      }
+      
+      
+      //teachers method for contacting the admin
+      public function messagetoadmin(){
+          
+           if ($this->request->is('post')) {
+               $subject = $this->request->getData('subject');
+              $message = $this->request->getData('message');
+              //get admin email from session
+              $settings = $this->request->getSession()->read('settings');
+              //call the mailling function
+             if($this->messagetoteachers($settings->email, $subject, $message)){
+                $this->Flash->success(__('Message has been sent to admin'));
+              return $this->redirect(['action' => 'messagetoadmin']);  
+             }else{
+                $this->Flash->error(__('Sorry, unable to send message, please try again'));
+              return $this->redirect(['action' => 'messagetoadmin']);  
+             }
+               
+           }
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
+  
+      
+      
+      //teacher method for sending mails to his students
+      public function messagetostudents(){
+           $studentsTable = TableRegistry::get('Students');
+              $sdepartmentsTable = TableRegistry::get('Departments');
+        $teacher =   $this->Teachers->find()
+                ->contain(['Departments'])
+                ->where(['user_id'=>$this->Auth->user('id')])->first();
+         if ($this->request->is('post')) {
+               $subject = $this->request->getData('subject');
+              $message = $this->request->getData('message');
+              $studentids = $this->request->getData('student._ids');
+              if(!empty($studentids)){
+                  $count = 0;
+                  //he selected some students
+                  foreach ($studentids as $sid){
+                  $student = $studentsTable->get($sid);
+                  //call the mailing method
+                  $this->messagetoteachers($student->email, $subject, $message);
+                  $count++;
+                  }
+              }else{
+                  //no student was selected meaning we are sending to all students in the department
+                 $students = $studentsTable->find()->where(['department_id'=> $teacher->department_id]);  
+                 foreach ($students as $student){
+                  //call the mailing method
+                  $this->messagetoteachers($student->email, $subject, $message);
+                  $count++;   
+                 }
+              }
+              $this->Flash->success(__('Message has been sent to '.$count.' students'));
+              return $this->redirect(['action' => 'messagetostudents']); 
+         
+         }
+          $students = $studentsTable->find('list')->where(['department_id'=> $teacher->department_id]);
+          $departments = $sdepartmentsTable->find('list')->where(['id'=>$teacher->department_id]);
+          $this->set(compact('students','departments'));
+          
+            $this->viewBuilder()->setLayout('adminbackend');
+      }
+      
+      //function that returns the states on the drop down
+      public function getstates($country_id) {
+          $statestable = TableRegistry::get('States');
+          $states = $statestable->find('list')
+                  ->where(['country_id' => $country_id]);
+          $this->set(compact('states'));
+          //debug(json_encode($states , JSON_PRETTY_PRINT)); exit;
+      }
   }
+  
