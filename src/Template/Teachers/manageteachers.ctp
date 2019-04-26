@@ -10,7 +10,7 @@
         <?= $this->Form->button(' ',['href'=>'#','data-toggle'=>'modal','data-target'=>'#assignsubjects',
             'class'=>'btn btn-success fa fa-check-circle float-lg-right','title'=>'assign subjects to teachers']) ?>
          
-  <?= $this->Html->link(__(' '), ['controller' => 'Users', 'action' => 'newadmin'], ['class' => 'btn-circle btn-lg fa fa-plus float-right', 'title' => 'Add new teacher'])
+  <?= $this->Html->link(__(' '), ['controller' => 'Teachers', 'action' => 'newteacher'], ['class' => 'btn-circle btn-lg fa fa-plus float-right', 'title' => 'Add new teacher'])
 ?>
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">Manage Teachers</h1></div>
