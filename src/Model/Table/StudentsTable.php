@@ -60,6 +60,14 @@ class StudentsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Levels', [
+            'foreignKey' => 'leve_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Parents', [
+            'foreignKey' => 'parent_id',
+            'joinType' => 'INNER'
+        ]);
         $this->hasMany('Invoices', [
             'foreignKey' => 'student_id'
         ]);
