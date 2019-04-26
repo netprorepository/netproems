@@ -10,13 +10,42 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">New Teacher</h1>
                         </div>
-                        <?= $this->Form->create($teacher) ?>
+                        <?= $this->Form->create($teacher,['type'=>'file']) ?>
                         <fieldset>
+                          <div class="form-group row">
+                              <div class="col-sm-6 mb-3 mb-sm-0">
+                                  <?=
+                                      $this->Form->control('firstname', ['label' =>false, 'required', 
+                                           'placeholder' => 'first name', 'class' => 'form-control user2'])
+                                    ?> 
+                              </div>  
+                            
+                              <div class="col-sm-6 mb-3 mb-sm-0">
+                                  <?=
+                                      $this->Form->control('lastname', ['label' =>false, 'required', 
+                                           'placeholder' => 'last name', 'class' => 'form-control user2'])
+                                    ?> 
+                              </div> 
+                          </div>
+                             <div class="form-group row">
+                                 <div class="col-sm-6 mb-3 mb-sm-0">
+                                     <?=
+                                      $this->Form->control('middlename', ['label' =>false, 
+                                           'placeholder' => 'middle name', 'class' => 'form-control user2'])
+                                    ?>  
+                                 </div>
+                              <div class="col-sm-6 mb-3 mb-sm-0">
+                                  <?php
+                                   
+                                      echo $this->Form->control('department_id', ['options' =>  $departments , 'label' => false, 'class' => 'form-control form-control-user2', 'placeholder' => 'Select department'])
+                                    ?>
+                           </div>
+                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <?=
-                                      $this->Form->control('user_id', ['options' => $users, 'required', 'label' => false,
-                                          'empty' => 'Select user', 'placeholder' => 'Select user', 'class' => 'form-control user2'])
+                                      $this->Form->control('username', ['label' =>false, 'required', 
+                                           'placeholder' => 'username/email address', 'class' => 'form-control user2'])
                                     ?>
                                 </div>
 
@@ -40,8 +69,12 @@
 
                             </div>
                             <div class="form-group row">
+                                <div class="col-sm-4">
+<?= $this->Form->control('country_id', ['label' => false, 'class' => 'form-control form-control-user2', 'placeholder' => 'country', 'empty' => 'Select Country','onChange'=>'getstates(this.value)']) ?>
+
+                                </div>
                                 <div class="col-sm-4 mb-3 mb-sm-0">
-<?= $this->Form->control('state_id', ['label' => false, 'class' => 'form-control form-control-user2', 'placeholder' => 'state', 'empty' => 'Select State']); ?>
+<?= $this->Form->control('state_id', ['label' => false, 'id'=>'states1','class' => 'form-control form-control-user2', 'placeholder' => 'state', 'empty' => 'Select State']); ?>
 
                                 </div>
 
@@ -49,23 +82,20 @@
 <?= $this->Form->control('phone', ['label' => false, 'class' => 'form-control form-control-user2', 'placeholder' => 'phone']) ?>
 
                                 </div>
-                                <div class="col-sm-4">
-<?= $this->Form->control('country_id', ['label' => false, 'class' => 'form-control form-control-user2', 'placeholder' => 'country', 'empty' => 'Select Country']) ?>
-
-                                </div>
+                                
                             </div>
                             <div class="form-group row">
 
 
                                 <div class="col-sm-4">
-<?= $this->Form->control('cv', ['label' => 'Upload Your CV', 'type' => 'file', 'class' => 'form-control form-control-user2', 'placeholder' => 'Upload CV']); ?>
+<?= $this->Form->control('cvv', ['label' => 'Upload Your CV', 'type' => 'file', 'class' => 'form-control form-control-user2', 'placeholder' => 'Upload CV']); ?>
 
                                 </div>
                                 <div class="col-sm-4">
                                     <?= $this->Form->control('passports', ['label' => 'Passport', 'type' => 'file', 'class' => 'form-control form-control-user2', 'placeholder' => 'Uplaod passport']); ?>
                                 </div>
                                 <div class="col-sm-4">
-<?= $this->Form->control('subject._ids', ['label' => 'Assign Subjects', 'options' => $subjects, 'class' => 'form-control form-control-user2', 'empty' => 'Select Subjects']); ?>
+<?= $this->Form->control('subject._ids', ['label' => 'Assign Subjects', 'options' => $subjects, 'class' => 'form-control select2_multiple', 'empty' => 'Select Subjects']); ?>
                                 </div>
 
                             </div>
@@ -87,3 +117,21 @@
     </div>
 
 </div>
+<script>
+    
+        function getstates(stateid){ 
+
+    $.ajax({
+        url: '../Teachers/getstates/'+stateid,
+        method: 'GET',
+        dataType: 'text',
+        success: function(response) {
+           // console.log(response);
+            document.getElementById('states1').innerHTML = "";
+            document.getElementById('states1').innerHTML = response;
+            //location.href = redirect;
+        }
+    });
+
+}
+    </script>
