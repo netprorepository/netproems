@@ -460,8 +460,10 @@
       public function dashboard() {
           $student = $this->Students->find()
                           ->where(['user_id' => $this->Auth->user('id')])
-                          ->contain(['Fees', 'Subjects', 'Departments'])->first();
+                          ->contain(['Fees', 'Subjects', 'Departments.Subjects','Invoices','Departments.Fees'])->first();
           $counter = 0;
+           //debug(json_encode( $student, JSON_PRETTY_PRINT));exit;
+           //check for any assigned fees
           foreach ($student->fees as $fee) {
               //check for any fee assigned to this student and if this fee has been paid
               if ($this->checkpayment($student->id, $fee->id) == 0) {
@@ -479,6 +481,26 @@
                   }
               }
           }
+          //check for fees based on department
+          foreach ($student->department->fees as $fee) {
+              //check for any fee assigned to this student and if this fee has been paid
+              if ($this->checkpayment($student->id, $fee->id) == 0) {
+                  //fee has not been paid, check if there is an invoice for it already
+                  $is_owing = 'is_owing';
+                  $this->request->getSession()->write('is_owing', $is_owing);
+
+                  if ($this->checkinvoice($student->id, $fee->id) == 1) {
+                      //there is an unpaid invoice, take him to his invoices
+                      return $this->redirect(['action' => 'invoices', $student->id]);
+                  } else {
+                      $counter++;
+                      //no invoices, create new one
+                      $this->creatnewinvoice($student->id, $fee->id, $fee->amount);
+                  }
+              }
+          } 
+          
+          
           if ($counter > 0) { //if new invoice was created, take the student to the invoice
               return $this->redirect(['action' => 'invoices', $student->id]);
           }
