@@ -66,7 +66,7 @@ class User extends Entity
         'created_by' => true,
        // 'passport' => true,
        // 'useruniquid' => true,
-       // 'userstatus' => true,
+        'verification_key' => true,
         'role' => true,
         'country' => true,
         'state' => true,
