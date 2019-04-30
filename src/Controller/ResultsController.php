@@ -35,42 +35,40 @@
               $conditions = [];
               if (!empty($department_id)) {
                   $conditions['Results.department_id'] = $department_id;
-              // $conditions = [
-                //  'subject_id' => $course_id,
-                //  'student_id' => $student_id,
-                 // 'department_id' => $department_id,
-                 //  'session_id' => $session_id,
-                 // 'semester_id' => $semester_id
-            //  ];    
+                  // $conditions = [
+                  //  'subject_id' => $course_id,
+                  //  'student_id' => $student_id,
+                  // 'department_id' => $department_id,
+                  //  'session_id' => $session_id,
+                  // 'semester_id' => $semester_id
+                  //  ];    
               }
               if (!empty($course_id)) {
-               $conditions['Results.subject_id'] = $course_id;    
+                  $conditions['Results.subject_id'] = $course_id;
               }
-              if (!empty($student_id)) { 
-               $conditions['Results.student_id'] = $student_id;     
+              if (!empty($student_id)) {
+                  $conditions['Results.student_id'] = $student_id;
               }
               if (!empty($session_id)) {
-             $conditions['Results.session_id'] = $session_id;     
+                  $conditions['Results.session_id'] = $session_id;
               }
               if (!empty($semester_id)) {
-             $conditions['Results.semester_id'] =  $semester_id;    
+                  $conditions['Results.semester_id'] = $semester_id;
               }
 
               $results = $this->Results->find()
                       ->contain(['Students', 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions'])
-                      ->where( $conditions);
-               //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
-              $this->set('results',$this->paginate($results));
-              
-          }else{ //if this was not a search
-             
-          $this->paginate = [
-              'contain' => ['Students', 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions', 'Users']
-          ];
-          
-          $results = $this->paginate($this->Results);
+                      ->where($conditions);
+              //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
+              $this->set('results', $this->paginate($results));
+          } else { //if this was not a search
+              $this->paginate = [
+                  'contain' => ['Students', 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions', 'Users']
+              ];
 
-          $this->set(compact('results'));
+              $results = $this->paginate($this->Results);
+
+              $this->set(compact('results'));
           }
           $faculties = $this->Results->Faculties->find('list', ['limit' => 200])
                   ->order(['name' => 'ASC']);
@@ -208,14 +206,14 @@
                       }
                   }
                   //log activity
-                $usercontroller = new UsersController();
-               
-                 $title = "Result Bulk Upload ";
-                $user_id = $this->Auth->user('id');
-                $description = "Uploaded " . $inserted. ' results';
-                $ip = $this->request->clientIp();
-                $type = "Add";
-                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  $usercontroller = new UsersController();
+
+                  $title = "Result Bulk Upload ";
+                  $user_id = $this->Auth->user('id');
+                  $description = "Uploaded " . $inserted . ' results';
+                  $ip = $this->request->clientIp();
+                  $type = "Add";
+                  $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                   $this->Flash->success(__($inserted . ' Result(s) have been uploaded successfully. Duplicates found : ' . $duplicate_results . ' Unknown students : ' . $unknown_students));
 
                   return $this->redirect(['action' => 'uploadresults']);
@@ -289,15 +287,15 @@
           if ($this->request->is(['patch', 'post', 'put'])) {
               $result = $this->Results->patchEntity($result, $this->request->getData());
               if ($this->Results->save($result)) {
-                   //log activity
-                $usercontroller = new UsersController();
-               
-                 $title = "Updated a Result ";
-                $user_id = $this->Auth->user('id');
-                $description = "Updated a result " . $result->id;
-                $ip = $this->request->clientIp();
-                $type = "Update";
-                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+                  //log activity
+                  $usercontroller = new UsersController();
+
+                  $title = "Updated a Result ";
+                  $user_id = $this->Auth->user('id');
+                  $description = "Updated a result " . $result->id;
+                  $ip = $this->request->clientIp();
+                  $type = "Update";
+                  $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                   $this->Flash->success(__('The result has been updated.'));
 
                   return $this->redirect(['action' => 'manageresults']);
@@ -322,57 +320,47 @@
           $this->set(compact('departments'));
       }
 
-      
-      
-      
       //student method for checking their results
-      public function myresults(){
+      public function myresults() {
           $student = $this->Results->Students->find()->contain(['Departments'])
-                  ->where(['user_id'=>$this->Auth->user('id')])->first();
+                          ->where(['user_id' => $this->Auth->user('id')])->first();
           if ($this->request->is('post')) {
-              
-               $session_id = $this->request->getData('session_id');
+
+              $session_id = $this->request->getData('session_id');
               $semester_id = $this->request->getData('semester_id');
               $course_id = $this->request->getData('subject_id');
-               $conditions = [];
+              $conditions = [];
               if (!empty($semester_id)) {
-                  $conditions['Results.semester_id'] = $semester_id;    
+                  $conditions['Results.semester_id'] = $semester_id;
               }
               if (!empty($course_id)) {
-               $conditions['Results.subject_id'] = $course_id;    
+                  $conditions['Results.subject_id'] = $course_id;
               }
-               if (!empty($session_id)) {
-               $conditions['Results.session_id'] = $session_id;    
+              if (!empty($session_id)) {
+                  $conditions['Results.session_id'] = $session_id;
               }
-               $results = $this->Results->find()
-                      ->contain([ 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions'])
-                       ->where(['student_id'=> $student->id])
-                      ->where( $conditions);
-               //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
-              $this->set('results',$results);
-              
-          }else{
               $results = $this->Results->find()
-                      ->contain([ 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions'])
-                       ->where(['student_id'=> $student->id]);
-                      
-               //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
-              $this->set('results',$results);
+                      ->contain(['Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions'])
+                      ->where(['student_id' => $student->id])
+                      ->where($conditions);
+              //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
+              $this->set('results', $results);
+          } else {
+              $results = $this->Results->find()
+                      ->contain(['Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions'])
+                      ->where(['student_id' => $student->id]);
+
+              //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
+              $this->set('results', $results);
           }
-          
-           $subjects = $this->Results->Subjects->find('list', ['limit' => 200]);
+
+          $subjects = $this->Results->Subjects->find('list', ['limit' => 200]);
           $semesters = $this->Results->Semesters->find('list', ['limit' => 200]);
           $sessions = $this->Results->Sessions->find('list', ['limit' => 200]);
-           $this->set(compact('result',  'subjects', 'semesters', 'sessions','student'));
-         
+          $this->set(compact('result', 'subjects', 'semesters', 'sessions', 'student'));
+
           $this->viewBuilder()->setLayout('adminbackend');
       }
-
-      
-
-
-
-
 
       /**
        * Delete method
@@ -386,14 +374,14 @@
           $result = $this->Results->get($id);
           if ($this->Results->delete($result)) {
               //log activity
-                $usercontroller = new UsersController();
-               
-                 $title = "Deleted a Result ";
-                $user_id = $this->Auth->user('id');
-                $description = "Deleted a result " . $result->id;
-                $ip = $this->request->clientIp();
-                $type = "Delete";
-                $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
+              $usercontroller = new UsersController();
+
+              $title = "Deleted a Result ";
+              $user_id = $this->Auth->user('id');
+              $description = "Deleted a result " . $result->id;
+              $ip = $this->request->clientIp();
+              $type = "Delete";
+              $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
               $this->Flash->success(__('The result has been deleted.'));
           } else {
               $this->Flash->error(__('The result could not be deleted. Please, try again.'));
