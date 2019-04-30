@@ -37,6 +37,10 @@ class UsersController extends AppController {
                 $this->request->getSession()->write('usersinfo', $user);
                 $this->request->getSession()->write('usersroles', $roles);
                 if($user['role_id']==2){
+                    //get the student and put it in session
+                    $studentsTable = TableRegistry::get('Students');
+                    $student =  $studentsTable->find()->where(['user_id'=>$user['id']])->first();
+                     $this->request->getSession()->write('student', $student);
                    return $this->redirect(['controller' => 'Students', 'action' => 'dashboard']); 
                 }
                 else{
@@ -358,7 +362,7 @@ class UsersController extends AppController {
     public function beforeFilter(Event $event) {
         // $this->Auth->allow(['add']);
         if (!$this->Auth->user()) {
-            $this->Auth->config('authError', false);
+            $this->Auth->setConfig('authError', false);
         }
     }
 
