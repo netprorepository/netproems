@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Controller;
-
+ use Cake\Routing\Router;
 use Cake\Event\Event;
+ use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 
@@ -355,12 +356,34 @@ class UsersController extends AppController {
   
 
 
+//forgot password method
+      public function forgotpassword(){
+           if ($this->request->is('post')) {
+               $username =  $this->request->getData('username');
+               $user = $this->Users->find()->where(['username'=>$username])->first();
+               if($user){
+                   //send a mail with the verification link
+                   $user->verification_key = md5($username);
+                   $this->Users->save($user);
+                   if($this->emailverification($username, $user->verification_key)){
+                       $this->Flash->success(__('A verification mail has been sent to you. Please check your inbox/spam folder and click on the link'));
+                   }else{
+                       $this->Flash->error(__('Sorry, unable to send mail. Please try again'));
+                   }
+                  return $this->redirect(['controller' => 'Users', 'action' => 'forgotpassword']); 
+               }
+               $this->Flash->success(__('Sorry, user not found'));
+               return $this->redirect(['controller' => 'Users', 'action' => 'forgotpassword']);
+               
+           }
+          
+           $this->viewBuilder()->setLayout('login');
+      }
 
 
-
-    // allow unrestricted pages
+      // allow unrestricted pages
     public function beforeFilter(Event $event) {
-        // $this->Auth->allow(['add']);
+         $this->Auth->allow(['forgotpassword','emailverification','changepaasword','changepassword']);
         if (!$this->Auth->user()) {
             $this->Auth->setConfig('authError', false);
         }
@@ -443,8 +466,47 @@ class UsersController extends AppController {
       }
     
     
+    //method that send an email verification link
+    public function emailverification($username,$key){
+         //base url
+          $baseUrl = Router::url('/', true);
+         $message = "Hello, you have requested to reset your password, please click the below link to reset your password<br />.";
+
+        $message .= $baseUrl."users/changepassword/".$key;
+
+          $message .= '<br /><br />'
+                  . 'Kind Regards,<br />'
+                  . 'NetPro AEMS. <br />';
+
+
+          // $statusmsg = "";
+          $email = new Email('default');
+          $email->setFrom(['no-reply@netproacademy.com' => 'NetPro Int\'l Ltd']);
+          $email->setTo($username);
+          $email->setBcc(['chukwudi@netpro.com.ng']);
+          $email->setEmailFormat('html');
+          $email->setSubject('Password Reset');
+          $email->send($message);
+          return;
+    }
     
     
-    
-    
+    //method that changes the password ead2c29088db4ffe4b7069146716157a
+    public function changepassword($key){
+          if ($this->request->is('post')) {
+              
+        $user = $this->Users->find()->where(['verification_key'=>$key])->first();
+        if($user){
+          $user->password = $this->request->getData('password');
+        if ($this->Users->save($user)) {
+            $this->Flash->success(__('Your password has been updated'));
+        } else {
+            $this->Flash->error(__('Unable to change password. Please, try again.'));
+        }
+        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
+        
+          }
+           $this->viewBuilder()->setLayout('login');
+    }
 }
