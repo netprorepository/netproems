@@ -10,11 +10,13 @@
             <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col-lg-6 d-none d-lg-block bg-login-imge" >
-                     <?php if(!empty($logo)){
-                         echo $this->Html->image($logo->logo,['height'=>'100%','width'=>'100%','href'=>'/']);
-                     } else {
-                         echo $this->Html->image('alogo.png',['height'=>'100%','width'=>'100%','href'=>'/']);
-                     }?>
+                     <?php
+                       //if(!empty($logo)){
+                        // echo $this->Html->image($logo->logo,['height'=>'100%','width'=>'100%','href'=>'/']);
+                     //} else {
+                         echo $this->Html->image('bs.png',['height'=>'100%','width'=>'100%','href'=>'/']);
+                     //}
+                     ?>
                 </div>
               <div class="col-lg-6">
                 <div class="p-5">
@@ -51,7 +53,9 @@
                    
                     <hr>
                      <div class="text-center">
-                    <a class="small" href="forgot-password.html">Forgot Password?</a>
+                           <?= $this->Html->link('Forgot Password?', ['controller' => 'Users', 'action' => 'forgotpassword'], ['title' => 'forgot password', 'class' => 'small'])?>
+                   
+                 
                   </div>
 <!--                    <a href="index.html" class="btn btn-google btn-user btn-block">
                       <i class="fab fa-google fa-fw"></i> Login with Google
@@ -63,7 +67,8 @@
                   <hr>
                  
                   <div class="text-center">
-                    <a class="small" href="register.html">New Applicant</a>
+                      <?= $this->Html->link('New Applicant', ['controller' => 'Students', 'action' => 'newapplicant'], ['title' => 'apply now', 'class' => 'small'])?>
+                   
                   </div>
                 </div>
               </div>
