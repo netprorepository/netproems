@@ -331,9 +331,9 @@
                   ->where(['user_id'=>$this->Auth->user('id')])->first();
           if ($this->request->is('post')) {
               
-               $session_id = $this->request->data('session_id');
-              $semester_id = $this->request->data('semester_id');
-              $course_id = $this->request->data('subject_id');
+               $session_id = $this->request->getData('session_id');
+              $semester_id = $this->request->getData('semester_id');
+              $course_id = $this->request->getData('subject_id');
                $conditions = [];
               if (!empty($semester_id)) {
                   $conditions['Results.semester_id'] = $semester_id;    
