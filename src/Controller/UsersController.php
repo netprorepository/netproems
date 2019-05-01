@@ -44,6 +44,13 @@ class UsersController extends AppController {
                      $this->request->getSession()->write('student', $student);
                    return $this->redirect(['controller' => 'Students', 'action' => 'dashboard']); 
                 }
+                elseif($user['role_id']==3){
+                    //get the teacher or employee details and put them in session
+                      $teachersTable = TableRegistry::get('Teachers');
+                    $teacher =  $teachersTable->find()->where(['user_id'=>$user['id']])->first();
+                     $this->request->getSession()->write('teacher', $teacher);
+                   return $this->redirect(['controller' => 'Teachers', 'action' => 'dashboard']);
+                }
                 else{
                 return $this->redirect(['controller' => 'Users', 'action' => 'dashboard']);
                 }
