@@ -48,9 +48,23 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">
+                    <?php // debug(json_encode( $user['role_id'], JSON_PRETTY_PRINT)); exit;
+                      if($user['role_id']===3){   echo $this->Html->link(' Dashboard', ['controller' => 'Teachers', 'action' => 'dashboard'], ['title' => 'teachers dashboard', 'class' => 'nav-link fas fa-fw fa-tachometer-alt']);
+                
+            }
+             elseif($user['role_id']==2){
+                     echo $this->Html->link(' Dashboard', ['controller' => 'Students', 'action' => 'dashboard'], ['title' => 'students dashboard', 'class' => 'nav-link fas fa-fw fa-tachometer-alt']);
+                   
+                    }
+                    elseif($user['role_id']==1){
+                      echo $this->Html->link(' Dashboard', ['controller' => 'Users', 'action' => 'dashboard'], ['title' => 'admins dashboard', 'class' => 'nav-link fas fa-fw fa-tachometer-alt']);
+                    
+                    }
+            ?>
+<!--                    <a class="nav-link" href="../users/dashboard">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span></a>
+                        <span>Dashboard</span></a>-->
+                   
                 </li>
 
                 <!-- Divider -->
@@ -309,6 +323,27 @@
                     </div>
                 </li>
                 
+                 <?php if ( $user['role_id']==3) { ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#tresults" aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Results</span>
+                    </a>
+                    <div id="tresults" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            
+<?php
+     
+                                  echo $this->Html->link('Upload Results', ['controller' => 'Teachers', 'action' => 'uploadresults'], ['title' => 'upload students results', 'class' => 'collapse-item']);
+                               echo $this->Html->link('manage Results', ['controller' => 'Teachers', 'action' => 'manageresults'], ['title' => 'manage results', 'class' => 'collapse-item']);
+                                 
+  
+?>
+                        </div>
+                    </div>
+                </li>
+  <?php } ?>
+                
  <?php } if ($user['role_id'] == 2 || $user['role_id'] == 3) {?>
                  <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#myaccount" aria-expanded="true" aria-controls="collapsePages">
@@ -328,7 +363,7 @@
       echo $this->Html->link(__(' My Invoices'), ['controller' => 'Students', 'action' => 'myinvoices'], ['class' => 'collapse-item','title'=>'view my invoices']);
      
      }
-     echo $this->Html->link(__(' Change Password'), ['controller' => 'Users', 'action' => 'changepassword'], ['class' => 'collapse-item','title'=>'change my password']);
+   //  echo $this->Html->link(__(' Change Password'), ['controller' => 'Users', 'action' => 'changepassword'], ['class' => 'collapse-item','title'=>'change my password']);
     
 ?>
                           
@@ -551,7 +586,22 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $user['fname'] . ' ' . $user['lname'] ?></span>
-<?php echo $this->Html->image($user['passport'], ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']) ?>
+       <?php // debug(json_encode( $user['role_id'], JSON_PRETTY_PRINT)); exit;
+                      if($user['role_id']===3){ 
+                          $teacher = $this->request->getSession()->read('teacher');
+                          $this->Html->image($teacher->passport, ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']);
+                
+            }
+             elseif($user['role_id']==2){
+                      $teacher = $this->request->getSession()->read('student');
+                          $this->Html->image($student->passport, ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']);
+                
+                    }
+                    elseif($user['role_id']==1){
+                    echo $this->Html->image($user['passport'], ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']);
+                    }
+            ?>
+                                        <?php echo $this->Html->image($user['passport'], ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']) ?>
 
                                 </a>
                                 <!-- Dropdown - User Information -->
