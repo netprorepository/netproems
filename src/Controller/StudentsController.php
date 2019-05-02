@@ -104,25 +104,25 @@
        */
       //admin method for direct entry
       public function newstudent() {
-           $parentsTable = TableRegistry::get('Sparents');
+          $parentsTable = TableRegistry::get('Sparents');
           $student = $this->Students->newEntity();
-           $parent = $parentsTable->newEntity();
-          
+          $parent = $parentsTable->newEntity();
+
           if ($this->request->is('post')) {
               $userscontroller = new UsersController();
-             
+
               //create parent login details
               $fathername = $this->request->getData('fathersname');
               $mothername = $this->request->getData('mothersname');
               $pemail = $this->request->getData('pemailaddress');
               $pmname = "";
               $parentuserid = $this->parentlogindata($pemail, $fathername, $mothername, $pmname);
-              if(is_numeric($parentuserid)){
-                  $parent =  $parentsTable->patchEntity($parent, $this->request->getData());
-                $parent->user_id = $parentuserid;
-                $parent->pemailaddress = $pemail;
-               // debug(json_encode( $parent , JSON_PRETTY_PRINT)); exit;
-                $parentsTable->save($parent);
+              if (is_numeric($parentuserid)) {
+                  $parent = $parentsTable->patchEntity($parent, $this->request->getData());
+                  $parent->user_id = $parentuserid;
+                  $parent->pemailaddress = $pemail;
+                  // debug(json_encode( $parent , JSON_PRETTY_PRINT)); exit;
+                  $parentsTable->save($parent);
               }
               //upload files
               //upload o level
@@ -200,9 +200,9 @@
           $countries = $this->Students->Countries->find('list', ['limit' => 200]);
           $users = $this->Students->Users->find('list', ['limit' => 200]);
           $fees = $this->Students->Fees->find('list', ['limit' => 200]);
-           $levels = $this->Students->Levels->find('list');
+          $levels = $this->Students->Levels->find('list');
           $subjects = $this->Students->Subjects->find('list', ['limit' => 200]);
-          $this->set(compact('student','levels', 'departments', 'states', 'countries', 'users', 'fees', 'subjects'));
+          $this->set(compact('student', 'levels', 'departments', 'states', 'countries', 'users', 'fees', 'subjects'));
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
@@ -308,10 +308,9 @@
               return "Failed";
           }
       }
-      
-      
+
       //method that creates a parent login details
-      private function parentlogindata($email, $fname, $lname, $mname){
+      private function parentlogindata($email, $fname, $lname, $mname) {
           $users_Table = TableRegistry::get('Users');
           $user = $users_Table->newEntity();
           $user->role_id = 4;
@@ -325,16 +324,7 @@
           } else {
               return "Failed";
           }
-          
       }
-
-
-
-
-
-
-
-
 
       //mail funtion that informs the student that admission has been offered to them
       private function studentselectionmail($emailaddress, $fname, $lname) {
@@ -362,22 +352,22 @@
       public function newapplicant() {
           $parentsTable = TableRegistry::get('Sparents');
           $student = $this->Students->newEntity();
-           $parent = $parentsTable->newEntity();
+          $parent = $parentsTable->newEntity();
           if ($this->request->is('post')) {
               $userscontroller = new UsersController();
-              
+
               //create parent login details
               $fathername = $this->request->getData('fathersname');
               $mothername = $this->request->getData('mothersname');
               $pemail = $this->request->getData('pemailaddress');
               $pmname = "";
               $parentuserid = $this->parentlogindata($pemail, $fathername, $mothername, $pmname);
-              if(is_numeric($parentuserid)){
-                  $parent =  $parentsTable->patchEntity($parent, $this->request->getData());
-                $parent->user_id = $parentuserid;
-                $parent->pemailaddress = $pemail;
-               // debug(json_encode( $parent , JSON_PRETTY_PRINT)); exit;
-                $parentsTable->save($parent);
+              if (is_numeric($parentuserid)) {
+                  $parent = $parentsTable->patchEntity($parent, $this->request->getData());
+                  $parent->user_id = $parentuserid;
+                  $parent->pemailaddress = $pemail;
+                  // debug(json_encode( $parent , JSON_PRETTY_PRINT)); exit;
+                  $parentsTable->save($parent);
               }
               //upload files
               //upload o level
@@ -460,10 +450,10 @@
       public function dashboard() {
           $student = $this->Students->find()
                           ->where(['user_id' => $this->Auth->user('id')])
-                          ->contain(['Fees', 'Subjects', 'Departments.Subjects','Invoices','Departments.Fees'])->first();
+                          ->contain(['Fees', 'Subjects', 'Departments.Subjects', 'Invoices', 'Departments.Fees'])->first();
           $counter = 0;
-           //debug(json_encode( $student, JSON_PRETTY_PRINT));exit;
-           //check for any assigned fees
+          //debug(json_encode( $student, JSON_PRETTY_PRINT));exit;
+          //check for any assigned fees
           foreach ($student->fees as $fee) {
               //check for any fee assigned to this student and if this fee has been paid
               if ($this->checkpayment($student->id, $fee->id) == 0) {
@@ -498,9 +488,9 @@
                       $this->creatnewinvoice($student->id, $fee->id, $fee->amount);
                   }
               }
-          } 
-          
-          
+          }
+
+
           if ($counter > 0) { //if new invoice was created, take the student to the invoice
               return $this->redirect(['action' => 'invoices', $student->id]);
           }
@@ -738,7 +728,8 @@
       public function viewprofile() {
           $student = $this->Students->find()
                           ->where(['user_id' => $this->Auth->user('id')])
-                          ->contain(['Users', 'Departments', 'States', 'Countries'])->first();
+                          ->contain(['Departments.Subjects', 'States', 'Countries', 'Users', 'Subjects', 'Invoices.Fees',
+                              'Invoices.Sessions', 'Results.Sessions', 'Results.Semesters', 'Results.Subjects'])->first();
           $this->set('student', $student);
           $this->viewBuilder()->setLayout('adminbackend');
       }
@@ -1093,57 +1084,102 @@
                   ->order(['joindate' => 'DESC']);
           if ($this->request->is('post')) {
               $level_id = $this->request->getData('slevel_id');
-             
-             $count = 0;
-            // echo $level_id; exit;
+
+              $count = 0;
+              // echo $level_id; exit;
               //ensure at least a student is selected
               if (!empty($this->request->getData('studentids'))) {
                   foreach ($this->request->getData('studentids') as $student_id) {
-                      if(is_numeric($student_id)){
+                      if (is_numeric($student_id)) {
                           $student = $this->Students->get($student_id);
-                          $student->level_id =  $level_id;
+                          $student->level_id = $level_id;
                           $this->Students->save($student);
                           // debug(json_encode( $this->request->getData(), JSON_PRETTY_PRINT)); exit;
                           $count++;
-                       //echo "value : " . $value . '<br/>';    
+                          //echo "value : " . $value . '<br/>';    
                       }
-                     
                   }
-                   $this->Flash->success(__($count.' Students have been promoted to level '.$level_id));
-                      return $this->redirect(['action' => 'promotestudents']);
-              }else{
-                $this->Flash->error(__(' Unable to promote student. It seems like you did not select any student after all'));
-                      return $this->redirect(['action' => 'promotestudents']);  
+                  $this->Flash->success(__($count . ' Students have been promoted to level ' . $level_id));
+                  return $this->redirect(['action' => 'promotestudents']);
+              } else {
+                  $this->Flash->error(__(' Unable to promote student. It seems like you did not select any student after all'));
+                  return $this->redirect(['action' => 'promotestudents']);
               }
 
 
               // debug(json_encode($this->request->getData('studentids'), JSON_PRETTY_PRINT)); exit;
           }
           $departments = $this->Students->Departments->find('list', ['limit' => 200])->order(['name' => 'DESC']);
-           $levels = $this->Students->Levels->find('list');
-          $this->set(compact('students','levels'));
+          $levels = $this->Students->Levels->find('list');
+          $this->set(compact('students', 'levels'));
           $this->set(compact('students', 'departments'));
           $this->viewBuilder()->setLayout('adminbackend');
       }
-      
-      
-      
+
       //admin method that gets the students to be promoted
-      public function getstudentstopromote($deptid){
+      public function getstudentstopromote($deptid) {
           $students = $this->Students->find()
-                  ->contain(['Departments','Levels'])
+                  ->contain(['Departments', 'Levels'])
                   ->where(['department_id' => $deptid, 'status' => 'Admitted']);
 
           $departments = $this->Students->Departments->find('list', ['limit' => 200])->order(['name' => 'DESC']);
           $levels = $this->Students->Levels->find('list');
-          $this->set(compact('students','levels'));
+          $this->set(compact('students', 'levels'));
           $this->set('departments', $departments);
-          
       }
 
+      //student method for viewing their course materials
+      public function coursematerials() {
+          //ensure this is a student
+          $student = $this->isstudent();
+          $coursematerials_Table = TableRegistry::get('Coursematerials');
+          $materials = $coursematerials_Table->find()
+                  ->contain(['Teachers', 'Subjects', 'Departments'])
+                  ->where(['Coursematerials.department_id' => $student->department->id]);
+          $this->set('materials', $materials);
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
 
+      //method that ensure this person is a student
+      private function isstudent() {
 
+          $student = $this->Students->find()
+                  ->contain(['Departments', 'Subjects'])
+                  ->where(['user_id' => $this->Auth->user('id')])
+                  ->first();
+          if (!$student) { //this is not a valid student
+              $this->Flash->error(__('Sorry, invalid access'));
 
+              return $this->redirect(['action' => 'index']);
+          } else {
+              return $student;
+          }
+      }
+
+      //student method for dowloading course materials
+
+      public function downloadmaterial($id) {
+          //ensure this is a student
+          $student = $this->isstudent();
+          $coursematerials_Table = TableRegistry::get('Coursematerials');
+          $coursematerial = $coursematerials_Table->get($id);
+          $ext = pathinfo($coursematerial->fileurl, PATHINFO_EXTENSION);
+           // debug(json_encode($coursematerial, JSON_PRETTY_PRINT)); exit;
+          //  exit;
+        //  if(is_file("coursematerials/" . $coursematerial->fileurl)){echo "coursematerials/" . $coursematerial->fileurl; exit;}
+          header('Content-Type: ' . $ext);
+          header('Content-Length: ' . filesize("coursematerials/" .$coursematerial->fileurl));
+          header('Content-Disposition: attachment;filename="' . $coursematerial->fileurl . '"');
+          header("Cache-control: private");
+          header('Content-Transfer-Encoding', 'binary');
+                header('Expires', 0);
+                header('Cache-Control', 'no-cache');
+                header('Pragma', 'public');
+                header('X-Pad', 'avoid browser bug');
+
+          readfile("coursematerials/" . $coursematerial->fileurl);
+          return;
+      }
 
       // allow unrestricted pages
       public function beforeFilter(Event $event) {
