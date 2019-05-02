@@ -39,6 +39,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                   <th >Fee Name</th>
                 <th>Amount</th>
                 <th>Date</th>
+                 <th>Session</th>
                 <th>Status</th>
                 <th >Action</th>
             </tr>
