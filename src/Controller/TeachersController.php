@@ -781,6 +781,16 @@
       
       
       
+      //teachers method for managing his students results
+      public function manageresults(){
+          
+          
+          
+           $this->viewBuilder()->setLayout('adminbackend');
+          
+      }
+  
+      
       
       
   }

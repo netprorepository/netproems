@@ -14,7 +14,7 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <?= $this->Html->image($teacher->user->passport, ['alt' => 'EMS', 'class' => 'img-responsive avatar-view', "width" => "100%", "height" => "300px"]) ?>
+                <?= $this->Html->image($teacher->passport, ['alt' => 'EMS', 'class' => 'img-responsive avatar-view', "width" => "100%", "height" => "300px"]) ?>
             </div>
             <!--/end card body-->
         </div>
@@ -90,7 +90,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Department</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $teacher->user->department->name ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $teacher->department->name ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-home fa-2x text-gray-300"></i>
