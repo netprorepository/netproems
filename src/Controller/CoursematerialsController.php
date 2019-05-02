@@ -122,7 +122,7 @@
               $file_name = $file['name'];
 
               if (!file_exists($folder . $file_name . $ext)) {
-                  $file_name = $this->GenerateUrl($file_name);
+                  $file_name = $this->GenerateUrl($file_name).$ext;
 
                   move_uploaded_file($file["tmp_name"], $folder . $file_name);
 
