@@ -46,8 +46,8 @@ $userrole = $this->request->getSession()->read('usersroles');
 
 
                                             <td class="actions">
-                                                <?= $this->Html->link(__(' '), ['controller'=>'Subjects','action' => 'view', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view subject']) ?>
-                                                <?= $this->Html->link(__(' '), ['controller'=>'Topics','action' => 'edittopic', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-primary fa fa-edit']) ?>
+                                                <?= $this->Html->link(__(' '), ['controller'=>'Subjects','action' => 'viewsubject', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view subject']) ?>
+                                                <?= $this->Html->link(__(' '), ['controller'=>'Coursematerials','action' => 'uploadmaterial', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'fa fa-upload btn btn-round btn-primary','title'=>'upload course material']) ?>
                                               <?= $this->Html->link(__('Add Contaent'), ['controller'=>'Teachers','action' => 'addtopic', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-success fa fa-eye','title'=>'add course contents']) ?> 
                                                  <?= $this->Html->link(__('View Contaents'), ['controller'=>'Topics','action' => 'viewcontents', $subjects->id, $this->GenerateUrl($subjects->name)], ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view contents']) ?> 
 										
