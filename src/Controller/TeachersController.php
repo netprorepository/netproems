@@ -783,10 +783,46 @@
       
       //teachers method for managing his students results
       public function manageresults(){
+           $teacher = $this->Teachers->find()->contain(['Subjects'])->where(['user_id'=>$this->Auth->user('id')])->first();
+         if(!$teacher){
+              $this->Flash->error(__('Wrong access type'));
+             return $this->redirect(['controller'=>'Students','action' => 'index']);
+         }
+          $resultsTable = TableRegistry::get('Results');
+          if ($this->request->is('post')) {
+               $session_id = $this->request->data('session_id');
+              $semester_id = $this->request->data('semester_id');
+              $course_id = $this->request->data('subject_id');
+           
+              if (!empty($course_id)) {
+                  $conditions['Results.subject_id'] = $course_id;
+              }
+              if (!empty($session_id)) {
+                  $conditions['Results.session_id'] = $session_id;
+              }
+              if (!empty($semester_id)) {
+                  $conditions['Results.semester_id'] = $semester_id;
+              }
+
+              $results = $resultsTable->find()
+                      ->contain(['Students', 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions','Users'])
+                      ->where($conditions);
+              //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
+              $this->set('results', $this->paginate($results));
+          }
           
-          
-          
-           $this->viewBuilder()->setLayout('adminbackend');
+          $teacher_subjects = [];
+          foreach ($teacher->subjects as $subject){
+              array_push($teacher_subjects, $subject->id);
+          } 
+          $subjects =  $resultsTable->Subjects->find('list', ['limit' => 200])
+                  ->where(['id IN '=>$teacher_subjects])
+                  ->order(['name' => 'ASC']);
+          $semesters =  $resultsTable->Semesters->find('list', ['limit' => 200]);
+          $sessions =  $resultsTable->Sessions->find('list', ['limit' => 200]);
+          $this->viewBuilder()->setLayout('adminbackend');
+          $this->set(compact('result','subjects', 'semesters', 'sessions'));
+    
           
       }
   
