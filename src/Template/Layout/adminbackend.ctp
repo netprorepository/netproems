@@ -311,11 +311,14 @@
   if ($user['role_id'] == 3) {
       echo $this->Html->link(__(' My Courses'), ['controller' => 'Teachers', 'action' => 'assignedcourses'], ['class' => 'collapse-item', 'title' => 'view assigned courese']);
       echo $this->Html->link(__(' Manage Topics'), ['controller' => 'Teachers', 'action' => 'mytopics'], ['class' => 'collapse-item', 'title' => 'view and update topics']);
-
+     echo $this->Html->link(__(' Upload Materials'), ['controller' => 'Coursematerials', 'action' => 'uploadmaterial'], ['class' => 'collapse-item', 'title' => 'upload course materials']);
+ 
        }
   if ($user['role_id'] == 2 & empty($is_owing)) {
       echo $this->Html->link(__(' My Courses'), ['controller' => 'Students', 'action' => 'mycourses'], ['class' => 'collapse-item', 'title' => 'view assigned courese']);
-     echo $this->Html->link(__(' My Results'), ['controller' => 'Results', 'action' => 'myresults'], ['class' => 'collapse-item', 'title' => 'check results']);
+      echo $this->Html->link(__(' Course Materials'), ['controller' => 'Students', 'action' => 'coursematerials'], ['class' => 'collapse-item', 'title' => 'course materials']);
+    
+      echo $this->Html->link(__(' My Results'), ['controller' => 'Results', 'action' => 'myresults'], ['class' => 'collapse-item', 'title' => 'check results']);
     
        }
 ?>
@@ -588,22 +591,22 @@
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $user['fname'] . ' ' . $user['lname'] ?></span>
        <?php // debug(json_encode( $user['role_id'], JSON_PRETTY_PRINT)); exit;
                       if($user['role_id']===3){ 
-                          $teacher = $this->request->getSession()->read('teacher');
-                          $this->Html->image($teacher->passport, ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']);
+                          $dteacher = $this->request->getSession()->read('teacher');
+                       
+                        echo $this->Html->image($dteacher->passport, ['alt' => 'EMS', 'class' => 'img-profile rounded-circle']);
                 
             }
              elseif($user['role_id']==2){
-                      $teacher = $this->request->getSession()->read('student');
-                          $this->Html->image($student->passport, ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']);
+             
+                      $student = $this->request->getSession()->read('student');
+                         echo $this->Html->image($student->passporturl, ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']);
                 
                     }
                     elseif($user['role_id']==1){
                     echo $this->Html->image($user['passport'], ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']);
                     }
             ?>
-                                        <?php echo $this->Html->image($user['passport'], ['alt' => 'EMS', 'href' => '/', 'class' => 'img-profile rounded-circle']) ?>
-
-                                </a>
+                                        </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                   <?php if ( $user['role_id']==1) {  
