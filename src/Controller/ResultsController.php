@@ -57,7 +57,7 @@
               }
 
               $results = $this->Results->find()
-                      ->contain(['Students', 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions'])
+                      ->contain(['Students', 'Faculties', 'Departments', 'Subjects', 'Semesters', 'Sessions','Users'])
                       ->where($conditions);
               //debug(json_encode($conditions, JSON_PRETTY_PRINT)); exit;
               $this->set('results', $this->paginate($results));
