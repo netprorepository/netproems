@@ -91,7 +91,7 @@
             <?php foreach ($results as $result): ?>
             <tr>
               
-                <td><?= $result->has('student') ? $this->Html->link($result->student->fname, ['controller' => 'Students', 'action' => 'view', $result->student->id]) : '' ?></td>
+                <td><?= $result->has('student') ? $this->Html->link($result->student->fname, ['controller' => 'Teachers', 'action' => 'viewstudent', $result->student->id,$this->generateurl($result->student->fname)]) : '' ?></td>
                 <td><?= $result->has('faculty') ? $this->Html->link($result->faculty->name, ['controller' => 'Faculties', 'action' => 'view', $result->faculty->id]) : '' ?></td>
                 <td><?= $result->has('department') ? $this->Html->link($result->department->name, ['controller' => 'Departments', 'action' => 'view', $result->department->id]) : '' ?></td>
                 <td><?= $result->has('subject') ? $this->Html->link($result->subject->name, ['controller' => 'Subjects', 'action' => 'view', $result->subject->id]) : '' ?></td>
