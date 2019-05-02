@@ -241,6 +241,7 @@
                                   echo $this->Html->link('Message To Students', ['controller' => 'Students', 'action' => 'newmessagetostudents'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
                                   echo $this->Html->link('Message To Teachers', ['controller' => 'Teachers', 'action' => 'newmessagetoteachers'], ['title' => 'Direct admision', 'class' => 'collapse-item']);
                                   echo $this->Html->link('Message To Parents', ['controller' => 'Users', 'action' => 'newmessagetoparents'], ['title' => 'Manage Applicants', 'class' => 'collapse-item']);
+                                 echo $this->Html->link('Notifications', ['controller' => 'Notifications', 'action' => 'index'], ['title' => 'Manage Notifications', 'class' => 'collapse-item']);
                                  
                                   ?>
                               </div>
