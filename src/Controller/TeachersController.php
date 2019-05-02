@@ -827,7 +827,32 @@
       }
   
       
-      
+      //method that verifies that the person currently loggedin is a teacher
+      public function isteacher(){
+          $teacher = $this->Teachers->find()->contain(['Subjects','Departments'])->where(['user_id'=>$this->Auth->user('id')])->first();
+         if(!$teacher){
+              $this->Flash->error(__('Wrong access type'));
+             return $this->redirect(['controller'=>'Students','action' => 'index']);
+         }else{ //this is a valid teacher so go on
+             return $teacher;
+         }
+          
+          
+      }
+  
+      //teachers method for viewing a student
+        public function viewstudent($id = null) {
+              $studentstable = TableRegistry::get('Students');
+            //ensure this is a teacher
+          $teacher = $this->isteacher();
+          $student = $studentstable->get($id, [
+              'contain' => ['Departments.Subjects', 'States', 'Countries', 'Users', 'Subjects','Invoices.Fees',
+                  'Invoices.Sessions','Results.Sessions','Results.Semesters','Results.Subjects']
+          ]);
+
+          $this->set('student', $student);
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
       
   }
   
