@@ -59,8 +59,9 @@ $userrole = $this->request->getSession()->read('usersroles');
                 <td><?= $this->Number->format($notification->viewcount) ?></td>
                 <td class="actions">
                    
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $notification->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $notification->id], ['confirm' => __('Are you sure you want to delete # {0}?', $notification->id)]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'editnotification', $notification->id,$notification->title],['class'=>'btn btn-primary fa fa-edit','title'=>'update notification']) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $notification->id], 
+                            ['confirm' => __('Are you sure you want to delete # {0}?', $notification->id),'class'=>'btn btn-danger','title'=>'delete notification']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

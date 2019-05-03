@@ -87,7 +87,7 @@
                                   <h6 class="collapse-header">Manage Admins:</h6>
                                   <?php
                                   echo $this->Html->link('Manage Admins', ['controller' => 'Users', 'action' => 'manageadmins'], ['title' => 'manage admins', 'class' => 'collapse-item']);
-                                  echo $this->Html->link('New Admin', ['controller' => 'Users', 'action' => 'newadmin'], ['title' => 'add new admin', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('New Admin', ['controller' => 'Admins', 'action' => 'newadmin'], ['title' => 'add new admin', 'class' => 'collapse-item']);
                                 echo '<h6 class="collapse-header">Manage Teachers</h6>';
                                   echo $this->Html->link('Manage Teacher', ['controller' => 'Teachers', 'action' => 'manageteachers'], ['title' => 'Manage Teachers', 'class' => 'collapse-item']);
       echo $this->Html->link('Assign Subject', ['controller' => 'Teachers', 'action' => 'assignsubjectstoteacher'], ['title' => 'Assign Subjects', 'class' => 'collapse-item']);
@@ -639,7 +639,7 @@
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
 <?= $this->Flash->render() ?>
-                        <div id="notify"> </div>
+                       
                         <?= $this->fetch('content') ?>
                     </div>
                     <!-- /.container-fluid -->
