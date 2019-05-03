@@ -484,7 +484,7 @@
                                 <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-bell fa-fw"></i>
                                     <!-- Counter - Alerts -->
-                                    <span class="badge badge-danger badge-counter">3+</span>
+                                    <span class="badge badge-info badge-counter">1+</span>
                                 </a>
                                 <!-- Dropdown - Alerts -->
                                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
@@ -639,7 +639,7 @@
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
 <?= $this->Flash->render() ?>
-
+                        <div id="notify"> </div>
                         <?= $this->fetch('content') ?>
                     </div>
                     <!-- /.container-fluid -->
@@ -730,10 +730,25 @@
             
         </script>
         <script>
-function getnotificationdata(){
-                alert('am called');
+function getnotificationdata(noteid){
+              //  alert(noteid);
+                 $.ajax({
+        url: '../Notifications/getnote/'+noteid,
+        method: 'GET',
+        dataType: 'text',
+        success: function(response) {
+            //console.log(response);
+           // $('#noteModal').modal('show'); 
+           
+            document.getElementById('notify').innerHTML = "";
+            document.getElementById('notify').innerHTML = response;
+            //location.href = redirect;
+        }
+    });
+
             }
             </script>
+           
     </body>
 
 </html>
