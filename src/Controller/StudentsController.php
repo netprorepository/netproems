@@ -450,7 +450,7 @@
       public function dashboard() {
           $student = $this->Students->find()
                           ->where(['user_id' => $this->Auth->user('id')])
-                          ->contain(['Fees', 'Subjects', 'Departments.Subjects', 'Invoices', 'Departments.Fees'])->first();
+                          ->contain(['Fees', 'Subjects', 'Departments.Subjects', 'Invoices', 'Departments.Fees','Levels'])->first();
           $counter = 0;
           //debug(json_encode( $student, JSON_PRETTY_PRINT));exit;
           //check for any assigned fees
