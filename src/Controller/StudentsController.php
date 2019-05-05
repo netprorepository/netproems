@@ -1181,6 +1181,50 @@
           return;
       }
 
+     //method that gets the countries in a selected continent
+     public function getcountries($continent_id){
+         $continents_Table = TableRegistry::get('Continents');
+         $countries = $continents_Table->get('list')->where(['continent_id'=>$continent_id]);
+         $this->set('countries',$countries);
+         
+     }
+
+
+
+
+
+
+
+
+
+
+     //student method for requesting for transcript
+      public function requesttrnscript(){
+          //ensure this is a student
+          $student = $this->isstudent();
+           $trequest_Table = TableRegistry::get('Trequests');
+           $continents_Table = TableRegistry::get('Continents');
+           $trequest = $trequest_Table->newEntity();
+           $continent_costs = $continents_Table->find();
+           if ($this->request->is('post')) {
+               
+           }
+          
+           $continents = $trequest_Table->Continents->find('list', ['limit' => 200]);
+        $countries = $trequest_Table->Countries->find('list', ['limit' => 200]);
+        $states = $trequest_Table->States->find('list', ['limit' => 200]);
+        $couriers = $trequest_Table->Couriers->find('list', ['limit' => 200]);
+        $this->set(compact('trequest', 'students', 'continents', 'countries', 'states', 'couriers','continent_costs '));
+         $this->set('continent_costs', $continent_costs);
+           $this->viewBuilder()->setLayout('adminbackend');
+          
+      }
+
+
+
+
+
+
       // allow unrestricted pages
       public function beforeFilter(Event $event) {
           $this->Auth->allow(['newapplicant', 'getstates', 'checkstatus']);
