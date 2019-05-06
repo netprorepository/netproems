@@ -18,14 +18,16 @@
   class TransactionsController extends AppController {
 
       //go to paystack for payment
-      public function gotopaystack($mail, $phone, $name, $amount, $student_id) {
+      public function gotopaystack($mail, $phone, $name, $amount, $student_id,$fee_id) {
           //initialize the transaction before going to paystack
-
+           $settings = $this->request->getSession()->read('settings');
+       //  echo $student_id; exit;
           $transaction = $this->Transactions->newEntity();
           $transaction->student_id = $student_id;
-
+          $transaction->fee_id = $fee_id;
           $transaction->gresponse = 'initialized';
           $transaction->amount = $amount;
+          $transaction->session_id = $settings['session_id'];
           $transaction->payref = uniqid('NetProEms');
           $transaction->paystatus = 'initialized';
 
