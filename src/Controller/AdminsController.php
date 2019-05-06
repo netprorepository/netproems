@@ -35,7 +35,34 @@ class AdminsController extends AppController
         $this->viewBuilder()->setLayout('adminbackend');
     }
 
-    /**
+    
+    //admin method for managing transcript requests
+    public function managetranscriptorders(){
+        //ensure this is an admin
+        $this->isadmin();
+        $trequest_table = TableRegistry::get('Trequests');
+        $trequests = $trequest_table->find()->contain(['Students']);
+        
+        $this->set('trequests',$trequests);
+        $this->viewBuilder()->setLayout('adminbackend');
+    }
+
+    
+
+
+//method that ensures this person is an admin
+      private function isadmin(){
+          $admin = $this->Admins->find()->where(['user_id'=>$this->Auth->user('id')]);
+          if(!$admin){
+              $this->Flash->error(__('Sorry, unknown admin account'));
+                      return $this->redirect(['controller'=>'Students','action' => 'index']);
+          }
+          else{
+              return $admin;
+          }
+      }
+
+            /**
      * View method
      *
      * @param string|null $id Admin id.
@@ -88,7 +115,7 @@ class AdminsController extends AppController
                   $usercontroller->makeLog($title, $user_id, $description, $ip, $type);
                 $this->Flash->success(__('The admin has been saved.'));
 
-                return $this->redirect(['action' => 'manageadmins']);
+                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The admin could not be saved. Please, try again.'));
         }
