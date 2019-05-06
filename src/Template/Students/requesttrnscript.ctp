@@ -5,11 +5,11 @@
             <!-- Nested Row within Card Body -->
             <div class="row">
                
-           <!--          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>-->
+                   <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
                 <div class="col-lg-12">
                     
                     <div class="p-5">
-                        <strong> Continents and their respective cost of transcript delivery</strong>
+                        <strong class="text-center"> Continents and Their Respective Cost of Transcript Delivery</strong>
                 <?php foreach ($continent_costs  as $continent) { 
                     
                 echo '<br />'.$continent->name.'  - '    .$continent->cost;
@@ -64,12 +64,12 @@
           </div>
           <div class="form-group row"> 
                              <div class="col-sm-4 mb-3 mb-sm-0">       
-            <?=$this->Form->control('amount',['label'=>'Cost','required','class'=>'form-control form-control-user','value'=>'','id'=>'amount'])?>
+            <?=$this->Form->control('amount',['label'=>'Cost','class'=>'form-control form-control-user','value'=>'','id'=>'amount'])?>
                              </div>
           </div>
                                  </fieldset>
                        <br /> <br />
-<?= $this->Form->button('Submit', ['class' => 'btn btn-primary btn-user btn-block']) ?>
+<?= $this->Form->button('Submit & Pay Online', ['class' => 'btn btn-primary btn-user btn-block']) ?>
 <?= $this->Form->end() ?>
                     </div>
                 </div>
