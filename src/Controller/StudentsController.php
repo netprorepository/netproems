@@ -426,7 +426,8 @@
                       $transactionController = new TransactionsController();
                       $name = $fname . ' ' . $lname;
                       $amount = 2000;
-                      $url = $transactionController->gotopaystack($email, $student->phone, $name, $amount, $student->id);
+                      $fee_id = 2;
+                      $url = $transactionController->gotopaystack($email, $student->phone, $name, $amount, $student->id,$fee_id);
                       $this->Flash->success(__('Your application has been submitted successfully. The admin officer would go through'
                                       . ' your application and contact you shortly. You can also check your application status by simply loging into the system'
                                       . ' with the email address you just provided and a default password of student123'));
@@ -557,13 +558,14 @@
       //method that creates invoices for students
       private function creatnewinvoice($student_id, $fee_id, $amount) {
           //  echo 'yest i got here'; exit;
+          $settings = $this->request->getSession()->read('settings');
           //get the invoice table
           $invoices_Table = TableRegistry::get('Invoices');
           $invoice = $invoices_Table->newEntity();
           $invoice->student_id = $student_id;
           $invoice->fee_id = $fee_id;
           $invoice->amount = $amount;
-          $invoice->session_id = 1;
+          $invoice->session_id = $settings->session_id;
           $invoice->invoiceid = "NETEMS/" . $fee_id . '/' . $student_id;
           $invoices_Table->save($invoice);
           return;
@@ -592,7 +594,6 @@
           $name = $student->fname . ' ' . $student->lname;
           //initialize the transaction before going to paystack
           $settings = $this->request->getSession()->read('settings');
-
           $transaction = $transactions_Table->newEntity();
           $transaction->student_id = $student_id;
           $transaction->fee_id = $invoice->fee_id;
@@ -1202,11 +1203,34 @@
       public function requesttrnscript(){
           //ensure this is a student
           $student = $this->isstudent();
+          
            $trequest_Table = TableRegistry::get('Trequests');
            $continents_Table = TableRegistry::get('Continents');
            $trequest = $trequest_Table->newEntity();
            $continent_costs = $continents_Table->find();
            if ($this->request->is('post')) {
+              // debug(json_encode( $this->request->getData(), JSON_PRETTY_PRINT)); exit;
+               $continentid = $this->request->getData('continent_id');
+               $continent = $continents_Table->get($continentid);
+               $trequest = $trequest_Table->patchEntity($trequest, $this->request->getData());
+               $trequest->amount = $continent->cost;
+               $trequest->student_id =  $student->id;
+               if($trequest_Table->save($trequest)){
+                   //created invoice
+                   $this->creatnewinvoice($student->id, 5, $continent->cost);
+                    //proceed to payment gateway for payment
+                      $transactionController = new TransactionsController();
+                      $name = $student->fname . ' ' . $student->lname;
+                      
+                      $url = $transactionController->gotopaystack($student->email, $student->phone, $name, $continent->cost, $student->id,5);
+                   $this->Flash->success(__('Success, your transcript order has been submitted and would be processed within the next ten days'));
+                    return $this->redirect($url);
+               }
+               else{
+               $this->Flash->error(__('Sorry, unable to submit order. Please try again'));
+                   // return $this->redirect(['action' => 'myinvoices']);    
+               }
+                
                
            }
           
