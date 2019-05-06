@@ -41,7 +41,8 @@ class AdminsController extends AppController
         //ensure this is an admin
         $this->isadmin();
         $trequest_table = TableRegistry::get('Trequests');
-        $trequests = $trequest_table->find()->contain(['Students']);
+        $trequests = $trequest_table->find()
+                ->contain(['Students','Countries','Continents','States','Couriers'])->order(['orderdate'=>'DESC']);
         
         $this->set('trequests',$trequests);
         $this->viewBuilder()->setLayout('adminbackend');
