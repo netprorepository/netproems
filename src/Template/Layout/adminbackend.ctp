@@ -184,6 +184,8 @@
                                   echo $this->Html->link('Manage Sessions', ['controller' => 'Sessions', 'action' => 'managesessions'], ['title' => 'manage manage sessions', 'class' => 'collapse-item']);
                                   echo ' <h6 class="collapse-header">Manage Semester:</h6>';
                                   echo $this->Html->link('Manage Semesters', ['controller' => 'Semesters', 'action' => 'managesemesters'], ['title' => 'manage manage sessions', 'class' => 'collapse-item']);
+                                   echo ' <h6 class="collapse-header">Transcript Requests :</h6>';
+                                  echo $this->Html->link('Manage Requests', ['controller' => 'Admins', 'action' => 'managetranscriptorders'], ['title' => 'manage transcript requests', 'class' => 'collapse-item']);
                                   
                                   ?> 
                               
@@ -320,6 +322,7 @@
       echo $this->Html->link(__(' Course Materials'), ['controller' => 'Students', 'action' => 'coursematerials'], ['class' => 'collapse-item', 'title' => 'course materials']);
     
       echo $this->Html->link(__(' My Results'), ['controller' => 'Results', 'action' => 'myresults'], ['class' => 'collapse-item', 'title' => 'check results']);
+    echo $this->Html->link(__(' Request Transcript'), ['controller' => 'Students', 'action' => 'requesttrnscript'], ['class' => 'collapse-item', 'title' => 'request for transcript']);
     
        }
 ?>
