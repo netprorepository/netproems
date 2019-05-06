@@ -51,7 +51,7 @@ class UsersController extends AppController {
                      $this->request->getSession()->write('teacher', $teacher);
                    return $this->redirect(['controller' => 'Teachers', 'action' => 'dashboard']);
                 }
-                else{
+                elseif($user['role_id']==1){
                 return $this->redirect(['controller' => 'Users', 'action' => 'dashboard']);
                 }
             } else {
