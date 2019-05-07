@@ -51,6 +51,21 @@ class AdminsController extends AppController
     }
 
     
+    
+    //admin method for generating transcripts
+    public function generatetranscript($student_id){
+        //ensure this is an admin
+        $this->isadmin();
+         $stdents_table = TableRegistry::get('Students');
+          $student = $stdents_table->get($student_id, [
+              'contain' => ['Departments.Subjects', 'Users','Results.Sessions', 'Results.Semesters','Trequests',
+                  'Results.Subjects']
+          ]);
+          $this->set('student', $student);
+          debug(json_encode( $student->results, JSON_PRETTY_PRINT)); exit;
+      
+        $this->viewBuilder()->setLayout('adminbackend');
+    }
 
 
 //method that ensures this person is an admin
