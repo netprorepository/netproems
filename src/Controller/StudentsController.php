@@ -50,9 +50,9 @@
        */
       public function viewstudent($id = null) {
           $student = $this->Students->get($id, [
-              'contain' => ['Departments', 'States', 'Countries', 'Users', 'Fees', 'Subjects']
+              'contain' => ['Departments.Subjects', 'States', 'Countries', 'Users', 'Subjects', 'Invoices.Fees',
+                              'Invoices.Sessions', 'Results.Sessions', 'Results.Semesters', 'Results.Subjects']
           ]);
-
           $this->set('student', $student);
           $this->viewBuilder()->setLayout('adminbackend');
       }
@@ -568,7 +568,7 @@
           $invoice->session_id = $settings->session_id;
           $invoice->invoiceid = "NETEMS/" . $fee_id . '/' . $student_id;
           $invoices_Table->save($invoice);
-          return;
+          return $invoice->id;
       }
 
 //method that shows a student all his invoices
@@ -1217,12 +1217,12 @@
                $trequest->student_id =  $student->id;
                if($trequest_Table->save($trequest)){
                    //created invoice
-                   $this->creatnewinvoice($student->id, 5, $continent->cost);
+                  $incoice_id = $this->creatnewinvoice($student->id, 5, $continent->cost);
                     //proceed to payment gateway for payment
-                      $transactionController = new TransactionsController();
-                      $name = $student->fname . ' ' . $student->lname;
+                     // $transactionController = new TransactionsController();
+                     // $name = $student->fname . ' ' . $student->lname;
                       
-                      $url = $transactionController->gotopaystack($student->email, $student->phone, $name, $continent->cost, $student->id,5);
+                      $url = $this->gotopaystack($incoice_id, $student->id);
                    $this->Flash->success(__('Success, your transcript order has been submitted and would be processed within the next ten days'));
                     return $this->redirect($url);
                }
