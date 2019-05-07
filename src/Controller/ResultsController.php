@@ -362,6 +362,32 @@
           $this->viewBuilder()->setLayout('adminbackend');
       }
 
+      
+       //calculate CGPA
+    public function calculateCGPA($regnumb) {
+        //$results_table = TableRegistry::get('Results');
+        $courses_table = TableRegistry::get('Subjects');
+        $constants_table = TableRegistry::get('Constants');
+        $total = 0;
+        $totalUnits = 0;
+        $results = $this->Results->find()->where(['regnumb' => $regnumb]);
+        $l = 0;
+
+        //  debug(json_encode( $results, JSON_PRETTY_PRINT)); exit;
+        foreach ($results as $result) {
+            $credit_unit = $courses_table->get($result->course_id);
+            $grade_point_quality = $constants_table->find()->where(['name' => $result->grade])->first();
+            $course_point = $grade_point_quality->value * $credit_unit->creditload;
+            $total += $course_point;
+            $totalUnits += $credit_unit->creditload;
+            $l++;
+        }
+        return number_format($total / $totalUnits, 2);
+    }
+      
+      
+      
+      
       /**
        * Delete method
        *
