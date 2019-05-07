@@ -12,7 +12,7 @@
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
 namespace App\View;
-
+use Cake\ORM\TableRegistry;
 use Cake\View\View;
 
 /**
@@ -48,4 +48,29 @@ class AppView extends View
   //Remove a - at the beginning or end and make lowercase
   return strtolower (preg_replace ('/^-/', '', preg_replace ('/-$/', '', $s)));
 }
+
+
+  //calculate CGPA
+    public function calculateCGPA($regnumb) {
+        $results_table = TableRegistry::get('Results');
+        $courses_table = TableRegistry::get('Subjects');
+        $constants_table = TableRegistry::get('Constants');
+        $total = 0;
+        $totalUnits = 0;
+        $results = $results_table->find()->where(['regno' => $regnumb]);
+        $l = 0;
+
+        //  debug(json_encode( $results, JSON_PRETTY_PRINT)); exit;
+        foreach ($results as $result) {
+            $credit_unit = $courses_table->get($result->subject_id);
+            $grade_point_quality = $constants_table->find()->where(['name' => $result->grade])->first();
+            $course_point = $grade_point_quality->value * $credit_unit->creditload;
+            $total += $course_point;
+            $totalUnits += $credit_unit->creditload;
+            $l++;
+        }
+        return number_format($total / $totalUnits, 2);
+    }
+      
+    
 }
