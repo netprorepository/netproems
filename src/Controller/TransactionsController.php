@@ -199,9 +199,9 @@
               $transactions = $this->Transactions->find()
                       ->contain(['Students', 'Fees', 'Sessions'])
                       ->where(['DATE(transdate) >= ' => $from])
+                      ->andwhere(['paystatus'=>'completed'])
                       ->andWhere(['DATE(transdate) <= ' => $to])
                       ->order(['transdate' => 'DESC']);
-              ;
 
 
 //             $transactions = $this->Transactions->find()
@@ -213,6 +213,7 @@
           } else {
               $transactions = $this->Transactions->find()
                       ->contain(['Students', 'Fees', 'Sessions'])
+                      ->where(['paystatus'=>'completed'])
                       ->order(['transdate' => 'DESC']);
               //get the base url
           }
