@@ -41,9 +41,9 @@ $userrole = $this->request->getSession()->read('usersroles');
                   <thead>
             <tr>
           
-                 <th scope="col"><?= $this->Paginator->sort('first Name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('last Name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('M Name') ?></th>
+                 <th scope="col"><?= $this->Paginator->sort('Name') ?></th>
+               
+<!--                <th scope="col"><?= $this->Paginator->sort('M Name') ?></th>-->
                 <th scope="col"><?= $this->Paginator->sort('DOB') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date Admitted') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Department') ?></th>
@@ -73,9 +73,9 @@ $userrole = $this->request->getSession()->read('usersroles');
               <tfoot>
             <tr>
           
-                 <th scope="col"><?= $this->Paginator->sort('first Name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('last Name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('M Name') ?></th>
+                 <th scope="col"><?= $this->Paginator->sort('Name') ?></th>
+               
+<!--                <th scope="col"><?= $this->Paginator->sort('M Name') ?></th>-->
                 <th scope="col"><?= $this->Paginator->sort('DOB') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date Admitted') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Department') ?></th>
@@ -106,11 +106,15 @@ $userrole = $this->request->getSession()->read('usersroles');
             <?php foreach ($students as $student): ?>
             <tr>
                 
-                <td><?= h($student->fname) ?></td>
-                <td><?= h($student->lname) ?></td>
-                <td><?= h($student->mname) ?></td>
+                <td>
+                    <?= $this->Html->link(h($student->fname. ' '.$student->lname), ['action' => 'viewstudent', $student->id,$this->Generateurl($student->fname)],
+                            ['class'=>'fa fa-eye','title'=>'view student details']) ?>
+                
+                </td>
+                
+<!--                <td><?= h($student->mname) ?></td>-->
                 <td><?= h($student->dob) ?></td>
-                <td><?= h(date('D, d M Y H:i a', strtotime($student->joindate))) ?></td>
+                <td><?= h(date('D, d M Y', strtotime($student->joindate))) ?></td>
                 <td><?= $student->has('department') ? $this->Html->link($student->department->name, ['controller' => 'Departments', 'action' => 'view', $student->department->id]) : '' ?></td>
 <!--                <td><?= h($student->olevelresulturl) ?></td>
                 <td><?= $this->Number->format($student->jamb) ?></td>
@@ -133,8 +137,7 @@ $userrole = $this->request->getSession()->read('usersroles');
               
                 <td><?= h($student->regno) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__(' '), ['action' => 'viewstudent', $student->id,$this->Generateurl($student->fname)],
-                            ['class'=>'btn btn-round btn-info fa fa-eye','title'=>'view student details']) ?>
+                    
                     <?= $this->Html->link(__(' '), ['action' => 'updatestudent', $student->id,$this->Generateurl($student->fname)],
                             ['class'=>'btn btn-round btn-primary fa fa-edit','title'=>'update student details']) ?>
                     <?= $this->Form->postLink(__(' '), ['action' => 'deactivate', $student->id], ['confirm' => __('Are you sure you want to deactivate # {0}?', $student->fname),'class'=>'btn btn-round btn-danger fa fa-times','title'=>'deactivate student']) ?>
