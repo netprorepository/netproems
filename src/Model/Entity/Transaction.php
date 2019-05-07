@@ -41,6 +41,7 @@ class Transaction extends Entity
         'gresponse' => true,
         'session_id' => true,
         'fee_id' => true,
+        'state_id' => true,
         'student' => true,
         'session' => true,
         'fee' => true
