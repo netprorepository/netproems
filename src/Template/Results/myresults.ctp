@@ -99,7 +99,9 @@ $userrole = $this->request->getSession()->read('usersroles');
             </tr>
             <?php endforeach; ?>
         </tbody>
+       
      </table>
+                   CGPA : <?= $this->calculateCGPA($student->regno) ?>
               </div>
             </div>
           </div>
