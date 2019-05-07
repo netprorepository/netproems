@@ -10,7 +10,7 @@ $userdata = $this->request->getSession()->read('usersinfo');
     <div class="card shadow mb-4">
       <!-- Card Header - Dropdown -->
       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Regno : <?= h($student->regno) ?></h6>
+        <h6 class="m-0 font-weight-bold text-primary">Regno : <?=$student->regno?></h6>
       </div>
       <!-- Card Body -->
       <div class="card-body">
@@ -27,7 +27,11 @@ $userdata = $this->request->getSession()->read('usersinfo');
     <div class="card shadow mb-4">
       <!-- Card Header - Dropdown -->
       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Overview</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Student Overview
+             </h6>
+           <span class="float-right">
+        <?= $this->Html->link(__('Update Profile'), ['controller' => 'Students', 'action' => 'updateprofile'],['class'=>'float-right']) ?>
+              </span>
       </div>
       <!-- Card Body -->
       <div class="card-body">
@@ -42,47 +46,10 @@ $userdata = $this->request->getSession()->read('usersinfo');
         </div>
         <!--/end no-gutters-->
         <hr/>
-        
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Date Of Birth</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $student->dob?></div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-          </div>
-        </div>
-        <!--/end no-gutters-->
-        <hr/>
-        
-         <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Father's Name</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= h($student->fathersname.'  - ('.$student->fathersjob.', '.$student->fatherphone.')') ?></div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-user-plus fa-2x text-gray-300"></i>
-          </div>
-        </div>
-        <!--/end no-gutters-->
-        <hr/>
-        
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Mother's Name</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= h($student->mothersname.'  - ('.$student->mothersjob.', '.$student->motherphone.')') ?></div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-user-plus fa-2x text-gray-300"></i>
-          </div>
-        </div>
-        <!--/end no-gutters-->
-        <hr/>
-        
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Email</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $student->user->username ?></div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $student->email ?></div>
           </div>
           <div class="col-auto">
             <i class="fas fa-envelope fa-2x text-gray-300"></i>
@@ -145,6 +112,30 @@ $userdata = $this->request->getSession()->read('usersinfo');
         </div>
         <!--/end no-gutters-->
         <hr/>
+        
+        Parents/Guardians
+         <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Father</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $student->fathersname.' - '. $student->fatherphone?></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-user fa-2x text-gray-300"></i>
+          </div>
+        </div>
+        <!--/end no-gutters-->
+        <hr/>
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Mother</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $student->mothersname.' - '. $student->motherphone?></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-user fa-2x text-gray-300"></i>
+          </div>
+        </div>
+        <!--/end no-gutters-->
+        <hr/>
        
       </div>
     </div>
@@ -152,191 +143,232 @@ $userdata = $this->request->getSession()->read('usersinfo');
   </div>
   <!--/end col-xl-8-->
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="students view large-9 medium-8 columns content">
-    <h3><?= h($student->id) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Fname') ?></th>
-            <td><?= h($student->fname) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Lname') ?></th>
-            <td><?= h($student->lname) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Mname') ?></th>
-            <td><?= h($student->mname) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Dob') ?></th>
-            <td><?= h($student->dob) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Department') ?></th>
-            <td><?= $student->has('department') ? $this->Html->link($student->department->name, ['controller' => 'Departments', 'action' => 'view', $student->department->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Olevelresulturl') ?></th>
-            <td><?= h($student->olevelresulturl) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Birthcerturl') ?></th>
-            <td><?= h($student->birthcerturl) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Othercerts') ?></th>
-            <td><?= h($student->othercerts) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Email') ?></th>
-            <td><?= h($student->email) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('State') ?></th>
-            <td><?= $student->has('state') ? $this->Html->link($student->state->name, ['controller' => 'States', 'action' => 'view', $student->state->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Country') ?></th>
-            <td><?= $student->has('country') ? $this->Html->link($student->country->name, ['controller' => 'Countries', 'action' => 'view', $student->country->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Address') ?></th>
-            <td><?= h($student->address) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Phone') ?></th>
-            <td><?= h($student->phone) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Fathersname') ?></th>
-            <td><?= h($student->fathersname) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Mothersname') ?></th>
-            <td><?= h($student->mothersname) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Fatherphone') ?></th>
-            <td><?= h($student->fatherphone) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Motherphone') ?></th>
-            <td><?= h($student->motherphone) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Fathersjob') ?></th>
-            <td><?= h($student->fathersjob) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Mothersjob') ?></th>
-            <td><?= h($student->mothersjob) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Passporturl') ?></th>
-            <td><?= h($student->passporturl) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('User') ?></th>
-            <td><?= $student->has('user') ? $this->Html->link($student->user->username, ['controller' => 'Users', 'action' => 'view', $student->user->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Regno') ?></th>
-            <td><?= h($student->regno) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($student->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Jamb') ?></th>
-            <td><?= $this->Number->format($student->jamb) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Joindate') ?></th>
-            <td><?= h($student->joindate) ?></td>
-        </tr>
-    </table>
-    <div class="related">
-        <h4><?= __('Related Fees') ?></h4>
-        <?php if (!empty($student->fees)): ?>
-        <table cellpadding="0" cellspacing="0">
+    
+  <div class="accordion" id="accordionExample">
+  <div class="card z-depth-0 bordered">
+    <div class="card-header bg-success" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne" style="color: white">
+          Courses
+        </button>
+      </h5>
+    </div>
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+      data-parent="#accordionExample">
+      <div class="card-body">
+         <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Student's Courses</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
             <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Name') ?></th>
-                <th scope="col"><?= __('Amount') ?></th>
-                <th scope="col"><?= __('User Id') ?></th>
-                <th scope="col"><?= __('Status') ?></th>
-                <th scope="col"><?= __('Startdate') ?></th>
-                <th scope="col"><?= __('Enddate') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+          
+                 <th >Course Name</th>
+                <th>Subject Code</th>
+                
+               
+               
             </tr>
-            <?php foreach ($student->fees as $fees): ?>
+                  </thead>
+            
+            
+              <tfoot>
             <tr>
-                <td><?= h($fees->id) ?></td>
-                <td><?= h($fees->name) ?></td>
-                <td><?= h($fees->amount) ?></td>
-                <td><?= h($fees->user_id) ?></td>
-                <td><?= h($fees->status) ?></td>
-                <td><?= h($fees->startdate) ?></td>
-                <td><?= h($fees->enddate) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Fees', 'action' => 'view', $fees->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Fees', 'action' => 'edit', $fees->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Fees', 'action' => 'delete', $fees->id], ['confirm' => __('Are you sure you want to delete # {0}?', $fees->id)]) ?>
-                </td>
+          
+                 <th >Course Name</th>
+                <th>Subject Code</th>
+                
+               
+            </tr>
+              </tfoot>
+            
+        
+         <tbody>
+            <?php //debug(json_encode( $mycourses->department->subjects, JSON_PRETTY_PRINT));exit;
+              foreach ($student->department->subjects as $subject): ?>
+            <tr>
+                
+                <td><?= h($subject->name) ?></td>
+                <td><?= h($subject->subjectcode) ?></td>
+              
+               
             </tr>
             <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
-    </div>
-    <div class="related">
-        <h4><?= __('Related Subjects') ?></h4>
-        <?php if (!empty($student->subjects)): ?>
-        <table cellpadding="0" cellspacing="0">
+            <!--  for any assigned course like carry over -->
+             <?php //debug(json_encode( $mycourses->department->subjects, JSON_PRETTY_PRINT));exit;
+              foreach ($student->subjects as $subject): ?>
             <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Name') ?></th>
-                <th scope="col"><?= __('Subjectcode') ?></th>
-                <th scope="col"><?= __('Department Id') ?></th>
-                <th scope="col"><?= __('Creditload') ?></th>
-                <th scope="col"><?= __('User Id') ?></th>
-                <th scope="col"><?= __('Created Date') ?></th>
-                <th scope="col"><?= __('Status') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($student->subjects as $subjects): ?>
-            <tr>
-                <td><?= h($subjects->id) ?></td>
-                <td><?= h($subjects->name) ?></td>
-                <td><?= h($subjects->subjectcode) ?></td>
-                <td><?= h($subjects->department_id) ?></td>
-                <td><?= h($subjects->creditload) ?></td>
-                <td><?= h($subjects->user_id) ?></td>
-                <td><?= h($subjects->created_date) ?></td>
-                <td><?= h($subjects->status) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Subjects', 'action' => 'view', $subjects->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Subjects', 'action' => 'edit', $subjects->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Subjects', 'action' => 'delete', $subjects->id], ['confirm' => __('Are you sure you want to delete # {0}?', $subjects->id)]) ?>
-                </td>
+                
+                <td><?= h($subject->name) ?></td>
+                <td><?= h($subject->subjectcode) ?></td>
+               
             </tr>
             <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
+        </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      </div>
     </div>
+  </div>
+  <div class="card z-depth-0 bordered">
+    <div class="card-header bg-info" id="headingTwo">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+          data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color: white">
+          Invoices
+        </button>
+      </h5>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+         <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Student Invoices</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+            <tr>
+          
+                 <th >Fee Name</th>
+                <th>Amount</th>
+                <th>Deadline</th>
+                <th>Payment Date</th>
+                 <th>Session</th>
+                <th>Status</th>
+              
+               
+            </tr>
+                  </thead>
+            
+            
+              <tfoot>
+            <tr>
+          
+                  <th >Fee Name</th>
+                <th>Amount</th>
+                <th>Deadline</th>
+                <th>Payment Date</th>
+                 <th>Session</th>
+                <th>Status</th>
+               
+            </tr>
+              </tfoot>
+            
+        
+         <tbody>
+            <?php foreach ($student->invoices as $invoice): ?>
+            <tr>
+                
+                <td><?= h($invoice->fee->name) ?></td>
+                <td><?= number_format($invoice->fee->amount) ?></td>
+                <td><?= date('d M Y', strtotime($invoice->fee->startdate)) ?></td>
+                <td><?= h($invoice->payday) ?></td>
+               <td><?= h($invoice->session->name) ?></td>
+               <td ><?php if($invoice->paystatus=="Unpaid"){
+               echo (' <span class="badge badge-warning">'.$invoice->paystatus.'</span>');}
+                   
+                   else{
+                        echo (' <span class="badge badge-success">'.$invoice->paystatus.'</span>');
+                   }?>
+               </td>
+               
+        
+                
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="card z-depth-0 bordered">
+    <div class="card-header bg-warning" id="headingThree">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+          data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="color: white">
+          Results
+        </button>
+      </h5>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
+           <?php if(!empty($student->results)){   ?>
+                   <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Student Results</h6>
+              <?php  
+                if($userdata['role_id']==1){
+                      echo $this->Html->link(' Get Transcript', ['controller' => 'Admins', 'action' => 'generatetranscript'], ['title' => 'generate student transcript', 'class' => 'btn btn-success float-right']);
+                    
+                    }
+                ?>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+            <tr>
+              
+              
+               
+                <th>Course</th>
+                <th >Semester</th>
+                <th >Session</th>
+                <th>Score</th>
+                <th>Grade</th>
+                <th >Remark</th>
+                
+                <th >Credit Load</th>
+            </tr>
+                  <tfoot>
+                       <tr>
+              
+               <th>Course</th>
+                <th >Semester</th>
+                <th >Session</th>
+                <th>Score</th>
+                <th>Grade</th>
+                <th >Remark</th>
+                
+                <th >Credit Load</th>
+            </tr>
+                  </tfoot>
+        </thead>
+        <tbody>
+            <?php foreach ($student->results as $result): ?>
+            <tr>
+              
+                <td><?= $result->subject->name?></td>
+                <td><?= $result->semester->name?></td>
+                <td><?= $result->session->name?></td>
+                <td><?= $this->Number->format($result->score) ?></td>
+                <td><?= h($result->grade) ?></td>
+                <td><?= h($result->remark) ?></td>
+               
+                <td><?= $this->Number->format($result->creditload) ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+     </table>
+              </div>
+            </div>
+          </div>
+    
+               <?php } ?>.
+      </div>
+    </div>
+  </div>
 </div>
+
+
