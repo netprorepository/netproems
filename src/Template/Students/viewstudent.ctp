@@ -309,7 +309,7 @@ $userdata = $this->request->getSession()->read('usersinfo');
               <h6 class="m-0 font-weight-bold text-primary">Student Results</h6>
               <?php  
                 if($userdata['role_id']==1){
-                      echo $this->Html->link(' Get Transcript', ['controller' => 'Admins', 'action' => 'generatetranscript'], ['title' => 'generate student transcript', 'class' => 'btn btn-success float-right']);
+                      echo $this->Html->link(' Get Transcript', ['controller' => 'Admins', 'action' => 'generatetranscript',$student->id], ['title' => 'generate student transcript', 'class' => 'btn btn-success float-right']);
                     
                     }
                 ?>
