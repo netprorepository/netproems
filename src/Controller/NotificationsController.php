@@ -1,6 +1,6 @@
 <?php
 namespace App\Controller;
-
+use Cake\Event\Event;
 use App\Controller\AppController;
 
 /**
@@ -36,7 +36,7 @@ class NotificationsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function getnote($id = null)
     {
         $notification = $this->Notifications->get($id, [
             'contain' => ['Users']
@@ -76,7 +76,7 @@ class NotificationsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function editnotification($id = null)
     {
         $notification = $this->Notifications->get($id, [
             'contain' => []
@@ -92,6 +92,7 @@ class NotificationsController extends AppController
         }
         $users = $this->Notifications->Users->find('list', ['limit' => 200]);
         $this->set(compact('notification', 'users'));
+          $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -112,5 +113,13 @@ class NotificationsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    
+      // allow unrestricted pages
+    public function beforeFilter(Event $event) {
+         $this->Auth->allow(['getnote']);
+        if (!$this->Auth->user()) {
+            $this->Auth->setConfig('authError', false);
+        }
     }
 }
