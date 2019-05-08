@@ -31,10 +31,8 @@ class UsersController extends AppController {
                 $this->updateLogout($user['id']);
                 $this->createLogin($user['id']);
                 //get the system settings and put it in session
-                $settings = $settings_Table->get(1);
-                $this->request->getSession()->write('settings', $settings);
-                // debug(json_encode($settings, JSON_PRETTY_PRINT)); exit;
-
+               // $settings = $settings_Table->get(1);
+                $this->request->getSession()->write('settings', $logo);
                 $this->request->getSession()->write('usersinfo', $user);
                 $this->request->getSession()->write('usersroles', $roles);
                 if($user['role_id']==2){
@@ -71,9 +69,10 @@ class UsersController extends AppController {
          $subjects = $subjects_Table->find()->count();
          $teachers = $teachers_Table->find()->count();
          $students = $students_Table->find()->where(['status'=>'Admitted'])->count();
+         $applied = $students_Table->find()->where(['status'=>'Applied'])->count();
           $pending_students = $students_Table->find()->where(['status'=>'Selected'])->count();
         $this->set('admin', $admin);
-        $this->set(compact('pending_students','students','teachers','subjects'));
+        $this->set(compact('pending_students','students','teachers','subjects','applied'));
         $this->viewBuilder()->setLayout('adminbackend');
     }
 
