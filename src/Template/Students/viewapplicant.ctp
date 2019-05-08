@@ -144,14 +144,14 @@
 ?>
                                 </div>
                                 <div class="col-sm-3 mb-3 mb-sm-0">
-<?= $this->Form->control('fees._ids', ['options' => $fees, 'label' => 'Select Fees', 'empty' => 'Select Fees', 'class' => 'select2_multiple form-control form-control-user', 'required']) ?>
+<?= $this->Form->control('fees._ids', ['options' => $fees, 'label' => 'Assign Fees(optional)', 'empty' => 'Select Fees', 'class' => 'select2_multiple form-control form-control-user', 'required']) ?>
                                 </div>
 
                             </div>   
 
                             <div class="form-group row">        
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-<?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Select Subjects', 'empty' => 'Select Subjects', 'class' => 'select2_multiple form-control form-control-user']) ?> 
+<?= $this->Form->control('subjects._ids', ['options' => $subjects, 'label' => 'Assign Subjects(optional)', 'empty' => 'Select Subjects', 'class' => 'select2_multiple form-control form-control-user']) ?> 
                                 </div>
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                    <?php $status = ['Selected'=>'Selected','Pending'=>'Pending','Rejected'=>'Rejected'];
