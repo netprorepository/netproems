@@ -27,7 +27,7 @@
           $transaction->fee_id = $fee_id;
           $transaction->gresponse = 'initialized';
           $transaction->amount = $amount;
-          $transaction->session_id = $settings['session_id'];
+          $transaction->session_id = $settings->session_id;
           $transaction->payref = uniqid('NetProEms');
           $transaction->paystatus = 'initialized';
 
