@@ -24,9 +24,10 @@ $userrole = $this->request->getSession()->read('usersroles');
           
                  <th >Fee Name</th>
                 <th>Amount</th>
-                <th>Date</th>
+                <th>Due</th>
                  <th>Session</th>
                 <th>Status</th>
+                 <th>Date Paid</th>
                 <th >Action</th>
                
             </tr>
@@ -38,9 +39,10 @@ $userrole = $this->request->getSession()->read('usersroles');
           
                   <th >Fee Name</th>
                 <th>Amount</th>
-                <th>Date</th>
+                <th>Due</th>
                  <th>Session</th>
                 <th>Status</th>
+                 <th>Date Paid</th>
                 <th >Action</th>
             </tr>
               </tfoot>
@@ -61,6 +63,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                         echo (' <span class="badge badge-success">Paid</span>');
                    }?>
                </td>
+               <td><?php if(!empty($invoice->payday)){echo $invoice->payday;}  ?></td>
                
         
                 <td class="actions">
