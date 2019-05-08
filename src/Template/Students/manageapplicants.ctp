@@ -9,13 +9,13 @@ $userrole = $this->request->getSession()->read('usersroles');
             <div style="padding-bottom: 10px; margin-bottom: 20px;"><?= $this->Html->link(__(' '), ['action' => 'newstudent'],
                             ['class'=>'btn-circle btn-lg fa fa-plus float-right','title'=>'addmit new student']) ?>
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Manage Students</h1></div>
+          <h1 class="h3 mb-2 text-gray-800">Manage Applicants</h1></div>
          
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Student Manager</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Applicants Manager</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -23,8 +23,8 @@ $userrole = $this->request->getSession()->read('usersroles');
                   <thead>
             <tr>
           
-                 <th scope="col"><?= $this->Paginator->sort('first Name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('last Name') ?></th>
+                 <th scope="col"><?= $this->Paginator->sort('Name') ?></th>
+               
                
                 <th scope="col"><?= $this->Paginator->sort('DOB') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date Applied') ?></th>
@@ -34,7 +34,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                 <th scope="col"><?= $this->Paginator->sort('jamb') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('birthcerturl') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('othercerts') ?></th>-->
-                <th scope="col"><?= $this->Paginator->sort('email') ?></th>
+               
 <!--                <th scope="col"><?= $this->Paginator->sort('state_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('country_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('address') ?></th>
@@ -56,8 +56,8 @@ $userrole = $this->request->getSession()->read('usersroles');
               <tfoot>
             <tr>
           
-                 <th scope="col"><?= $this->Paginator->sort('first Name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('last Name') ?></th>
+                 <th scope="col"><?= $this->Paginator->sort('Name') ?></th>
+                
                
                 <th scope="col"><?= $this->Paginator->sort('DOB') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date Applied') ?></th>
@@ -67,7 +67,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                 <th scope="col"><?= $this->Paginator->sort('jamb') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('birthcerturl') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('othercerts') ?></th>-->
-                <th scope="col"><?= $this->Paginator->sort('email') ?></th>
+               
 <!--                <th scope="col"><?= $this->Paginator->sort('state_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('country_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('address') ?></th>
@@ -90,18 +90,18 @@ $userrole = $this->request->getSession()->read('usersroles');
             <?php foreach ($students as $student): ?>
             <tr>
                 
-                <td><?= h($student->fname) ?></td>
-                <td><?= h($student->lname) ?></td>
+                <td><?= h($student->fname.' '.$student->lname) ?></td>
+             
              
                 <td><?= h($student->dob) ?></td>
-                <td><?= h(date('D, d M Y H:i a', strtotime($student->joindate))) ?></td>
+                <td><?= h(date('D, d M Y', strtotime($student->joindate))) ?></td>
                 <td><?= $student->has('department') ? $this->Html->link($student->department->name, ['controller' => 'Departments', 'action' => 'viewdepartment', $student->department->id]) : '' ?></td>
                 <td><?= h($student->status) ?></td>
 <!--                <td><?= h($student->olevelresulturl) ?></td>
                 <td><?= $this->Number->format($student->jamb) ?></td>
                 <td><?= h($student->birthcerturl) ?></td>
                 <td><?= h($student->othercerts) ?></td>-->
-                <td><?= h($student->email) ?></td>
+              
 <!--                <td><?= $student->has('state') ? $this->Html->link($student->state->name, ['controller' => 'States', 'action' => 'view', $student->state->id]) : '' ?></td>
                 <td><?= $student->has('country') ? $this->Html->link($student->country->name, ['controller' => 'Countries', 'action' => 'view', $student->country->id]) : '' ?></td>
                 <td><?= h($student->address) ?></td>
