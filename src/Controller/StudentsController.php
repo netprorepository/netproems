@@ -51,7 +51,7 @@
       public function viewstudent($id = null) {
           $student = $this->Students->get($id, [
               'contain' => ['Departments.Subjects', 'States', 'Countries', 'Users', 'Subjects', 'Invoices.Fees',
-                              'Invoices.Sessions', 'Results.Sessions', 'Results.Semesters', 'Results.Subjects']
+                  'Invoices.Sessions', 'Results.Sessions', 'Results.Semesters', 'Results.Subjects']
           ]);
           $this->set('student', $student);
           $this->viewBuilder()->setLayout('adminbackend');
@@ -351,6 +351,10 @@
       //the application method that allows student to apply online
       public function newapplicant() {
           $parentsTable = TableRegistry::get('Sparents');
+          //get settings table
+          $settings_Table = TableRegistry::get('Settings');
+          $settings = $settings_Table->get(1);
+          $this->request->getSession()->write('settings', $settings);
           $student = $this->Students->newEntity();
           $parent = $parentsTable->newEntity();
           if ($this->request->is('post')) {
@@ -427,7 +431,7 @@
                       $name = $fname . ' ' . $lname;
                       $amount = 2000;
                       $fee_id = 2;
-                      $url = $transactionController->gotopaystack($email, $student->phone, $name, $amount, $student->id,$fee_id);
+                      $url = $transactionController->gotopaystack($email, $student->phone, $name, $amount, $student->id, $fee_id);
                       $this->Flash->success(__('Your application has been submitted successfully. The admin officer would go through'
                                       . ' your application and contact you shortly. You can also check your application status by simply loging into the system'
                                       . ' with the email address you just provided and a default password of student123'));
@@ -451,7 +455,7 @@
       public function dashboard() {
           $student = $this->Students->find()
                           ->where(['user_id' => $this->Auth->user('id')])
-                          ->contain(['Fees', 'Subjects', 'Departments.Subjects', 'Invoices', 'Departments.Fees','Levels'])->first();
+                          ->contain(['Fees', 'Subjects', 'Departments.Subjects', 'Invoices', 'Departments.Fees', 'Levels'])->first();
           $counter = 0;
           //debug(json_encode( $student, JSON_PRETTY_PRINT));exit;
           //check for any assigned fees
@@ -719,10 +723,42 @@
           $invoice->payday = date('d M Y H:i a');
           $invoices_Table->save($invoice);
           //send payment alert via email
-          // $this->payconfirmationmail($email,$name,$transaction->amount);
+          $this->payconfirmationmail($email, $name, $transaction->amount, $transaction->student_id);
 
           $this->Flash->success('Your payment was successful.');
           return $this->redirect(['action' => 'invoices', $tranx->data->metadata->student_id]);
+      }
+
+      //mailing method for payment receipt
+      public function payconfirmationmail($email, $name, $amount, $student_id) {
+          $students_table = TableRegistry::get('Students');
+          $student = $students_table->get($student_id, ['contain' => ['Departments']]);
+
+          $message = " Hello " . $name . ' ' . ',<br />Our school has recieved your payment'
+                  . '<br /><br /> .';
+          // . ' Do remember that you can always use your application number to check your admission status any time. <br />Please find details below your payment details: <br />';
+
+          $message .= '<br />Course : ' . $student->department->name;
+          // $message .= '<br /> Duration : ' . $course->duration;
+          $message .= '<br /> Payment  Date : ' . date('D, d M Y');
+          // $message .= '<br /> Application  Number : ' .$student->application_no;
+          // $message .= '<br /> Amount Paid : ' . $course->end_date;
+          $message .= '<br /> Cost : ₦' . number_format($amount);
+
+          $message .= '<br /><br />'
+                  . 'Kind Regards,<br />'
+                  . 'NetPro AEMS. <br />';
+
+
+          // $statusmsg = "";
+          $email = new Email('default');
+          $email->setFrom(['no-reply@yulo.ng' => 'NetPro Int\'l Ltd']);
+          $email->setTo($email);
+          $email->setBcc(['chukwudi@netpro.com.ng']);
+          $email->setEmailFormat('html');
+          $email->setSubject('Student Payment Receipt');
+          $email->send($message);
+          return;
       }
 
       //student method for viewing their profile
@@ -1165,89 +1201,70 @@
           $coursematerials_Table = TableRegistry::get('Coursematerials');
           $coursematerial = $coursematerials_Table->get($id);
           $ext = pathinfo($coursematerial->fileurl, PATHINFO_EXTENSION);
-           // debug(json_encode($coursematerial, JSON_PRETTY_PRINT)); exit;
+          // debug(json_encode($coursematerial, JSON_PRETTY_PRINT)); exit;
           //  exit;
-        //  if(is_file("coursematerials/" . $coursematerial->fileurl)){echo "coursematerials/" . $coursematerial->fileurl; exit;}
+          //  if(is_file("coursematerials/" . $coursematerial->fileurl)){echo "coursematerials/" . $coursematerial->fileurl; exit;}
           header('Content-Type: ' . $ext);
-          header('Content-Length: ' . filesize("coursematerials/" .$coursematerial->fileurl));
+          header('Content-Length: ' . filesize("coursematerials/" . $coursematerial->fileurl));
           header('Content-Disposition: attachment;filename="' . $coursematerial->fileurl . '"');
           header("Cache-control: private");
           header('Content-Transfer-Encoding', 'binary');
-                header('Expires', 0);
-                header('Cache-Control', 'no-cache');
-                header('Pragma', 'public');
-                header('X-Pad', 'avoid browser bug');
+          header('Expires', 0);
+          header('Cache-Control', 'no-cache');
+          header('Pragma', 'public');
+          header('X-Pad', 'avoid browser bug');
 
           readfile("coursematerials/" . $coursematerial->fileurl);
           return;
       }
 
-     //method that gets the countries in a selected continent
-     public function getcountries($continent_id){
-         $continents_Table = TableRegistry::get('Continents');
-         $countries = $continents_Table->get('list')->where(['continent_id'=>$continent_id]);
-         $this->set('countries',$countries);
-         
-     }
-
-
-
-
-
-
-
-
-
-
-     //student method for requesting for transcript
-      public function requesttrnscript(){
-          //ensure this is a student
-          $student = $this->isstudent();
-          
-           $trequest_Table = TableRegistry::get('Trequests');
-           $continents_Table = TableRegistry::get('Continents');
-           $trequest = $trequest_Table->newEntity();
-           $continent_costs = $continents_Table->find();
-           if ($this->request->is('post')) {
-              // debug(json_encode( $this->request->getData(), JSON_PRETTY_PRINT)); exit;
-               $continentid = $this->request->getData('continent_id');
-               $continent = $continents_Table->get($continentid);
-               $trequest = $trequest_Table->patchEntity($trequest, $this->request->getData());
-               $trequest->amount = $continent->cost;
-               $trequest->student_id =  $student->id;
-               if($trequest_Table->save($trequest)){
-                   //created invoice
-                  $incoice_id = $this->creatnewinvoice($student->id, 5, $continent->cost);
-                    //proceed to payment gateway for payment
-                     // $transactionController = new TransactionsController();
-                     // $name = $student->fname . ' ' . $student->lname;
-                      
-                      $url = $this->gotopaystack($incoice_id, $student->id);
-                   $this->Flash->success(__('Success, your transcript order has been submitted and would be processed within the next ten days'));
-                    return $this->redirect($url);
-               }
-               else{
-               $this->Flash->error(__('Sorry, unable to submit order. Please try again'));
-                   // return $this->redirect(['action' => 'myinvoices']);    
-               }
-                
-               
-           }
-          
-           $continents = $trequest_Table->Continents->find('list', ['limit' => 200]);
-        $countries = $trequest_Table->Countries->find('list', ['limit' => 200]);
-        $states = $trequest_Table->States->find('list', ['limit' => 200]);
-        $couriers = $trequest_Table->Couriers->find('list', ['limit' => 200]);
-        $this->set(compact('trequest', 'students', 'continents', 'countries', 'states', 'couriers','continent_costs '));
-         $this->set('continent_costs', $continent_costs);
-           $this->viewBuilder()->setLayout('adminbackend');
-          
+      //method that gets the countries in a selected continent
+      public function getcountries($continent_id) {
+          $continents_Table = TableRegistry::get('Continents');
+          $countries = $continents_Table->get('list')->where(['continent_id' => $continent_id]);
+          $this->set('countries', $countries);
       }
 
+      //student method for requesting for transcript
+      public function requesttrnscript() {
+          //ensure this is a student
+          $student = $this->isstudent();
 
+          $trequest_Table = TableRegistry::get('Trequests');
+          $continents_Table = TableRegistry::get('Continents');
+          $trequest = $trequest_Table->newEntity();
+          $continent_costs = $continents_Table->find();
+          if ($this->request->is('post')) {
+              // debug(json_encode( $this->request->getData(), JSON_PRETTY_PRINT)); exit;
+              $continentid = $this->request->getData('continent_id');
+              $continent = $continents_Table->get($continentid);
+              $trequest = $trequest_Table->patchEntity($trequest, $this->request->getData());
+              $trequest->amount = $continent->cost;
+              $trequest->student_id = $student->id;
+              if ($trequest_Table->save($trequest)) {
+                  //created invoice
+                  $incoice_id = $this->creatnewinvoice($student->id, 5, $continent->cost);
+                  //proceed to payment gateway for payment
+                  // $transactionController = new TransactionsController();
+                  // $name = $student->fname . ' ' . $student->lname;
 
+                  $url = $this->gotopaystack($incoice_id, $student->id);
+                  $this->Flash->success(__('Success, your transcript order has been submitted and would be processed within the next ten days'));
+                  return $this->redirect($url);
+              } else {
+                  $this->Flash->error(__('Sorry, unable to submit order. Please try again'));
+                  // return $this->redirect(['action' => 'myinvoices']);    
+              }
+          }
 
-
+          $continents = $trequest_Table->Continents->find('list', ['limit' => 200]);
+          $countries = $trequest_Table->Countries->find('list', ['limit' => 200]);
+          $states = $trequest_Table->States->find('list', ['limit' => 200]);
+          $couriers = $trequest_Table->Couriers->find('list', ['limit' => 200]);
+          $this->set(compact('trequest', 'students', 'continents', 'countries', 'states', 'couriers', 'continent_costs '));
+          $this->set('continent_costs', $continent_costs);
+          $this->viewBuilder()->setLayout('adminbackend');
+      }
 
       // allow unrestricted pages
       public function beforeFilter(Event $event) {
