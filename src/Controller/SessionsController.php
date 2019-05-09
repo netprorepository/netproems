@@ -75,7 +75,7 @@ class SessionsController extends AppController
             $this->Flash->error(__('The session could not be saved. Please, try again.'));
         }
        // $users = $this->Sessions->Users->find('list', ['limit' => 200]);
-       // $this->set(compact('session', 'users'));
+        $this->set(compact('session', 'users'));
         $this->viewBuilder()->setLayout('adminbackend');
     }
 
