@@ -72,5 +72,16 @@ class AppView extends View
         return number_format($total / $totalUnits, 2);
     }
       
+     //function that return the grade point value
+    public function getgradepoint($course_id,$grade){
+        $courses_table = TableRegistry::get('Subjects');
+        $constants_table = TableRegistry::get('Constants');
+        $credit_unit = $courses_table->get($course_id);
+            $grade_point_quality = $constants_table->find()->where(['name' => $grade])->first();
+            $course_point = $grade_point_quality->value * $credit_unit->creditload;
+            return $course_point;
+        
+    }
+
     
 }
