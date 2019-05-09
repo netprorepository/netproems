@@ -365,8 +365,10 @@ $userdata = $this->request->getSession()->read('usersinfo');
             </div>
           </div>
     
-               <?php } ?>.
+               <?php } ?>
+           CGPA : <?= $this->calculateCGPA($student->regno) ?>
       </div>
+        
     </div>
   </div>
 </div>
