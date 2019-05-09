@@ -181,10 +181,13 @@
                                   echo $this->Html->link('Manage Subjects', ['controller' => 'Subjects', 'action' => 'managesubjects'], ['title' => 'Manage Subject', 'class' => 'collapse-item']);
                                   echo $this->Html->link('Manage Topics', ['controller' => 'Topics', 'action' => 'managetopics'], ['title' => 'Manage Topics', 'class' => 'collapse-item']);
                                   echo ' <h6 class="collapse-header">Manage Sesion:</h6>';
-                                  echo $this->Html->link('Manage Sessions', ['controller' => 'Sessions', 'action' => 'managesessions'], ['title' => 'manage manage sessions', 'class' => 'collapse-item']);
+                                  echo $this->Html->link('Manage Sessions', ['controller' => 'Sessions', 'action' => 'managesessions'], ['title' => 'manage sessions', 'class' => 'collapse-item']);
                                   echo ' <h6 class="collapse-header">Manage Semester:</h6>';
-                                  echo $this->Html->link('Manage Semesters', ['controller' => 'Semesters', 'action' => 'managesemesters'], ['title' => 'manage manage sessions', 'class' => 'collapse-item']);
-                                   echo ' <h6 class="collapse-header">Transcript Requests :</h6>';
+                                  echo $this->Html->link('Manage Semesters', ['controller' => 'Semesters', 'action' => 'managesemesters'], ['title' => 'manage sessions', 'class' => 'collapse-item']);
+                                  echo ' <h6 class="collapse-header">Manage Class/Level:</h6>';
+                                  echo $this->Html->link('Manage Classes', ['controller' => 'Admins', 'action' => 'manageclasses'], ['title' => 'manage classes', 'class' => 'collapse-item']);
+                                  
+                                  echo ' <h6 class="collapse-header">Transcript Requests :</h6>';
                                   echo $this->Html->link('Manage Requests', ['controller' => 'Admins', 'action' => 'managetranscriptorders'], ['title' => 'manage transcript requests', 'class' => 'collapse-item']);
                                   
                                   ?> 
