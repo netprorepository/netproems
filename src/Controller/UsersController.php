@@ -62,19 +62,27 @@ class UsersController extends AppController {
 
     //the user dashboard
     public function dashboard() {
+        $settings = $this->request->getSession()->read('settings');
         $admin = $this->Users->get($this->Auth->user('id'));
          $students_Table = TableRegistry::get('Students');
          $teachers_Table = TableRegistry::get('Teachers');
          $subjects_Table = TableRegistry::get('Subjects');
+         $transactions_table = TableRegistry::get('Transactions');
+         $payments = $transactions_table->find()->where(['session_id'=>$settings->session_id]);
+        
+          $payments->select([
+                      'amount' => $payments->func()->sum('amount'),
+                      'txdate' => 'DATE(transdate)'
+                  ]);
          $graph = $this->transactionviewsgraph();
-         //debug(json_encode($graph, JSON_PRETTY_PRINT)); exit;
+        // debug(json_encode($payments, JSON_PRETTY_PRINT)); exit;
          $subjects = $subjects_Table->find()->count();
          $teachers = $teachers_Table->find()->count();
          $students = $students_Table->find()->where(['status'=>'Admitted'])->count();
          $applied = $students_Table->find()->where(['status'=>'Applied'])->count();
           $pending_students = $students_Table->find()->where(['status'=>'Selected'])->count();
         $this->set('admin', $admin);
-        $this->set(compact('pending_students','students','teachers','subjects','applied','graph'));
+        $this->set(compact('pending_students','students','teachers','subjects','applied','graph','payments'));
         $this->viewBuilder()->setLayout('adminbackend');
     }
 
