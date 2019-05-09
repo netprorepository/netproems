@@ -43,8 +43,8 @@ $userrole = $this->request->getSession()->read('usersroles');
           
                  <th scope="col"><?= $this->Paginator->sort('Name') ?></th>
                
-<!--                <th scope="col"><?= $this->Paginator->sort('M Name') ?></th>-->
-                <th scope="col"><?= $this->Paginator->sort('DOB') ?></th>
+
+                <th scope="col"><?= $this->Paginator->sort('Level') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date Admitted') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Department') ?></th>
 <!--                <th scope="col"><?= $this->Paginator->sort('olevelresulturl') ?></th>
@@ -75,8 +75,7 @@ $userrole = $this->request->getSession()->read('usersroles');
           
                  <th scope="col"><?= $this->Paginator->sort('Name') ?></th>
                
-<!--                <th scope="col"><?= $this->Paginator->sort('M Name') ?></th>-->
-                <th scope="col"><?= $this->Paginator->sort('DOB') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Level') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date Admitted') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Department') ?></th>
 <!--                <th scope="col"><?= $this->Paginator->sort('olevelresulturl') ?></th>
@@ -112,7 +111,7 @@ $userrole = $this->request->getSession()->read('usersroles');
                 
                 </td>
                 
-<!--                <td><?= h($student->mname) ?></td>-->
+               <td><?= h($student->level->name) ?></td>
                 <td><?= h($student->dob) ?></td>
                 <td><?= h(date('D, d M Y', strtotime($student->joindate))) ?></td>
                 <td><?= $student->has('department') ? $this->Html->link($student->department->name, ['controller' => 'Departments', 'action' => 'view', $student->department->id]) : '' ?></td>
