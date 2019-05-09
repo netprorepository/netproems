@@ -19,7 +19,7 @@ class UsersController extends AppController {
     public function login() {
         //get the logo on the login page
          $settings_Table = TableRegistry::get('Settings');
-        $logo = $settings_Table->get(1);
+        $logo = $settings_Table->get(1,['contain'=>['Sessions']]);
         if ($this->request->is('post')) {
             //   debug(json_encode($this->request->getData(), JSON_PRETTY_PRINT)); exit;
             $user = $this->Auth->identify();
@@ -66,16 +66,36 @@ class UsersController extends AppController {
          $students_Table = TableRegistry::get('Students');
          $teachers_Table = TableRegistry::get('Teachers');
          $subjects_Table = TableRegistry::get('Subjects');
+         $graph = $this->transactionviewsgraph();
+         //debug(json_encode($graph, JSON_PRETTY_PRINT)); exit;
          $subjects = $subjects_Table->find()->count();
          $teachers = $teachers_Table->find()->count();
          $students = $students_Table->find()->where(['status'=>'Admitted'])->count();
          $applied = $students_Table->find()->where(['status'=>'Applied'])->count();
           $pending_students = $students_Table->find()->where(['status'=>'Selected'])->count();
         $this->set('admin', $admin);
-        $this->set(compact('pending_students','students','teachers','subjects','applied'));
+        $this->set(compact('pending_students','students','teachers','subjects','applied','graph'));
         $this->viewBuilder()->setLayout('adminbackend');
     }
 
+    
+     //the graph that shows our view counts
+      private function transactionviewsgraph() {
+          
+         // debug(json_encode($from, JSON_PRETTY_PRINT)); exit;
+       $transactions_Table = TableRegistry::get('Transactions');
+          $views_graph = $transactions_Table->find();
+        
+          $views_graph->select([
+                      'amount' => $views_graph->func()->sum('amount'),
+                      'txdate' => 'DATE(transdate)'
+                  ])
+                  ->group('MONTH(txdate)');
+         
+          return $views_graph;
+      }
+    
+    
     //admin method for managing admins
     public function manageadmins() {
         //ensure admin is loggeding
