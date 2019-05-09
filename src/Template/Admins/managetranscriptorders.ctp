@@ -56,15 +56,19 @@ $userrole = $this->request->getSession()->read('usersroles');
             <?php foreach ($trequests as $trequest): ?>
             <tr>
                
-                <td><?= $trequest->has('student') ? $this->Html->link($trequest->student->fname, ['controller' => 'Students', 'action' => 'view', $trequest->student->id]) : '' ?></td>
+                <td>
+                    <?= $this->Html->link(h($trequest->student->fname. ' '.$trequest->student->lname), ['controller'=>'Students','action' => 'viewstudent', $trequest->student->id,$this->Generateurl($trequest->student->fname)],
+                            ['class'=>'fa fa-eye','title'=>'view student details']) ?>
+             
+                </td>
                 <td><?= h($trequest->orderdate) ?></td>
                 <td><?= h($trequest->institution) ?></td>
                 <td><?= h($trequest->status) ?></td>
-                <td><?= $trequest->has('continent') ? $this->Html->link($trequest->continent->name, ['controller' => 'Continents', 'action' => 'view', $trequest->continent->id]) : '' ?></td>
-                <td><?= $trequest->has('country') ? $this->Html->link($trequest->country->name, ['controller' => 'Countries', 'action' => 'view', $trequest->country->id]) : '' ?></td>
-                <td><?= $trequest->has('state') ? $this->Html->link($trequest->state->name, ['controller' => 'States', 'action' => 'view', $trequest->state->id]) : '' ?></td>
+                <td><?= $trequest->has('continent') ? $trequest->continent->name : '' ?></td>
+                <td><?= $trequest->has('country') ? $trequest->country->name : '' ?></td>
+                <td><?= $trequest->has('state') ? $trequest->state->name : '' ?></td>
                 <td><?= h($trequest->address) ?></td>
-                <td><?= $trequest->has('courier') ? $this->Html->link($trequest->courier->name, ['controller' => 'Couriers', 'action' => 'view', $trequest->courier->id]) : '' ?></td>
+                <td><?= $trequest->has('courier') ? $trequest->courier->name : '' ?></td>
                 <td><?= h($trequest->amount) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $trequest->id]) ?>
