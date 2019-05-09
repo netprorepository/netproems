@@ -11,11 +11,11 @@
             <div class="row">
                 <div class="col-lg-6 d-none d-lg-block bg-login-imge" >
                      <?php
-                       //if(!empty($logo)){
-                        // echo $this->Html->image($logo->logo,['height'=>'100%','width'=>'100%','href'=>'/']);
-                     //} else {
+                       if(!empty($logo)){
+                         echo $this->Html->image($logo->logo,['height'=>'100%','width'=>'100%','href'=>'/']);
+                     } else {
                          echo $this->Html->image('bs.png',['height'=>'100%','width'=>'100%','href'=>'/']);
-                     //}
+                     }
                      ?>
                 </div>
               <div class="col-lg-6">
