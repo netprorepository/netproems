@@ -42,4 +42,12 @@ class nemsCell extends Cell{
          $this->set('notifications',  $notifications);
     }
           
+    
+    //cell that renders user activities to the admin
+    public function useractivities(){
+        
+        $logs_table = TableRegistry::get('Logs');
+        $logs = $logs_table->find()->contain(['Users'])->order(['timestamp'=>'DESC'])->limit(10);
+         $this->set('logs',  $logs);
+    }
 }
