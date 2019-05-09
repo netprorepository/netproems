@@ -52,17 +52,45 @@ class AdminsController extends AppController
 
     
     
+    //admin method for managing classes
+    public function manageclasses(){
+         //ensure this is an admin
+        $this->isadmin();
+        $levels_table = TableRegistry::get('Levels');
+        $levels = $levels_table->find()->order(['name'=>'DESC']);
+        $this->set('levels',$levels);
+        $this->viewBuilder()->setLayout('adminbackend');
+        
+        
+    }
+
+
+
+
+
+
+
+
     //admin method for generating transcripts
     public function generatetranscript($student_id){
         //ensure this is an admin
         $this->isadmin();
          $stdents_table = TableRegistry::get('Students');
+          $trequests_table = TableRegistry::get('Trequests');
+         
           $student = $stdents_table->get($student_id, [
               'contain' => ['Departments.Subjects', 'Users','Results.Sessions', 'Results.Semesters','Trequests',
-                  'Results.Subjects']
+                  'Results.Subjects','Countries','States']
           ]);
+          //get the transcript request
+           $trequest = $trequests_table->find()
+                   ->contain(['Countries','Continents','Couriers'])
+                   ->where(['student_id'=>$student->id])
+                   ->order(['orderdate'=>'DESC'])
+                   ->limit(1);
           $this->set('student', $student);
-          debug(json_encode( $student->results, JSON_PRETTY_PRINT)); exit;
+           $this->set('trequest', $trequest);
+        //  debug(json_encode( $student->results, JSON_PRETTY_PRINT)); exit;
       
         $this->viewBuilder()->setLayout('adminbackend');
     }
