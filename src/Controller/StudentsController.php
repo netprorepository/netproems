@@ -31,7 +31,7 @@
 //              'contain' => ['Departments', 'States', 'Countries', 'Users']
 //          ];
           $students = $this->Students->find()
-                  ->contain(['Departments', 'States', 'Countries', 'Users'])
+                  ->contain(['Departments', 'States', 'Countries', 'Users','Levels'])
                   ->where(['status' => 'Admitted'])
                   ->order(['joindate' => 'DESC']);
 
@@ -730,7 +730,7 @@
       }
 
       //mailing method for payment receipt
-      public function payconfirmationmail($email, $name, $amount, $student_id) {
+      public function payconfirmationmail($studentemail, $name, $amount, $student_id) {
           $students_table = TableRegistry::get('Students');
           $student = $students_table->get($student_id, ['contain' => ['Departments']]);
 
