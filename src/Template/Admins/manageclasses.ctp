@@ -6,7 +6,7 @@ $userrole = $this->request->getSession()->read('usersroles');
 
 <!-- Begin Page Content -->
         <div class="container-fluid">
-            <div style="padding-bottom: 10px; margin-bottom: 20px;"><?= $this->Html->link(__(' '), ['action' => 'newlevel'],
+            <div style="padding-bottom: 10px; margin-bottom: 20px;"><?= $this->Html->link(__(' '), ['controller'=>'Levels','action' => 'addnewclass'],
                             ['class'=>'btn-circle btn-lg fa fa-plus float-right','title'=>'create new class']) ?>
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Manage Students Classes</h1></div>
