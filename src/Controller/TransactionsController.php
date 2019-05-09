@@ -149,7 +149,7 @@
           $transaction->gresponse = $tranx->data->status;
           $this->Transactions->save($transaction);
           //send payment alert via email
-          // $this->applicationconfirmationmail($email,$name,$transaction->amount);
+           $this->applicationconfirmationmail($email,$name,$transaction->amount,$transaction->student_id);
 
           $this->Flash->success('Your application is complete. We will get back to you shortly ');
 
@@ -158,14 +158,18 @@
       }
 
       //methodthat sends a mail to the student confirming his payment 
-      public function applicationconfirmationmail($emailaddress, $name, $amount) {
+      public function applicationconfirmationmail($emailaddress, $name, $amount,$student_id) {
+          $students_table = TableRegistry::get('Students');
+          $student = $students_table->get($student_id,['contain'=>['Departments']]);
 
-          $message = " Hello " . $name . ' ' . ',<br />Our school managent system has recieved your application. We will review and revert back to you soon '
-                  . '<br /><br /> Please find details below your payment details: <br />';
+          $message = " Hello " . $name . ' ' . ',<br />Our school has recieved your application. We will review and revert back to you soon '
+                  . '<br /><br /> .'
+                  . ' Do remember that you can always use your application number to check your admission status any time. <br />Please find details below your payment details: <br />';
 
-          $message .= '<br />Course : Computer';
+          $message .= '<br />Course : '.$student->department->name;
           // $message .= '<br /> Duration : ' . $course->duration;
-          $message .= '<br />  Date : ' . date('D, d M Y');
+          $message .= '<br /> Application  Date : ' . date('D, d M Y');
+           $message .= '<br /> Application  Number : ' .$student->application_no;
           // $message .= '<br /> Amount Paid : ' . $course->end_date;
           $message .= '<br /> Cost : ₦' . number_format($amount);
 
@@ -176,7 +180,7 @@
 
           // $statusmsg = "";
           $email = new Email('default');
-          $email->setFrom(['no-reply@netproacademy.com' => 'NetPro Int\'l Ltd']);
+          $email->setFrom(['no-reply@yulo.ng' => 'NetPro Int\'l Ltd']);
           $email->setTo($emailaddress);
           $email->setBcc(['chukwudi@netpro.com.ng']);
           $email->setEmailFormat('html');
