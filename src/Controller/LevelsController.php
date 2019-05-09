@@ -1,6 +1,6 @@
 <?php
 namespace App\Controller;
-
+ use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 
 /**
@@ -46,19 +46,20 @@ class LevelsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function addnewclass()
     {
         $level = $this->Levels->newEntity();
         if ($this->request->is('post')) {
             $level = $this->Levels->patchEntity($level, $this->request->getData());
             if ($this->Levels->save($level)) {
-                $this->Flash->success(__('The level has been saved.'));
+                $this->Flash->success(__('The class has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller'=>'Admins','action' => 'manageclasses']);
             }
-            $this->Flash->error(__('The level could not be saved. Please, try again.'));
+            $this->Flash->error(__('The class could not be saved. Please, try again.'));
         }
         $this->set(compact('level'));
+          $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -68,7 +69,7 @@ class LevelsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function updateclass($id = null)
     {
         $level = $this->Levels->get($id, [
             'contain' => []
@@ -76,13 +77,14 @@ class LevelsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $level = $this->Levels->patchEntity($level, $this->request->getData());
             if ($this->Levels->save($level)) {
-                $this->Flash->success(__('The level has been saved.'));
+                $this->Flash->success(__('The class has been updated.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller'=>'Admins','action' => 'manageclasses']);
             }
-            $this->Flash->error(__('The level could not be saved. Please, try again.'));
+            $this->Flash->error(__('The class could not be saved. Please, try again.'));
         }
         $this->set(compact('level'));
+          $this->viewBuilder()->setLayout('adminbackend');
     }
 
     /**
@@ -97,11 +99,11 @@ class LevelsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $level = $this->Levels->get($id);
         if ($this->Levels->delete($level)) {
-            $this->Flash->success(__('The level has been deleted.'));
+            $this->Flash->success(__('The class has been deleted.'));
         } else {
-            $this->Flash->error(__('The level could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The class could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+       return $this->redirect(['controller'=>'Admins','action' => 'manageclasses']);
     }
 }
