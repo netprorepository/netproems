@@ -1,74 +1,87 @@
-<!-- page content -->
+<?php
+$userdata = $this->request->getSession()->read('usersinfo');
+$userrole = $this->request->getSession()->read('usersroles');
+?>
 
-<div class="right_col" role="main" style="margin-bottom: 55px;" id="transcriptd">
-    <div class="">
-        <div class="page-title">
-            <div class="title_left">
-                <h3><small></small></h3>
+
+<!-- Begin Page Content -->
+        <div class="container-fluid">
+            <div style="padding-bottom: 10px; margin-bottom: 20px;">
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">Transcript System</h1></div>
+         
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Student Transcript</h6>
             </div>
-        </div>
-        <div class="clearfix"></div> 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="x_panel">
-                    <div class="x_content" id="printit"><?= $this->Flash->render() ?>
+              <div class="card-body">
+                  
+             <?= $this->Flash->render() ?>
                         <?php
                         if (!empty($student->results)) {
                             ?>
                             <div class="col-md-12 col-xs-12">
                                 <p>TOPS ID : <?php $transcript_id = "ISP/ESR/" . mt_rand();
                         echo $transcript_id; ?></p>
+                                  <?php echo $this->Html->image('logo-icon.png', ['alt' => 'EMS',  'style' => 'margin-top: 5px;','class'=>'float-right']) ?>
+                           <?= $this->Html->image($student->passporturl, ['alt' => 'IMG', 'class' => 'img-responsive img-fluid float-left',
+                                    'style' => 'width:80px;height:80px;']) ?>
                             </div>
-                            <div class="col-md-4 col-xs-4 col-md-offset-4 col-xs-offset-4" style="text-align: center; margin-bottom: 5px;">
+                  
+                            <div class="text-center" style="text-align: center; margin-bottom: 5px;">
                                 <span class="school-name">Imo State Polytechnic</span><br>
                                 <span class="mail-bag">P.M.B. 1472, Umuagwo, Imo State, 
                                     Office of the Registrar Statistic and Record Unit.
                                     Nigeria</span><br>
-    <?php echo $this->Html->image('logo-icon.png', ['alt' => 'TOPS', 'href' => '/', 'style' => 'margin-top: 5px;']) ?>
+  
 
                             </div>
+                  <div class="row">
                             <div class="col-md-6 col-xs-6">
-                                <span><small>Rector</small></span><br>
+                               <br /><br /> <span><small>Rector</small></span><br>
                                 <span class="school-name">Rev. Fr. W. Madu</span><br>
                                 <span><small>B.Sc(UNN);M.Sc(U.S.A);Ph.D(ABSU)</small></span><br>
                             </div>
-                            <div class="col-md-6 col-xs-6" style="text-align: right;">
-                                <span><small>Registrar</small></span><br>
+                            <div class="col-md-6 text-center  col-xs-6">
+                               <br /><br /> <span><small>Registrar</small></span><br>
                                 <span class="school-name">Mrs. S. Njemanze</span><br>
                                 <span><small>B.Arts(Hons),FCIA.FIIA MNIM</small></span><br>
                             </div>
+                  </div>
                             <div class="col-md-4 col-xs-4 col-md-offset-4 col-xs-offset-4" style="text-align: center; margin-bottom: 5px;">
-                                <span class="office-name">OFFICE OF THE REGISTRAR</span><br>
+                            <br /><br />    <span class="office-name">OFFICE OF THE REGISTRAR</span><br>
                             </div>
                             <div class="col-md-4 col-xs-4 col-md-offset-8 col-xs-offset-8" style="text-align: right;">
-                                <span class="mail-bag"><?php echo date('M j, Y'); ?></span>
+                                <span class="mail-bag float-left"><?php echo date('M j, Y'); ?></span><br />
                             </div>
                             <div class="col-md-12 col-xs-12" style="text-align: left;">
-    <?php foreach ($shipping_details as $shipping): ?>
-                                    <span class=""><?php echo ucfirst($shipping->institution); ?></span><br>
+    <?php foreach ( $trequest as $requestdetail): ?>
+                                    <span class=""><?php echo ucfirst( $requestdetail->institution); ?></span><br>
                                     <span class="">
-                                    <?php echo ucfirst($shipping->address); ?>
+                                    <?php echo ucfirst( $requestdetail->address); ?>
                                     </span><br><br>
     <?php endforeach; ?>
                             </div>
                             <div class="col-md-6 col-xs-6" style="text-align: left;">
-                                <span><small>ACADEMIC TRANSCRIPT OF</small></span><br>
-                                <span class="school-name"><?php echo $student->firstname . " " . $student->surname . " " . $student->middlename; ?></span><br>
-                                <span class="office-name">REGISTRATION NO : <small><?php echo str_replace('-', '/', $student->regnumb); ?></small></span><br>
+                                <span><small>ACADEMIC TRANSCRIPT OF</small></span>
+                                <span class="school-name"><?php echo $student->ftname . " " . $student->lname . " " . $student->mname; ?></span><br>
+                                <span class="office-name">REGISTRATION NO : <small><?php echo $student->regno ?></small></span><br>
                             </div>
                             <div class="col-md-6 col-xs-6" style="text-align: left;">
                                 <span></span><br>
                                 <span></span><br>
                                 <span class="office-name">Department : <small>
-    <?= $student->department->departmentname ?>
+    <?= $student->department->name ?>
                                     </small></span><br><br>
                             </div>
                             <div class="col-md-12 col-xs-12">
                                 <p>We have been asked to forward to you, the academic transcript of the above named student/ex-student of Imo State Polytechnic,
-                                    Umuagwo, Nigeria. The Candidate is/was of Our Department of <?php echo $student->department->departmentname; ?>.
+                                    Umuagwo, Nigeria. The Candidate is/was of Our Department of <?php echo $student->department->name; ?>.
                                     <br>
                                     The Transcript is herewith enclosed. You will have to testify yourself that <strong>
-    <?php echo $student->firstname . " " . $student->surname . " " . $student->middlename; ?>
+    <?php echo $student->fname . " " . $student->lname . " " . $student->lname; ?>
                                     </strong> of our record and the one requesting us to send the transcript is one and the same person
                                     <br>The <strong>TRANSCRIPT</strong> is confidential and on no account should the student or other unauthorised person(s) be allowed access to it
                                 </p>
@@ -109,33 +122,33 @@
                                     <span class="">Transcript Of Student Academic Records</span><br>
                             </div-->
                             <div class="col-md-6 col-xs-6">
-                                <p><strong>FULL NAME : </strong><?php echo $student->firstname . " " . $student->surname . " " . $student->middlename; ?></p>
-                                <p><strong>STUDENT REG NO : </strong><?php echo str_replace('-', '/', $student->regnumb); ?></p>
-                                <p><strong>NATIONALITY : </strong>NIGERIAN</p>
-                                <p><strong>L.G.A : </strong><?php echo $student->lga ?></p>
+                                <p><strong>FULL NAME : </strong><?php echo $student->fname . " " . $student->lname . " " . $student->mname; ?></p>
+                                <p><strong>STUDENT REG NO : </strong><?php echo  $student->regno ?></p>
+                                <p><strong>NATIONALITY : </strong><?php echo  $student->country->name ?></p>
+                               
                                 <p><strong>PRESENT ADDRESS : </strong>
-                                   <?=$shipping_details->address?>
+                                   <?=$student->address?>
                                 </p>
                             </div>
-                            <div class="col-md-6 col-xs-6" style="text-align: right">
+                            <div class="col-md-6 col-xs-6" style="text-align: left">
                                 <p><strong>SEX : </strong><?php echo $student->gender; ?></p>
                                 <p><strong>DATE OF BIRTH : </strong><?= h(date("d-M-Y", strtotime($student->dob))) ?></p>
-                                <p><strong>YEAR OF ENTRY : </strong> 
+                                <p><strong>YEAR OF ENTRY : </strong> <?php echo date('Y', strtotime($student->joindate)) ?>
                                     <?php
-                                    $regnumb_explode = explode("-", $student->regnumb);
-                                    echo $regnumb_explode[0];
+//                                    $regnumb_explode = explode("-", $student->regnumb);
+//                                    echo $regnumb_explode[0];
                                     ?>
                                 </p><br><br><br><br>
                             </div>
                             <div class="col-md-12 col-xs-12">
                                 <div class="row">
-                                    <div class="col-md-6 col-xs-6">
+<!--                                    <div class="col-md-6 col-xs-6">
                                         <p><strong>SCHOOL : </strong>
-                                            <?php echo strtoupper($student->faculty->facultyname); ?>
+                                            <?php echo strtoupper($student->faculty->name); ?>
                                         </p>
-                                    </div>
+                                    </div>-->
                                     <div class="col-md-6 col-xs-6" style="text-align: right">
-                                        <p><strong>DEPARTMENT : </strong><?php echo strtoupper($student->department->departmentname); ?></p>
+                                        <p><strong>DEPARTMENT : </strong><?php echo strtoupper($student->department->name); ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -160,24 +173,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-    <?php foreach ($results as $result): ?>
+    <?php foreach ($student->results as $result): ?>
                                             <tr>
-                                                <td><?= h($result->course->coursename) ?></td>
-                                                <td><?= h($result->course->description) ?></td>
+                                                <td><?= h($result->subject->name) ?></td>
+                                                <td><?= h($result->subject->subjectcode) ?></td>
                                                  <td>
                             <?php
                             //$grade_point = $this->getcreditunit($result->grade);
                             //echo $grade_point->value;
-                            echo h($result->course->units);
+                            echo h($result->subject->creditload);
                             ?>
                                                 </td>
                                                 <td><?= $this->Number->format($result->score) ?></td>
                                                 <td><?= h($result->grade) ?></td>
-                                                <td> <?= $this->getgradepoint($result->course->id,$result->grade) ?>  </td>
+                                                <td> <?= $this->getgradepoint($result->subject->id,$result->grade) ?>  </td>
                                        
                                                 <td><?= h($result->remark) ?></td>
-                                                 <td><?= h($result->semester->semestername) ?></td>
-                                                <td><?= h($result->session->sessionname) ?></td>
+                                                 <td><?= h($result->semester->name) ?></td>
+                                                <td><?= h($result->session->name) ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -185,20 +198,20 @@
                             </div>
 
                             <div class="col-md-12 col-xs-12">
-                                <span class="office-name pull-right">FINAL CUMMULATIVE G.P.A : <b><?php $final_gp = $this->calculateCGPA($student->regnumb);
+                                <span class="office-name pull-right">FINAL CUMMULATIVE G.P.A : <b><?php $final_gp = $this->calculateCGPA($student->regno);
                                        if($final_gp==0){ echo 'Sorry, No Results Found';}else{echo $final_gp;}
                                         ?></b></span><br>
                                 <table class="table table-bordered" id="transtab">
                                     <tbody>
                                         <tr>
                                             <th>Curriculum</th>
-                                            <td><?php echo $student->department->departmentname; ?></td>
+                                            <td><?php echo $student->department->name; ?></td>
                                         </tr>
                                         <tr>
                                             <th>Degree</th>
                                             <td>
                                                 <?php
-                                                $department_explode = explode("-", $student->regnumb);
+                                                $department_explode = explode("/", $student->regno);
                                                 //print_r($department_explode);
                                                 if ($department_explode[1] == "ND") {
                                                     echo "National Diploma";
@@ -230,49 +243,12 @@
                                         </tr>
                                         <tr>
                                             <th>Graduation Year</th>
-                                            <td> OCTOBER, <?=$regnumb_explode[0]+2 ?></td>
+                                            <td> OCTOBER, <?=date('Y')?></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-<!--                            <div class="col-md-6 col-xs-6">
-                                <table class="table table-bordered" id="transtab" style="margin-bottom: 0px !important;">
-                                    <thead>
-                                        <tr>
-                                            <th>School Certificate</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <table class="table table-bordered" id="transtab">
-                                    <thead>
-                                        <tr>
-                                            <th>Subject</th>
-                                            <th>Grade</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th colspan="2">W.A.S.S.C.E 2004</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Mathematics</th>
-                                            <td>A1</td>
-                                        </tr>
-                                        <tr>
-                                            <th>English</th>
-                                            <td>C6</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Physics</th>
-                                            <td>B3</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Chemistry</th>
-                                            <td>C5</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>-->
+
                             <!--/. ends create here-->
                             <div class="col-md-6 col-xs-6">
                                 <div class="row">
@@ -384,9 +360,7 @@
                     <!--/.end x_content-->
                 </div>
             </div>
-        </div>      
-    </div>
-</div>  
+        
 
 <script language="javascript" type="text/javascript">
     
